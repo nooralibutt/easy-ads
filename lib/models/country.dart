@@ -3,9 +3,9 @@ class Country {
   final String imageUrl;
   final String countryDescription;
 
-  Country(this.countryName, this.imageUrl, this.countryDescription);
+  const Country(this.countryName, this.imageUrl, this.countryDescription);
 
-  static List<Country> countryList = [
+  static const List<Country> countryList = [
     Country(
       "Afghanistan",
       "https://cdn.britannica.com/40/5340-004-B25ED5CF/Flag-Afghanistan.jpg",

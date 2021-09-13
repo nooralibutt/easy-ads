@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: CountryListScreen(),
+      home: const CountryListScreen(),
     );
   }
 }

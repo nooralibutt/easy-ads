@@ -18,9 +18,9 @@ class CountryListScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(
                   builder: (context) => CountryDetailScreen(
-                      imagesName: Country.countryList[index].countryName,
-                      imageUrl: Country.countryList[index].imageUrl,
-                      imageDescription:
+                      countryName: Country.countryList[index].countryName,
+                      flagUrl: Country.countryList[index].imageUrl,
+                      countryDescription:
                           Country.countryList[index].countryDescription),
                 ),
               ),

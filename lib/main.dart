@@ -1,4 +1,4 @@
-import 'package:ads/country_list_screen.dart';
+import 'package:ads/screens/country_list_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

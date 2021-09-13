@@ -1,5 +1,5 @@
-import 'package:ads/country_detail_screen.dart';
-import 'package:ads/model/country_data.dart';
+import 'package:ads/screens/country_detail_screen.dart';
+import 'package:ads/models/country.dart';
 import 'package:flutter/material.dart';
 
 class CountryListScreen extends StatelessWidget {

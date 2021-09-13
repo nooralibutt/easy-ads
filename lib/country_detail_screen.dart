@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
 
-class CountryDetail extends StatelessWidget {
-  final String name;
-  final String url;
-  final String description;
+class CountryDetailScreen extends StatelessWidget {
+  final String imagesName;
+  final String imageUrl;
+  final String imageDescription;
 
-  const CountryDetail(
+  const CountryDetailScreen(
       {Key? key,
-      required this.name,
-      required this.url,
-      required this.description})
+      required this.imagesName,
+      required this.imageUrl,
+      required this.imageDescription})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(name),
+        title: Text(imagesName),
         centerTitle: true,
       ),
       body: Column(
@@ -26,7 +26,7 @@ class CountryDetail extends StatelessWidget {
             height: 200,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(url),
+                image: NetworkImage(imageUrl),
               ),
             ),
           ),
@@ -34,8 +34,9 @@ class CountryDetail extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Center(
               child: Text(
-                description,
-                style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
+                imageDescription,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
               ),
             ),
           ),

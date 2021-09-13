@@ -15,15 +15,17 @@ class CountryListScreen extends StatelessWidget {
       body: ListView.builder(
           itemCount: Country.countryList.length,
           itemBuilder: (context, index) {
+            var countryList = Country.countryList[index];
             return GestureDetector(
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => CountryDetailScreen(
-                      countryName: Country.countryList[index].countryName,
-                      flagUrl: Country.countryList[index].imageUrl,
-                      countryDescription:
-                          Country.countryList[index].countryDescription),
+                  builder: (context) {
+                    return CountryDetailScreen(
+                        countryName: countryList.countryName,
+                        flagUrl: countryList.imageUrl,
+                        countryDescription: countryList.countryDescription);
+                  },
                 ),
               ),
               child: Card(

@@ -20,13 +20,8 @@ class CountryListScreen extends StatelessWidget {
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) {
-                    return CountryDetailScreen(
-                        countryName: countryList[index].countryName,
-                        flagUrl: countryList[index].imageUrl,
-                        countryDescription:
-                            countryList[index].countryDescription);
-                  },
+                  builder: (context) =>
+                      CountryDetailScreen(country: countryList[index]),
                 ),
               ),
               child: Card(

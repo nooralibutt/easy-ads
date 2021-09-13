@@ -7,24 +7,25 @@ class CountryListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final countryList = Country.countryList;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Country List"),
         centerTitle: true,
       ),
       body: ListView.builder(
-          itemCount: Country.countryList.length,
+          itemCount: countryList.length,
           itemBuilder: (context, index) {
-            var countryList = Country.countryList[index];
             return GestureDetector(
               onTap: () => Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) {
                     return CountryDetailScreen(
-                        countryName: countryList.countryName,
-                        flagUrl: countryList.imageUrl,
-                        countryDescription: countryList.countryDescription);
+                        countryName: countryList[index].countryName,
+                        flagUrl: countryList[index].imageUrl,
+                        countryDescription:
+                            countryList[index].countryDescription);
                   },
                 ),
               ),

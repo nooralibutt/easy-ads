@@ -29,9 +29,6 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
   google_mobile_ads: ^0.13.4
-  facebook_audience_network: ^0.9.0
-  unity_ads_plugin: ^0.2.3
-  flutter_applovin_max: ^2.0.0
 
 
 dev_dependencies:

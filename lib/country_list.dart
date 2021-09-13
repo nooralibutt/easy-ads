@@ -1,9 +1,51 @@
 import 'package:ads/country_detail_screen.dart';
 import 'package:ads/model/country_data.dart';
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class CountryName extends StatelessWidget {
-  const CountryName({Key? key}) : super(key: key);
+class CountryName extends StatefulWidget {
+  @override
+  _CountryNameState createState() => _CountryNameState();
+}
+
+class _CountryNameState extends State<CountryName> {
+  late BannerAd bannerAds;
+
+  void create() {
+    bannerAds = BannerAd(
+      size: AdSize.banner,
+      adUnitId: BannerAd.testAdUnitId,
+      listener: BannerAdListener(
+        onAdLoaded: (Ad ad) => print('Ad loaded has been Successfully bro.'),
+        // Called when an ad request failed.
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          // Dispose the ad here to free resources.
+          ad.dispose();
+          print('Ad failed to load: $error');
+        },
+        // Called when an ad opens an overlay that covers the screen.
+        onAdOpened: (Ad ad) => print('Ad opened.'),
+        // Called when an ad removes an overlay that covers the screen.
+        onAdClosed: (Ad ad) => print('Ad closed.'),
+        // Called when an impression occurs on the ad.
+        onAdImpression: (Ad ad) => print('Ad impression.'),
+      ),
+      request: AdRequest(),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    create();
+    bannerAds.load();
+  }
+
+  @override
+  void dispose() {
+    bannerAds.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,36 +81,49 @@ class CountryName extends StatelessWidget {
         "pakistan",
       ),
     ];
-
+    final AdWidget adWidget = AdWidget(ad: bannerAds);
     return Scaffold(
       appBar: AppBar(
         title: Text("Country List"),
         centerTitle: true,
       ),
-      body: ListView.builder(
-          itemCount: countryList.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CountryDetail(
-                            name: countryList[index].name,
-                            url: countryList[index].url,
-                            description: countryList[index].description)));
-              },
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(
-                    countryList[index].name,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w300),
-                  ),
-                ),
-              ),
-            );
-          }),
+      body: Column(
+        children: [
+          Container(
+            child: adWidget,
+            height: 50,
+            width: double.infinity,
+          ),
+          Expanded(
+            child: ListView.builder(
+                itemCount: countryList.length,
+                itemBuilder: (context, index) {
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CountryDetail(
+                                  name: countryList[index].name,
+                                  url: countryList[index].url,
+                                  description:
+                                      countryList[index].description)));
+                    },
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          countryList[index].name,
+                          style: TextStyle(
+                              fontSize: 28, fontWeight: FontWeight.w300),
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+          ),
+        ],
+      ),
     );
   }
 }

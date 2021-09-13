@@ -2,7 +2,8 @@
     package="com.nab.flutter.ads">
    <application
         android:label="ads"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+       >
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
@@ -23,6 +24,7 @@
                  screen fades out. A splash screen is useful to avoid any visual
                  gap between the end of Android's launch screen and the painting of
                  Flutter's first frame. -->
+
             <meta-data
               android:name="io.flutter.embedding.android.SplashScreenDrawable"
               android:resource="@drawable/launch_background"
@@ -37,5 +39,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <meta-data
+           android:name="com.google.android.gms.ads.APPLICATION_ID"
+           android:value="ca-app-pub-3940256099942544~3347511713"/>
     </application>
 </manifest>

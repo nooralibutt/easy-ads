@@ -1,5 +1,5 @@
-import 'package:ads/myads/myinterstitial_ad.dart';
-import 'package:ads/myads/mybanner.dart';
+import 'package:ads/myads/my_banner_ads.dart';
+import 'package:ads/myads/my_interstitial_ads.dart';
 import 'package:ads/screens/country_detail_screen.dart';
 import 'package:ads/models/country.dart';
 import 'package:flutter/material.dart';

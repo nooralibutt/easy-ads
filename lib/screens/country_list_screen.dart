@@ -1,5 +1,5 @@
-import 'package:ads/easyadmob/easy_admob_bannerAd.dart';
-import 'package:ads/easyadmob/easy_admob_interstitial_ad.dart';
+import 'package:ads/easy_admob/easy_admob_banner_ad.dart';
+import 'package:ads/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:ads/screens/country_detail_screen.dart';
 import 'package:ads/models/country.dart';
 import 'package:flutter/material.dart';

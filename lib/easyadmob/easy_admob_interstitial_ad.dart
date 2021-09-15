@@ -1,6 +1,6 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class MyInterstitialAds {
+class EasyAdmobInterstitialAd {
   InterstitialAd? _interstitialAd;
   void createInterstitialAd() {
     InterstitialAd.load(

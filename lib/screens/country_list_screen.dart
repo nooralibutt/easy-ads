@@ -1,5 +1,5 @@
-import 'package:ads/myads/my_banner_ads.dart';
-import 'package:ads/myads/my_interstitial_ads.dart';
+import 'package:ads/easyadmob/easy_admob_bannerAd.dart';
+import 'package:ads/easyadmob/easy_admob_interstitial_ad.dart';
 import 'package:ads/screens/country_detail_screen.dart';
 import 'package:ads/models/country.dart';
 import 'package:flutter/material.dart';
@@ -14,12 +14,12 @@ class CountryListScreen extends StatefulWidget {
 
 class _CountryListScreenState extends State<CountryListScreen> {
   BannerAd? bannerAds;
-  MyInterstitialAds? myInterstitialAds = MyInterstitialAds();
+  EasyAdmobInterstitialAd? myInterstitialAds = EasyAdmobInterstitialAd();
 
   @override
   void initState() {
     super.initState();
-    bannerAds = MyBannerAds.bannerCreate();
+    bannerAds = EasyAdmobBannerAd.bannerCreate();
     bannerAds?.load();
     myInterstitialAds?.createInterstitialAd();
   }

@@ -1,6 +1,6 @@
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
-class MyBannerAds {
+class EasyAdmobBannerAd {
   static BannerAd bannerCreate() => BannerAd(
         size: AdSize.banner,
         adUnitId: BannerAd.testAdUnitId,

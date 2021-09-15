@@ -1,5 +1,6 @@
 import 'package:ads/easy_admob/easy_admob_banner_ad.dart';
 import 'package:ads/easy_admob/easy_admob_interstitial_ad.dart';
+import 'package:ads/easy_admob/easy_admob_rewarded_ad.dart';
 import 'package:ads/screens/country_detail_screen.dart';
 import 'package:ads/models/country.dart';
 import 'package:flutter/material.dart';
@@ -14,14 +15,16 @@ class CountryListScreen extends StatefulWidget {
 
 class _CountryListScreenState extends State<CountryListScreen> {
   BannerAd? bannerAds;
-  EasyAdmobInterstitialAd? myInterstitialAds = EasyAdmobInterstitialAd();
+  // EasyAdmobInterstitialAd? myInterstitialAds = EasyAdmobInterstitialAd();
+  EasyAdmobRewardedAd easyAdmobRewardedAd = EasyAdmobRewardedAd();
 
   @override
   void initState() {
     super.initState();
     bannerAds = EasyAdmobBannerAd.bannerCreate();
     bannerAds?.load();
-    myInterstitialAds?.createInterstitialAd();
+    easyAdmobRewardedAd.createRewardedAd();
+    // myInterstitialAds?.createInterstitialAd();
   }
 
   @override
@@ -53,7 +56,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      myInterstitialAds?.showInterstitialAd();
+                      // myInterstitialAds?.showInterstitialAd();
+                      easyAdmobRewardedAd.showRewardedAd();
                       Navigator.push(
                         context,
                         MaterialPageRoute(

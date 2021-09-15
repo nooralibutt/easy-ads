@@ -1,5 +1,4 @@
 import 'package:ads/utils/enums/ad_network.dart';
-import 'package:flutter/material.dart';
 
 abstract class EasyAdBase {
   AdNetwork get adNetwork;
@@ -9,10 +8,17 @@ abstract class EasyAdBase {
   void dispose();
   Future load();
   bool get isAdLoaded;
-  VoidCallback onAdLoaded(AdNetwork adNetwork);
-  VoidCallback onAdDisplayed(AdNetwork adNetwork);
-  VoidCallback onAdFailedToLoad(AdNetwork adNetwork, String errorMessage);
-  VoidCallback onAdDismissed(AdNetwork adNetwork);
-  VoidCallback onEarnedReward(
-      AdNetwork adNetwork, String rewardType, num rewardAmount);
+  AdLoaded? onAdLoaded;
+  AdDisplayed? onAdDisplayed;
+  AdFailedToLoad? onAdFailedToLoad;
+  AdDismissed? onAdDismissed;
+  EarnedReward? onEarnedReward;
 }
+
+typedef AdLoaded = void Function(AdNetwork adNetwork);
+typedef AdDisplayed = void Function(AdNetwork adNetwork);
+typedef AdFailedToLoad = void Function(
+    AdNetwork adNetwork, String errorMessage);
+typedef AdDismissed = void Function(AdNetwork adNetwork);
+typedef EarnedReward = void Function(
+    AdNetwork adNetwork, String rewardType, num rewardAmount);

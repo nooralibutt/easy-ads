@@ -6,9 +6,9 @@ class EasyAds {
 
   static final EasyAds instance = EasyAds._easyAds();
 
-  List<EasyAdBase> interstitialAds;
-  List<EasyAdBase> bannerAds;
-  List<EasyAdBase> rewardedAds;
+  List<EasyAdBase>? interstitialAds;
+  List<EasyAdBase>? bannerAds;
+  List<EasyAdBase>? rewardedAds;
 
   Future initAdmob() {
     return Future(() => null);

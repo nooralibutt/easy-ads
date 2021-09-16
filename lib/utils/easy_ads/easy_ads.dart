@@ -10,6 +10,11 @@ class EasyAds {
   static final EasyAds instance = EasyAds._easyAds();
 
   AdLoaded? onAdLoaded;
+  AdShowed? onAdShowed;
+  AdFailedToLoad? onAdFailedToLoad;
+  AdFailedToShow? onAdFailedToShow;
+  AdDismissed? onAdDismissed;
+  EarnedReward? onEarnedReward;
 
   final List<EasyAdBase> bannerAds = [];
   final List<EasyAdBase> interstitialAds = [];
@@ -29,7 +34,14 @@ class EasyAds {
       final rewardedAd = EasyAdmobRewardedAd(
           rewardedAdUnitId, adRequest ?? AdRequest(), immersiveModeEnabled);
       rewardedAds.add(rewardedAd);
+
+      // overriding the callbacks
       rewardedAd.onAdLoaded = onAdLoadedMethod;
+      rewardedAd.onAdFailedToLoad = onAdFailedToLoadMethod;
+      rewardedAd.onAdShowed = onAdShowedMethod;
+      rewardedAd.onAdFailedToShow = onAdFailedToShowMethod;
+      rewardedAd.onAdDismissed = onAdDismissedMethod;
+      rewardedAd.onEarnedReward = onEarnedRewardMethod;
 
       await rewardedAd.init();
       await rewardedAd.load();
@@ -89,4 +101,16 @@ class EasyAds {
 
   void onAdLoadedMethod(AdNetwork adNetwork, Object? data) =>
       onAdLoaded?.call(adNetwork, data);
+  void onAdShowedMethod(AdNetwork adNetwork, Object? data) =>
+      onAdShowed?.call(adNetwork, data);
+  void onAdFailedToLoadMethod(AdNetwork adNetwork, String errorMessage) =>
+      onAdFailedToLoad?.call(adNetwork, errorMessage);
+  void onAdFailedToShowMethod(
+          AdNetwork adNetwork, String errorMessage, Object? data) =>
+      onAdFailedToShow?.call(adNetwork, errorMessage, data);
+  void onAdDismissedMethod(AdNetwork adNetwork, Object? data) =>
+      onAdDismissed?.call(adNetwork, data);
+  void onEarnedRewardMethod(
+          AdNetwork adNetwork, String rewardType, num rewardAmount) =>
+      onEarnedReward?.call(adNetwork, rewardType, rewardAmount);
 }

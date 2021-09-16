@@ -1,4 +1,5 @@
 import 'package:ads/utils/enums/ad_network.dart';
+import 'package:ads/utils/enums/ad_unit_type.dart';
 
 abstract class EasyAdBase {
   final String adUnitId;
@@ -7,6 +8,7 @@ abstract class EasyAdBase {
   EasyAdBase(this.adUnitId);
 
   AdNetwork get adNetwork;
+  AdUnitType get adUnitType;
   bool get isAdLoaded;
 
   /// This will be called for initialization when we have to wait for the initialization

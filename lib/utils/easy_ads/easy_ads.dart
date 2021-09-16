@@ -1,6 +1,7 @@
 import 'package:ads/utils/easy_ads/easy_ad_base.dart';
 import 'package:ads/utils/easy_ads/easy_admob/easy_admob_rewarded_ad.dart';
 import 'package:ads/utils/enums/ad_network.dart';
+import 'package:ads/utils/enums/ad_unit_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:collection/collection.dart';
 
@@ -68,32 +69,32 @@ class EasyAds {
   void isInterstitialAdLoaded(AdNetwork adNetwork) {}
   void showInterstitialAd(AdNetwork adNetwork) {}
 
-  void loadRewardedAd({AdNetwork adNetwork = AdNetwork.Default}) {
+  void loadRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
     rewardedAds.forEach((e) {
       if (e.isAdLoaded == false &&
-          (adNetwork == AdNetwork.Default || adNetwork == e.adNetwork)) {
+          (adNetwork == AdNetwork.any || adNetwork == e.adNetwork)) {
         e.load();
       }
     });
   }
 
-  bool isRewardedAdLoaded({AdNetwork adNetwork = AdNetwork.Default}) {
+  bool isRewardedAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
     final ad = rewardedAds.firstWhereOrNull((e) =>
         e.isAdLoaded &&
-        (adNetwork == AdNetwork.Default || adNetwork == e.adNetwork));
+        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
     return ad?.isAdLoaded ?? false;
   }
 
-  void showRewardedAd({AdNetwork adNetwork = AdNetwork.Default}) {
+  void showRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
     final ad = rewardedAds.firstWhereOrNull((e) =>
         e.isAdLoaded &&
-        (adNetwork == AdNetwork.Default || adNetwork == e.adNetwork));
+        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
     ad?.show();
   }
 
-  void disposeRewardedAd({AdNetwork adNetwork = AdNetwork.Default}) {
+  void disposeRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
     for (final r in rewardedAds) {
-      if (adNetwork == AdNetwork.Default)
+      if (adNetwork == AdNetwork.any)
         r.dispose();
       else if (adNetwork == r.adNetwork) r.dispose();
     }

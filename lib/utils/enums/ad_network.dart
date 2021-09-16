@@ -1,11 +1,11 @@
 import 'package:flutter/foundation.dart';
 
 enum AdNetwork {
-  Default,
-  Admob,
-  Facebook,
-  AppLovin,
-  Unity,
+  any,
+  admob,
+  facebook,
+  appLovin,
+  unity,
 }
 
 extension AdNetworkExtension on AdNetwork {

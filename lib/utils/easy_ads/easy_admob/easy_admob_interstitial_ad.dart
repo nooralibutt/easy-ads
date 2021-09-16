@@ -1,5 +1,6 @@
 import 'package:ads/utils/easy_ads/easy_ad_base.dart';
 import 'package:ads/utils/enums/ad_network.dart';
+import 'package:ads/utils/enums/ad_unit_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class EasyAdmobInterstitialAd extends EasyAdBase {
@@ -16,7 +17,10 @@ class EasyAdmobInterstitialAd extends EasyAdBase {
   bool _isAdLoaded = false;
 
   @override
-  AdNetwork get adNetwork => AdNetwork.Admob;
+  AdNetwork get adNetwork => AdNetwork.admob;
+
+  @override
+  AdUnitType get adUnitType => AdUnitType.interstitial;
 
   @override
   bool get isAdLoaded => _isAdLoaded;

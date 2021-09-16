@@ -27,12 +27,15 @@ abstract class EasyAdBase {
   EarnedReward? onEarnedReward;
 }
 
-typedef AdLoaded = void Function(AdNetwork adNetwork, Object? data);
-typedef AdShowed = void Function(AdNetwork adNetwork, Object? data);
+typedef AdLoaded = void Function(
+    AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
+typedef AdShowed = void Function(
+    AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
 typedef AdFailedToLoad = void Function(
-    AdNetwork adNetwork, String errorMessage);
-typedef AdFailedToShow = void Function(
-    AdNetwork adNetwork, String errorMessage, Object? data);
-typedef AdDismissed = void Function(AdNetwork adNetwork, Object? data);
-typedef EarnedReward = void Function(
-    AdNetwork adNetwork, String rewardType, num rewardAmount);
+    AdNetwork adNetwork, AdUnitType adUnitType, String errorMessage);
+typedef AdFailedToShow = void Function(AdNetwork adNetwork,
+    AdUnitType adUnitType, String errorMessage, Object? data);
+typedef AdDismissed = void Function(
+    AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
+typedef EarnedReward = void Function(AdNetwork adNetwork, AdUnitType adUnitType,
+    String rewardType, num rewardAmount);

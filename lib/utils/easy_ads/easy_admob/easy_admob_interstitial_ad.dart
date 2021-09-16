@@ -47,13 +47,13 @@ class EasyAdmobInterstitialAd extends EasyAdBase {
             print('$ad loaded');
             _interstitialAd = ad;
             _isAdLoaded = true;
-            onAdLoaded?.call(adNetwork, ad);
+            onAdLoaded?.call(adNetwork, adUnitType, ad);
           },
           onAdFailedToLoad: (LoadAdError error) {
             print('InterstitialAd failed to load: $error.');
             _interstitialAd = null;
             _isAdLoaded = false;
-            onAdFailedToLoad?.call(adNetwork, error.toString());
+            onAdFailedToLoad?.call(adNetwork, adUnitType, error.toString());
           },
         ));
   }
@@ -69,18 +69,18 @@ class EasyAdmobInterstitialAd extends EasyAdBase {
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (InterstitialAd ad) {
         print('ad onAdShowedFullScreenContent.');
-        onAdShowed?.call(adNetwork, ad);
+        onAdShowed?.call(adNetwork, adUnitType, ad);
       },
       onAdDismissedFullScreenContent: (InterstitialAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
-        onAdDismissed?.call(adNetwork, ad);
+        onAdDismissed?.call(adNetwork, adUnitType, ad);
 
         ad.dispose();
         load();
       },
       onAdFailedToShowFullScreenContent: (InterstitialAd ad, AdError error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
-        onAdFailedToShow?.call(adNetwork, error.toString(), ad);
+        onAdFailedToShow?.call(adNetwork, adUnitType, error.toString(), ad);
 
         ad.dispose();
         load();

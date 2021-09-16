@@ -47,12 +47,12 @@ class EasyAdmobRewardedAd extends EasyAdBase {
           print('$ad loaded.');
           _rewardedAd = ad;
           _isAdLoaded = true;
-          onAdLoaded?.call(adNetwork, ad);
+          onAdLoaded?.call(adNetwork, adUnitType, ad);
         }, onAdFailedToLoad: (LoadAdError error) {
           print('RewardedAd failed to load: $error');
           _rewardedAd = null;
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(adNetwork, error.toString());
+          onAdFailedToLoad?.call(adNetwork, adUnitType, error.toString());
         }));
   }
 
@@ -67,18 +67,18 @@ class EasyAdmobRewardedAd extends EasyAdBase {
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (RewardedAd ad) {
         print('ad onAdShowedFullScreenContent.');
-        onAdShowed?.call(adNetwork, ad);
+        onAdShowed?.call(adNetwork, adUnitType, ad);
       },
       onAdDismissedFullScreenContent: (RewardedAd ad) {
         print('$ad onAdDismissedFullScreenContent.');
-        onAdDismissed?.call(adNetwork, ad);
+        onAdDismissed?.call(adNetwork, adUnitType, ad);
 
         ad.dispose();
         load();
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
-        onAdFailedToShow?.call(adNetwork, error.toString(), ad);
+        onAdFailedToShow?.call(adNetwork, adUnitType, error.toString(), ad);
 
         ad.dispose();
         load();
@@ -88,7 +88,7 @@ class EasyAdmobRewardedAd extends EasyAdBase {
     ad.setImmersiveMode(_immersiveModeEnabled);
     ad.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
       print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
-      onEarnedReward?.call(adNetwork, reward.type, reward.amount);
+      onEarnedReward?.call(adNetwork, adUnitType, reward.type, reward.amount);
     });
     _rewardedAd = null;
     _isAdLoaded = false;

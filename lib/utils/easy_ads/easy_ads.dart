@@ -31,7 +31,7 @@ class EasyAds {
     this.adRequest = adRequest;
 
     if (rewardedAdUnitId != null &&
-        rewardedAds.indexWhere((e) => e.adNetwork == AdNetwork.Admob) == -1) {
+        rewardedAds.indexWhere((e) => e.adNetwork == AdNetwork.admob) == -1) {
       final rewardedAd = EasyAdmobRewardedAd(
           rewardedAdUnitId, adRequest ?? AdRequest(), immersiveModeEnabled);
       rewardedAds.add(rewardedAd);
@@ -100,18 +100,22 @@ class EasyAds {
     }
   }
 
-  void onAdLoadedMethod(AdNetwork adNetwork, Object? data) =>
-      onAdLoaded?.call(adNetwork, data);
-  void onAdShowedMethod(AdNetwork adNetwork, Object? data) =>
-      onAdShowed?.call(adNetwork, data);
-  void onAdFailedToLoadMethod(AdNetwork adNetwork, String errorMessage) =>
-      onAdFailedToLoad?.call(adNetwork, errorMessage);
-  void onAdFailedToShowMethod(
-          AdNetwork adNetwork, String errorMessage, Object? data) =>
-      onAdFailedToShow?.call(adNetwork, errorMessage, data);
-  void onAdDismissedMethod(AdNetwork adNetwork, Object? data) =>
-      onAdDismissed?.call(adNetwork, data);
-  void onEarnedRewardMethod(
-          AdNetwork adNetwork, String rewardType, num rewardAmount) =>
-      onEarnedReward?.call(adNetwork, rewardType, rewardAmount);
+  void onAdLoadedMethod(
+          AdNetwork adNetwork, AdUnitType adUnitType, Object? data) =>
+      onAdLoaded?.call(adNetwork, adUnitType, data);
+  void onAdShowedMethod(
+          AdNetwork adNetwork, AdUnitType adUnitType, Object? data) =>
+      onAdShowed?.call(adNetwork, adUnitType, data);
+  void onAdFailedToLoadMethod(
+          AdNetwork adNetwork, AdUnitType adUnitType, String errorMessage) =>
+      onAdFailedToLoad?.call(adNetwork, adUnitType, errorMessage);
+  void onAdFailedToShowMethod(AdNetwork adNetwork, AdUnitType adUnitType,
+          String errorMessage, Object? data) =>
+      onAdFailedToShow?.call(adNetwork, adUnitType, errorMessage, data);
+  void onAdDismissedMethod(
+          AdNetwork adNetwork, AdUnitType adUnitType, Object? data) =>
+      onAdDismissed?.call(adNetwork, adUnitType, data);
+  void onEarnedRewardMethod(AdNetwork adNetwork, AdUnitType adUnitType,
+          String rewardType, num rewardAmount) =>
+      onEarnedReward?.call(adNetwork, adUnitType, rewardType, rewardAmount);
 }

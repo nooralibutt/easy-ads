@@ -74,7 +74,7 @@ class EasyAdmobRewardedAd extends EasyAdBase {
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
-        onAdFailedToDisplay?.call(adNetwork, error.toString(), ad);
+        onAdFailedToShow?.call(adNetwork, error.toString(), ad);
 
         ad.dispose();
         load();

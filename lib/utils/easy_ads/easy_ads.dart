@@ -57,14 +57,18 @@ class EasyAds {
   void showInterstitialAd(AdNetwork adNetwork) {}
 
   void loadRewardedAd({AdNetwork adNetwork = AdNetwork.Default}) {
-    final ad = rewardedAds.firstWhereOrNull(
-        (e) => adNetwork == AdNetwork.Default || adNetwork == e.adNetwork);
-    ad?.load();
+    rewardedAds.forEach((e) {
+      if (e.isAdLoaded == false &&
+          (adNetwork == AdNetwork.Default || adNetwork == e.adNetwork)) {
+        e.load();
+      }
+    });
   }
 
   bool isRewardedAdLoaded({AdNetwork adNetwork = AdNetwork.Default}) {
-    final ad = rewardedAds.firstWhereOrNull(
-        (e) => adNetwork == AdNetwork.Default || adNetwork == e.adNetwork);
+    final ad = rewardedAds.firstWhereOrNull((e) =>
+        e.isAdLoaded &&
+        (adNetwork == AdNetwork.Default || adNetwork == e.adNetwork));
     return ad?.isAdLoaded ?? false;
   }
 

@@ -1,7 +1,7 @@
 import 'package:ads/screens/country_detail_screen.dart';
 import 'package:ads/models/country.dart';
 import 'package:ads/utils/easy_ads/easy_admob/easy_admob_banner_ad.dart';
-import 'package:ads/utils/easy_ads/easy_admob/easy_admob_interstitial_ad.dart';
+import 'package:ads/utils/easy_ads/easy_ads.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -14,14 +14,16 @@ class CountryListScreen extends StatefulWidget {
 
 class _CountryListScreenState extends State<CountryListScreen> {
   BannerAd? bannerAds;
-  EasyAdmobInterstitialAd? myInterstitialAds = EasyAdmobInterstitialAd();
+  // EasyAdmobInterstitialAd? myInterstitialAds = EasyAdmobInterstitialAd();
 
   @override
   void initState() {
     super.initState();
     bannerAds = EasyAdmobBannerAd.bannerCreate();
     bannerAds?.load();
-    myInterstitialAds?.createInterstitialAd();
+    // myInterstitialAds?.createInterstitialAd();
+
+    EasyAds.instance.initAdmob(rewardedAdUnitId: RewardedAd.testAdUnitId);
   }
 
   @override
@@ -29,6 +31,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
     super.dispose();
     bannerAds?.dispose();
     bannerAds = null;
+
+    EasyAds.instance.disposeRewardedAd();
   }
 
   @override
@@ -53,7 +57,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      myInterstitialAds?.showInterstitialAd();
+                      // myInterstitialAds?.showInterstitialAd();
+                      EasyAds.instance.showRewardedAd();
                       Navigator.push(
                         context,
                         MaterialPageRoute(

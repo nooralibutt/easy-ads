@@ -1,4 +1,5 @@
 import 'package:ads/utils/enums/ad_network.dart';
+import 'package:ads/utils/enums/ad_unit_type.dart';
 
 abstract class EasyAdBase {
   final String adUnitId;
@@ -7,6 +8,7 @@ abstract class EasyAdBase {
   EasyAdBase(this.adUnitId);
 
   AdNetwork get adNetwork;
+  AdUnitType get adUnitType;
   bool get isAdLoaded;
 
   /// This will be called for initialization when we have to wait for the initialization
@@ -20,17 +22,20 @@ abstract class EasyAdBase {
   AdLoaded? onAdLoaded;
   AdShowed? onAdShowed;
   AdFailedToLoad? onAdFailedToLoad;
-  AdFailedToShow? onAdFailedToDisplay;
+  AdFailedToShow? onAdFailedToShow;
   AdDismissed? onAdDismissed;
   EarnedReward? onEarnedReward;
 }
 
-typedef AdLoaded = void Function(AdNetwork adNetwork, Object? data);
-typedef AdShowed = void Function(AdNetwork adNetwork, Object? data);
+typedef AdLoaded = void Function(
+    AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
+typedef AdShowed = void Function(
+    AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
 typedef AdFailedToLoad = void Function(
-    AdNetwork adNetwork, String errorMessage);
-typedef AdFailedToShow = void Function(
-    AdNetwork adNetwork, String errorMessage, Object? data);
-typedef AdDismissed = void Function(AdNetwork adNetwork, Object? data);
-typedef EarnedReward = void Function(
-    AdNetwork adNetwork, String rewardType, num rewardAmount);
+    AdNetwork adNetwork, AdUnitType adUnitType, String errorMessage);
+typedef AdFailedToShow = void Function(AdNetwork adNetwork,
+    AdUnitType adUnitType, String errorMessage, Object? data);
+typedef AdDismissed = void Function(
+    AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
+typedef EarnedReward = void Function(AdNetwork adNetwork, AdUnitType adUnitType,
+    String rewardType, num rewardAmount);

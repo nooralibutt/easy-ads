@@ -1,5 +1,6 @@
 import 'package:ads/utils/easy_ads/easy_ad_base.dart';
 import 'package:ads/utils/enums/ad_network.dart';
+import 'package:ads/utils/enums/ad_unit_type.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -17,7 +18,9 @@ class EasyAdmobBannerAd extends EasyAdBase {
   bool _isAdLoaded = false;
 
   @override
-  AdNetwork get adNetwork => AdNetwork.Admob;
+  AdUnitType get adUnitType => AdUnitType.banner;
+  @override
+  AdNetwork get adNetwork => AdNetwork.admob;
 
   @override
   void dispose() {
@@ -43,12 +46,12 @@ class EasyAdmobBannerAd extends EasyAdBase {
           _bannerAd = ad as BannerAd?;
           print('Banner Ad Loaded  >>>>>>>>>>>>>>>>>>>>>>>>>>');
           _isAdLoaded = true;
-          onAdLoaded?.call(adNetwork, ad);
+          onAdLoaded?.call(adNetwork, adUnitType, ad);
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           _bannerAd = null;
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(adNetwork, error.toString());
+          onAdFailedToLoad?.call(adNetwork, adUnitType, error.toString());
           ad.dispose();
         },
         onAdOpened: (Ad ad) => print('Ad opened.'),

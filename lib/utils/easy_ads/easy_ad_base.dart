@@ -20,7 +20,7 @@ abstract class EasyAdBase {
   AdLoaded? onAdLoaded;
   AdShowed? onAdShowed;
   AdFailedToLoad? onAdFailedToLoad;
-  AdFailedToShow? onAdFailedToShow;
+  AdFailedToShow? onAdFailedToDisplay;
   AdDismissed? onAdDismissed;
   EarnedReward? onEarnedReward;
 }

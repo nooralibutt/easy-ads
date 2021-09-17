@@ -34,7 +34,6 @@ class EasyAdmobRewardedAd extends EasyAdBase {
   @override
   Future<void> load() async {
     if (_isAdLoaded) return;
-
     await RewardedAd.load(
         adUnitId: adUnitId,
         request: _adRequest,
@@ -74,7 +73,7 @@ class EasyAdmobRewardedAd extends EasyAdBase {
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
         print('$ad onAdFailedToShowFullScreenContent: $error');
-        onAdFailedToShow?.call(adNetwork, error.toString(), ad);
+        onAdFailedToDisplay?.call(adNetwork, error.toString(), ad);
 
         ad.dispose();
         load();

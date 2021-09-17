@@ -89,8 +89,7 @@ class EasyAds {
 
   void loadInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
     interstitialAds.forEach((e) {
-      if (e.isAdLoaded == false &&
-          (adNetwork == AdNetwork.any || adNetwork == e.adNetwork)) {
+      if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
         e.load();
       }
     });
@@ -98,8 +97,8 @@ class EasyAds {
 
   bool isInterstitialAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
     final ad = interstitialAds.firstWhereOrNull((e) =>
-        e.isAdLoaded &&
-        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
+        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
+        e.isAdLoaded);
     return ad?.isAdLoaded ?? false;
   }
 
@@ -120,8 +119,7 @@ class EasyAds {
 
   void loadRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
     rewardedAds.forEach((e) {
-      if (e.isAdLoaded == false &&
-          (adNetwork == AdNetwork.any || adNetwork == e.adNetwork)) {
+      if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
         e.load();
       }
     });
@@ -129,8 +127,8 @@ class EasyAds {
 
   bool isRewardedAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
     final ad = rewardedAds.firstWhereOrNull((e) =>
-        e.isAdLoaded &&
-        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
+        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
+        e.isAdLoaded);
     return ad?.isAdLoaded ?? false;
   }
 

@@ -1,4 +1,5 @@
 import 'package:ads/utils/easy_ads/easy_ad_base.dart';
+import 'package:ads/utils/easy_ads/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:ads/utils/easy_ads/easy_admob/easy_admob_rewarded_ad.dart';
 import 'package:ads/utils/enums/ad_network.dart';
 import 'package:ads/utils/enums/ad_unit_type.dart';
@@ -24,12 +25,33 @@ class EasyAds {
   AdRequest? adRequest;
 
   Future<void> initAdmob({
+    String? interstitialAdUnitId,
     String? rewardedAdUnitId,
     AdRequest? adRequest,
     bool immersiveModeEnabled = true,
   }) async {
     this.adRequest = adRequest;
 
+    // init interstitial ads
+    if (interstitialAdUnitId != null &&
+        interstitialAds.indexWhere((e) => e.adNetwork == AdNetwork.admob) ==
+            -1) {
+      final interstitialAd = EasyAdmobInterstitialAd(
+          interstitialAdUnitId, adRequest ?? AdRequest(), immersiveModeEnabled);
+      interstitialAds.add(interstitialAd);
+
+      // overriding the callbacks
+      interstitialAd.onAdLoaded = onAdLoadedMethod;
+      interstitialAd.onAdFailedToLoad = onAdFailedToLoadMethod;
+      interstitialAd.onAdShowed = onAdShowedMethod;
+      interstitialAd.onAdFailedToShow = onAdFailedToShowMethod;
+      interstitialAd.onAdDismissed = onAdDismissedMethod;
+
+      await interstitialAd.init();
+      await interstitialAd.load();
+    }
+
+    // init rewarded ads
     if (rewardedAdUnitId != null &&
         rewardedAds.indexWhere((e) => e.adNetwork == AdNetwork.admob) == -1) {
       final rewardedAd = EasyAdmobRewardedAd(
@@ -65,9 +87,36 @@ class EasyAds {
   void isBannerAdLoaded(AdNetwork adNetwork) {}
   void showBannerAd(AdNetwork adNetwork) {}
 
-  void loadInterstitialAd(AdNetwork adNetwork) {}
-  void isInterstitialAdLoaded(AdNetwork adNetwork) {}
-  void showInterstitialAd(AdNetwork adNetwork) {}
+  void loadInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
+    interstitialAds.forEach((e) {
+      if (e.isAdLoaded == false &&
+          (adNetwork == AdNetwork.any || adNetwork == e.adNetwork)) {
+        e.load();
+      }
+    });
+  }
+
+  bool isInterstitialAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
+    final ad = interstitialAds.firstWhereOrNull((e) =>
+        e.isAdLoaded &&
+        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
+    return ad?.isAdLoaded ?? false;
+  }
+
+  void showInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
+    final ad = interstitialAds.firstWhereOrNull((e) =>
+        e.isAdLoaded &&
+        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
+    ad?.show();
+  }
+
+  void disposeInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
+    for (final e in interstitialAds) {
+      if (adNetwork == AdNetwork.any)
+        e.dispose();
+      else if (adNetwork == e.adNetwork) e.dispose();
+    }
+  }
 
   void loadRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
     rewardedAds.forEach((e) {
@@ -93,10 +142,10 @@ class EasyAds {
   }
 
   void disposeRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
-    for (final r in rewardedAds) {
+    for (final e in rewardedAds) {
       if (adNetwork == AdNetwork.any)
-        r.dispose();
-      else if (adNetwork == r.adNetwork) r.dispose();
+        e.dispose();
+      else if (adNetwork == e.adNetwork) e.dispose();
     }
   }
 

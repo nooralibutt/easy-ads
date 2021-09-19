@@ -1,17 +1,17 @@
 import 'package:ads/utils/easy_ads/easy_ad_base.dart';
-import 'package:ads/utils/easy_ads/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:ads/utils/easy_ads/easy_admob/easy_admob_rewarded_ad.dart';
 import 'package:ads/utils/enums/ad_network.dart';
+import 'package:ads/utils/easy_ads/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:ads/utils/enums/ad_unit_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:collection/collection.dart';
 
 class EasyAds {
   EasyAds._easyAds();
-
   static final EasyAds instance = EasyAds._easyAds();
 
   AdLoaded? onAdLoaded;
+  AdRequest? _adRequest;
   AdShowed? onAdShowed;
   AdFailedToLoad? onAdFailedToLoad;
   AdFailedToShow? onAdFailedToShow;
@@ -22,15 +22,13 @@ class EasyAds {
   final List<EasyAdBase> interstitialAds = [];
   final List<EasyAdBase> rewardedAds = [];
 
-  AdRequest? adRequest;
-
   Future<void> initAdmob({
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
     AdRequest? adRequest,
     bool immersiveModeEnabled = true,
   }) async {
-    this.adRequest = adRequest;
+    this._adRequest = adRequest;
 
     // init interstitial ads
     if (interstitialAdUnitId != null &&
@@ -55,7 +53,7 @@ class EasyAds {
     if (rewardedAdUnitId != null &&
         rewardedAds.indexWhere((e) => e.adNetwork == AdNetwork.admob) == -1) {
       final rewardedAd = EasyAdmobRewardedAd(
-          rewardedAdUnitId, adRequest ?? AdRequest(), immersiveModeEnabled);
+          rewardedAdUnitId, _adRequest ?? AdRequest(), immersiveModeEnabled);
       rewardedAds.add(rewardedAd);
 
       // overriding the callbacks
@@ -85,7 +83,6 @@ class EasyAds {
 
   void loadBannerAd(AdNetwork adNetwork) {}
   void isBannerAdLoaded(AdNetwork adNetwork) {}
-  void showBannerAd(AdNetwork adNetwork) {}
 
   void loadInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
     interstitialAds.forEach((e) {

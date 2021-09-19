@@ -38,7 +38,6 @@ class EasyAdmobRewardedAd extends EasyAdBase {
   @override
   Future<void> load() async {
     if (_isAdLoaded) return;
-
     await RewardedAd.load(
         adUnitId: adUnitId,
         request: _adRequest,

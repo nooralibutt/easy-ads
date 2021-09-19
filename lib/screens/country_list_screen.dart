@@ -1,9 +1,8 @@
 import 'package:ads/screens/country_detail_screen.dart';
 import 'package:ads/models/country.dart';
+import 'package:ads/utils/easy_ads/easy_ad_base.dart';
 import 'package:ads/utils/easy_ads/easy_admob/easy_admob_banner_ad.dart';
 import 'package:ads/utils/easy_ads/easy_ads.dart';
-import 'package:ads/utils/enums/ad_network.dart';
-import 'package:ads/utils/enums/ad_unit_type.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -15,13 +14,16 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
-  BannerAd? bannerAds;
-
+  late final EasyAdBase _bannerAd;
   @override
   void initState() {
     super.initState();
-    bannerAds = EasyAdmobBannerAd.bannerCreate();
-    bannerAds?.load();
+
+    final adRequest = AdRequest();
+
+    _bannerAd =
+        EasyAdmobBannerAd(BannerAd.testAdUnitId, adRequest, AdSize.banner);
+    _bannerAd.load();
 
     EasyAds.instance.initAdmob(
         interstitialAdUnitId: InterstitialAd.testAdUnitId,
@@ -31,11 +33,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
   @override
   void dispose() {
     super.dispose();
-    bannerAds?.dispose();
-    bannerAds = null;
 
     EasyAds.instance.disposeInterstitialAd();
     EasyAds.instance.disposeRewardedAd();
+    _bannerAd.dispose();
   }
 
   @override
@@ -48,12 +49,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
       ),
       body: Column(
         children: [
-          if (bannerAds != null)
-            SizedBox(
-              child: AdWidget(ad: bannerAds!),
-              height: 50,
-              width: double.infinity,
-            ),
+          _bannerAd.show(),
           Expanded(
             child: ListView.builder(
                 itemCount: countryList.length,

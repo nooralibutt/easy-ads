@@ -1,10 +1,26 @@
-import 'package:ads/screens/country_detail_screen.dart';
 import 'package:ads/models/country.dart';
-import 'package:ads/utils/easy_ads/easy_ad_base.dart';
-import 'package:ads/utils/easy_ads/easy_admob/easy_admob_banner_ad.dart';
-import 'package:ads/utils/easy_ads/easy_ads.dart';
 import 'package:flutter/material.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyAds.instance.initialize();
+
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      title: 'Flutter Easy Ads Example',
+      home: CountryListScreen(),
+    );
+  }
+}
 
 class CountryListScreen extends StatefulWidget {
   const CountryListScreen({Key? key}) : super(key: key);
@@ -14,15 +30,13 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
-  late final EasyAdBase _bannerAd;
+  late final EasyAdmobBannerAd _bannerAd;
   @override
   void initState() {
     super.initState();
 
-    final adRequest = AdRequest();
-
-    _bannerAd =
-        EasyAdmobBannerAd(BannerAd.testAdUnitId, adRequest, AdSize.banner);
+    _bannerAd = EasyAdmobBannerAd(
+        BannerAd.testAdUnitId, const AdRequest(), AdSize.banner);
     _bannerAd.load();
 
     EasyAds.instance.initAdmob(
@@ -41,7 +55,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final countryList = Country.countryList;
+    const countryList = Country.countryList;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Country List"),
@@ -78,6 +92,46 @@ class _CountryListScreenState extends State<CountryListScreen> {
                     ),
                   );
                 }),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class CountryDetailScreen extends StatelessWidget {
+  final Country country;
+
+  const CountryDetailScreen({Key? key, required this.country})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(country.countryName),
+        centerTitle: true,
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            height: 200,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage(country.imageUrl),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Center(
+              child: Text(
+                country.countryDescription,
+                style:
+                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
+              ),
+            ),
           ),
         ],
       ),

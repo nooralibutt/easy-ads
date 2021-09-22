@@ -1,6 +1,6 @@
-import 'package:easy_ads/src/easy_ad_base.dart';
-import 'package:easy_ads/src/enums/ad_network.dart';
-import 'package:easy_ads/src/enums/ad_unit_type.dart';
+import 'package:easy_ads_flutter/src/easy_ad_base.dart';
+import 'package:easy_ads_flutter/src/enums/ad_network.dart';
+import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class EasyAdmobRewardedAd extends EasyAdBase {

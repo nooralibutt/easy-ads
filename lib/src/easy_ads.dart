@@ -1,13 +1,9 @@
-library easy_ads;
-
 import 'package:collection/collection.dart';
-import 'package:easy_ads/src/easy_ad_base.dart';
-import 'package:easy_ads/src/easy_admob/easy_admob_interstitial_ad.dart';
-import 'package:easy_ads/src/easy_admob/easy_admob_rewarded_ad.dart';
-export 'package:easy_ads/src/enums/ad_network.dart';
-export 'package:easy_ads/src/easy_admob/easy_admob_banner_ad.dart';
-import 'package:easy_ads/src/enums/ad_network.dart';
-import 'package:easy_ads/src/enums/ad_unit_type.dart';
+import 'package:easy_ads_flutter/src/easy_ad_base.dart';
+import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
+import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
+import 'package:easy_ads_flutter/src/enums/ad_network.dart';
+import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class EasyAds {

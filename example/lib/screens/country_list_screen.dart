@@ -1,6 +1,6 @@
 import 'package:ads/screens/country_detail_screen.dart';
 import 'package:ads/models/country.dart';
-import 'package:easy_ads/easy_ads.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 

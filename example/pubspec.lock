@@ -43,7 +43,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
-  easy_ads:
+  easy_ads_flutter:
     dependency: "direct main"
     description:
       path: ".."

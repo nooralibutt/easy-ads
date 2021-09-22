@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  easy_ads:
+  easy_ads_flutter:
     path: ../
 
 dev_dependencies:

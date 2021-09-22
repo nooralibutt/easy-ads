@@ -85,9 +85,6 @@ class EasyAds {
     return Future(() => null);
   }
 
-  void loadBannerAd(AdNetwork adNetwork) {}
-  void isBannerAdLoaded(AdNetwork adNetwork) {}
-
   void loadInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
     for (final e in interstitialAds) {
       if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
@@ -118,7 +115,7 @@ class EasyAds {
     }
   }
 
-  void loadRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
+  void loadRewardedAdloadRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
     for (final e in rewardedAds) {
       if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
         e.load();

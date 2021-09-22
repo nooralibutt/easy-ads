@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   google_mobile_ads: ^0.13.4
+  collection: ^1.15.0
 
 dev_dependencies:
   flutter_test:

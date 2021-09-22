@@ -1,6 +1,6 @@
-import 'package:ads/utils/easy_ads/easy_ad_base.dart';
-import 'package:ads/utils/enums/ad_network.dart';
-import 'package:ads/utils/enums/ad_unit_type.dart';
+import 'package:easy_ads/src/easy_ad_base.dart';
+import 'package:easy_ads/src/enums/ad_network.dart';
+import 'package:easy_ads/src/enums/ad_unit_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class EasyAdmobRewardedAd extends EasyAdBase {
@@ -24,9 +24,6 @@ class EasyAdmobRewardedAd extends EasyAdBase {
 
   @override
   bool get isAdLoaded => _isAdLoaded;
-
-  @override
-  Future<void> init() async {}
 
   @override
   void dispose() {

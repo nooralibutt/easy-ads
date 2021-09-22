@@ -1,7 +1,7 @@
-import 'package:ads/utils/easy_ads/easy_ad_base.dart';
-import 'package:ads/utils/enums/ad_network.dart';
-import 'package:ads/utils/enums/ad_unit_type.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:easy_ads/src/easy_ad_base.dart';
+import 'package:easy_ads/src/enums/ad_network.dart';
+import 'package:easy_ads/src/enums/ad_unit_type.dart';
+import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class EasyAdmobBannerAd extends EasyAdBase {
@@ -28,9 +28,6 @@ class EasyAdmobBannerAd extends EasyAdBase {
     _bannerAd?.dispose();
     _bannerAd = null;
   }
-
-  @override
-  Future<void> init() async {}
 
   @override
   bool get isAdLoaded => _isAdLoaded;

@@ -1,10 +1,10 @@
 import 'package:ads/screens/country_list_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:easy_ads/easy_ads.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  MobileAds.instance.initialize();
+  await EasyAds.instance.initialize();
 
   runApp(MyApp());
 }

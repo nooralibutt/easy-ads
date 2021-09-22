@@ -43,6 +43,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.15.0"
+  easy_ads:
+    dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "0.0.1"
   fake_async:
     dependency: transitive
     description:
@@ -61,7 +68,7 @@ packages:
     source: sdk
     version: "0.0.0"
   google_mobile_ads:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: google_mobile_ads
       url: "https://pub.dartlang.org"
@@ -151,4 +158,4 @@ packages:
     version: "2.1.0"
 sdks:
   dart: ">=2.12.0 <3.0.0"
-  flutter: ">=1.12.13+hotfix.5"
+  flutter: ">=1.17.0"

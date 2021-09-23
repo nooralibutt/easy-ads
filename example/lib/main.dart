@@ -70,8 +70,12 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 itemBuilder: (context, index) {
                   return GestureDetector(
                     onTap: () {
-                      EasyAds.instance.showInterstitialAd();
-                      // EasyAds.instance.showRewardedAd();
+                      if (countryList[index].countryName ==
+                          'Pakistan - Rewarded') {
+                        EasyAds.instance.showRewardedAd();
+                      } else {
+                        EasyAds.instance.showInterstitialAd();
+                      }
                       Navigator.push(
                         context,
                         MaterialPageRoute(

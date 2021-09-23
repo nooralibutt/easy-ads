@@ -32,7 +32,7 @@ class Country {
       "India, officially the Republic of India, is a country in South Asia. It is the seventh-largest country by area, the second-most populous country, and the most populous democracy in the world",
     ),
     Country(
-      "Pakistan",
+      "Pakistan - Rewarded",
       "https://cdn.pixabay.com/photo/2015/01/14/22/42/pakistan-599684_960_720.png",
       "Pakistan, officially the Islamic Republic of Pakistan, is a country in South Asia. It is the world's fifth-most populous country, with a population exceeding 225.2 million, and has the world's second-largest Muslim population. Pakistan is the 33rd-largest country by area, spanning 881,913 square kilometres",
     ),

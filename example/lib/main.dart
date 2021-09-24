@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:ads/models/country.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:unity_ads_plugin/unity_ads.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,26 +33,43 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
+  static final _unityGameId = Platform.isAndroid ? '4374881' : '4374880';
+  static final _unityInterstitialPlacementId =
+      Platform.isAndroid ? 'Interstitial_Android' : 'Interstitial_iOS';
+  static final _unityRewardedPlacementId =
+      Platform.isAndroid ? 'Rewarded_Android' : 'Rewarded_iOS';
+
   late final EasyAdmobBannerAd _bannerAd;
   @override
   void initState() {
     super.initState();
 
+    // Initializing Unity Ads
+    EasyAds.instance.initUnity(
+      unityGameId: _unityGameId,
+      testMode: true,
+      interstitialPlacementId: _unityInterstitialPlacementId,
+      rewardedPlacementId: _unityRewardedPlacementId,
+    );
+
+    // Initializing admob Ads
+    EasyAds.instance.initAdmob(
+      interstitialAdUnitId: InterstitialAd.testAdUnitId,
+      rewardedAdUnitId: RewardedAd.testAdUnitId,
+    );
+
+    // Initializing admob banner
     _bannerAd = EasyAdmobBannerAd(
         BannerAd.testAdUnitId, const AdRequest(), AdSize.banner);
     _bannerAd.load();
-
-    EasyAds.instance.initAdmob(
-        interstitialAdUnitId: InterstitialAd.testAdUnitId,
-        rewardedAdUnitId: RewardedAd.testAdUnitId);
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    EasyAds.instance.disposeInterstitialAd();
-    EasyAds.instance.disposeRewardedAd();
+    EasyAds.instance.disposeAds();
+
     _bannerAd.dispose();
   }
 
@@ -103,17 +123,30 @@ class _CountryListScreenState extends State<CountryListScreen> {
   }
 }
 
-class CountryDetailScreen extends StatelessWidget {
+class CountryDetailScreen extends StatefulWidget {
   final Country country;
 
   const CountryDetailScreen({Key? key, required this.country})
       : super(key: key);
 
   @override
+  State<CountryDetailScreen> createState() => _CountryDetailScreenState();
+}
+
+class _CountryDetailScreenState extends State<CountryDetailScreen> {
+  static final _unityBannerPlacementId =
+      Platform.isAndroid ? 'Banner_Android' : 'Banner_iOS';
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(country.countryName),
+        title: Text(widget.country.countryName),
         centerTitle: true,
       ),
       body: Column(
@@ -123,7 +156,7 @@ class CountryDetailScreen extends StatelessWidget {
             height: 200,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(country.imageUrl),
+                image: NetworkImage(widget.country.imageUrl),
               ),
             ),
           ),
@@ -131,12 +164,18 @@ class CountryDetailScreen extends StatelessWidget {
             padding: const EdgeInsets.all(20.0),
             child: Center(
               child: Text(
-                country.countryDescription,
+                widget.country.countryDescription,
                 style:
                     const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
               ),
             ),
           ),
+          UnityBannerAd(
+            placementId: _unityBannerPlacementId,
+            listener: (state, args) {
+              print('Banner Listener: $state => $args');
+            },
+          )
         ],
       ),
     );

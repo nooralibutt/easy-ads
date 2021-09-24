@@ -7,3 +7,9 @@
 
 * Added Changelog
 * Added how to use
+
+## 0.0.3
+
+* Added Unity ad support
+* Added On Network Initialized callback
+* Updated example with unity ads

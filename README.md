@@ -2,7 +2,8 @@ To easily add ads into your app.
 
 ## Features
 
-- Google Mobile Ads (banner, interstitial, rewarded video ad)
+- Google Mobile Ads (banner, interstitial, rewarded ad)
+- Unity Ads (banner, interstitial, rewarded ad)
 
 ## Prerequisites
 
@@ -111,7 +112,19 @@ EasyAds.instance.initAdmob(
         rewardedAdUnitId: RewardedAd.testAdUnitId);
 ```
 
-## load ad
+## Initialize the unity
+
+```dart
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+
+EasyAds.instance.initUnity(
+        unityGameId: 'unityGameId',
+        testMode: true,
+        interstitialPlacementId: 'Interstitial_Android',
+        rewardedPlacementId: 'Rewarded_Android');
+```
+
+## loading an ad
 
 ```dart
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -123,23 +136,21 @@ OR
 EasyAds.instance.loadInterstitialAd();
 ```
 
-## showing ad
+## showing Interstitial ad
 
 ```dart
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-
 EasyAds.instance.showInterstitialAd();
+```
 
-OR
+## showing Rewarded ad
 
+```dart
 EasyAds.instance.showRewardedAd();
 ```
 
 ## dispose ad
 
 ```dart
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-
 EasyAds.instance.disposeInterstitialAd();
 
 OR

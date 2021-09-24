@@ -59,8 +59,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
     );
 
     // Initializing admob banner
-    _bannerAd = EasyAdmobBannerAd(
-        BannerAd.testAdUnitId, const AdRequest(), AdSize.banner);
+    _bannerAd = EasyAdmobBannerAd(BannerAd.testAdUnitId, const AdRequest());
     _bannerAd.load();
   }
 
@@ -137,9 +136,22 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
   static final _unityBannerPlacementId =
       Platform.isAndroid ? 'Banner_Android' : 'Banner_iOS';
 
+  late final EasyUnityBannerAd _bannerAd;
+
   @override
   void initState() {
     super.initState();
+
+    // Initializing banner and load
+    _bannerAd = EasyUnityBannerAd(_unityBannerPlacementId);
+    _bannerAd.load();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    _bannerAd.dispose();
   }
 
   @override
@@ -170,12 +182,8 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
-          UnityBannerAd(
-            placementId: _unityBannerPlacementId,
-            listener: (state, args) {
-              print('Banner Listener: $state => $args');
-            },
-          )
+          const Spacer(),
+          _bannerAd.show(),
         ],
       ),
     );

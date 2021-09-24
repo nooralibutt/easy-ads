@@ -87,36 +87,19 @@ void main() async {
 
   runApp(MyApp());
 }
-
-class MyApp extends StatefulWidget {
-  @override
-  MyAppState createState() => MyAppState();
-}
-
-class MyAppState extends State<MyApp> {
-  @override
-  void initState() {
-    super.initState();
-    // Load ads.
-  }
-}
 ```
 
-## Initialize the admob
+### Initialize the admob plugin
 
 ```dart
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-
 EasyAds.instance.initAdmob(
         interstitialAdUnitId: InterstitialAd.testAdUnitId,
         rewardedAdUnitId: RewardedAd.testAdUnitId);
 ```
 
-## Initialize the unity
+### Initialize the unity plugin
 
 ```dart
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-
 EasyAds.instance.initUnity(
         unityGameId: 'unityGameId',
         testMode: true,
@@ -124,11 +107,9 @@ EasyAds.instance.initUnity(
         rewardedPlacementId: 'Rewarded_Android');
 ```
 
-## loading an ad
+### loading an ad
 
 ```dart
-import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-
 EasyAds.instance.loadRewardedAd();
 
 OR
@@ -136,24 +117,78 @@ OR
 EasyAds.instance.loadInterstitialAd();
 ```
 
-## showing Interstitial ad
+### showing Interstitial ad
 
 ```dart
 EasyAds.instance.showInterstitialAd();
 ```
 
-## showing Rewarded ad
+### showing Rewarded ad
 
 ```dart
 EasyAds.instance.showRewardedAd();
 ```
 
-## dispose ad
+### disposing an ad
 
 ```dart
-EasyAds.instance.disposeInterstitialAd();
+EasyAds.instance.disposeAds();
+```
 
-OR
+## Banner Ads
 
-EasyAds.instance.disposeRewardedAd();
+#### Declare Banner ad
+
+Declare banner ad instance variable and banner ad placement ids
+
+```dart
+class _CountryDetailScreenState extends State<CountryDetailScreen> {
+  static final _unityBannerPlacementId =
+          Platform.isAndroid ? 'Banner_Android' : 'Banner_iOS';
+
+  late final EasyUnityBannerAd _bannerAd;
+```
+
+#### initialize and load Banner ad
+
+Initialize and Load banner ad in init state
+
+```dart
+@override
+void initState() {
+  super.initState();
+
+  // Initializing banner and load ad
+  _bannerAd = EasyUnityBannerAd(_unityBannerPlacementId);
+  _bannerAd.load();
+}
+```
+
+#### show banner ad
+
+Show banner ad in widget-tree somewhere 
+
+```dart
+@override
+Widget build(BuildContext context) {
+  Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      SomeWidget(),
+      const Spacer(),
+      _bannerAd.show(),
+    ],
+  );
+}
+```
+
+#### dispose banner ad
+
+```dart
+@override
+void dispose() {
+  super.dispose();
+
+  _bannerAd.dispose();
+}
 ```

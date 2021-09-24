@@ -6,13 +6,13 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class EasyAdmobBannerAd extends EasyAdBase {
   final AdRequest _adRequest;
-  final AdSize _adSize;
+  final AdSize adSize;
 
   EasyAdmobBannerAd(
     String adUnitId,
-    this._adRequest,
-    this._adSize,
-  ) : super(adUnitId);
+    this._adRequest, {
+    this.adSize = AdSize.banner,
+  }) : super(adUnitId);
 
   BannerAd? _bannerAd;
   bool _isAdLoaded = false;
@@ -36,7 +36,7 @@ class EasyAdmobBannerAd extends EasyAdBase {
   Future<void> load() async {
     if (_isAdLoaded) return;
     _bannerAd = BannerAd(
-      size: _adSize,
+      size: adSize,
       adUnitId: adUnitId,
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
@@ -69,8 +69,8 @@ class EasyAdmobBannerAd extends EasyAdBase {
     return Container(
       alignment: Alignment.center,
       child: AdWidget(ad: ad),
-      height: _adSize.height.toDouble(),
-      width: _adSize.width.toDouble(),
+      height: adSize.height.toDouble(),
+      width: adSize.width.toDouble(),
     );
   }
 }

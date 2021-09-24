@@ -17,25 +17,25 @@ abstract class EasyAdBase {
   Future<void> load();
   dynamic show();
 
-  AdLoaded? onAdLoaded;
-  AdShowed? onAdShowed;
-  AdFailedToLoad? onAdFailedToLoad;
-  AdFailedToShow? onAdFailedToShow;
-  AdDismissed? onAdDismissed;
-  EarnedReward? onEarnedReward;
+  EasyAdCallback? onAdLoaded;
+  EasyAdCallback? onAdShowed;
+  EasyAdCallback? onAdClicked;
+  EasyAdFailedCallback? onAdFailedToLoad;
+  EasyAdFailedCallback? onAdFailedToShow;
+  EasyAdCallback? onAdDismissed;
+  EasyAdEarnedReward? onEarnedReward;
 }
 
-typedef AdNetworkInitialized = void Function(
+typedef EasyAdNetworkInitialized = void Function(
     AdNetwork adNetwork, bool isInitialized, Object? data);
-typedef AdLoaded = void Function(
+typedef EasyAdFailedCallback = void Function(AdNetwork adNetwork,
+    AdUnitType adUnitType, Object? data, String errorMessage);
+typedef EasyAdCallback = void Function(
     AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
-typedef AdShowed = void Function(
-    AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
-typedef AdFailedToLoad = void Function(
-    AdNetwork adNetwork, AdUnitType adUnitType, String errorMessage);
-typedef AdFailedToShow = void Function(AdNetwork adNetwork,
-    AdUnitType adUnitType, String errorMessage, Object? data);
-typedef AdDismissed = void Function(
-    AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
-typedef EarnedReward = void Function(AdNetwork adNetwork, AdUnitType adUnitType,
-    String? rewardType, num? rewardAmount);
+typedef EasyAdEarnedReward = void Function(AdNetwork adNetwork,
+    AdUnitType adUnitType, String? rewardType, num? rewardAmount);
+
+extension EasyAdBaseListExtension on List<EasyAdBase> {
+  bool doesNotContain(AdNetwork adNetwork, AdUnitType type) =>
+      indexWhere((e) => e.adNetwork == adNetwork && e.adUnitType == type) == -1;
+}

@@ -13,17 +13,23 @@ class EasyAds {
   EasyAds._easyAds();
   static final EasyAds instance = EasyAds._easyAds();
 
-  AdNetworkInitialized? onAdNetworkInitialized;
-  AdLoaded? onAdLoaded;
   AdRequest? _adRequest;
-  AdShowed? onAdShowed;
-  AdFailedToLoad? onAdFailedToLoad;
-  AdFailedToShow? onAdFailedToShow;
-  AdDismissed? onAdDismissed;
-  EarnedReward? onEarnedReward;
 
-  final List<EasyAdBase> interstitialAds = [];
-  final List<EasyAdBase> rewardedAds = [];
+  EasyAdNetworkInitialized? onAdNetworkInitialized;
+  EasyAdCallback? onAdLoaded;
+  EasyAdCallback? onAdDismissed;
+  EasyAdCallback? onAdShowed;
+  EasyAdFailedCallback? onAdFailedToLoad;
+  EasyAdFailedCallback? onAdFailedToShow;
+  EasyAdEarnedReward? onEarnedReward;
+
+  List<EasyAdBase> get _allAds => [..._interstitialAds, ..._rewardedAds];
+
+  /// All the interstitial ads will be stored in it
+  final List<EasyAdBase> _interstitialAds = [];
+
+  /// All the rewarded ads will be stored in it
+  final List<EasyAdBase> _rewardedAds = [];
 
   /// Initializes the Google Mobile Ads SDK.
   ///
@@ -43,11 +49,11 @@ class EasyAds {
 
     // init interstitial ads
     if (interstitialAdUnitId != null &&
-        interstitialAds.indexWhere((e) => e.adNetwork == AdNetwork.admob) ==
-            -1) {
+        _interstitialAds.doesNotContain(
+            AdNetwork.admob, AdUnitType.interstitial)) {
       final interstitialAd = EasyAdmobInterstitialAd(interstitialAdUnitId,
           adRequest ?? const AdRequest(), immersiveModeEnabled);
-      interstitialAds.add(interstitialAd);
+      _interstitialAds.add(interstitialAd);
 
       // overriding the callbacks
       interstitialAd.onAdLoaded = onAdLoadedMethod;
@@ -61,10 +67,10 @@ class EasyAds {
 
     // init rewarded ads
     if (rewardedAdUnitId != null &&
-        rewardedAds.indexWhere((e) => e.adNetwork == AdNetwork.admob) == -1) {
+        _rewardedAds.doesNotContain(AdNetwork.admob, AdUnitType.rewarded)) {
       final rewardedAd = EasyAdmobRewardedAd(rewardedAdUnitId,
           _adRequest ?? const AdRequest(), immersiveModeEnabled);
-      rewardedAds.add(rewardedAd);
+      _rewardedAds.add(rewardedAd);
 
       // overriding the callbacks
       rewardedAd.onAdLoaded = onAdLoadedMethod;
@@ -96,11 +102,11 @@ class EasyAds {
   }) async {
     // init interstitial ads
     if (interstitialPlacementId != null &&
-        interstitialAds.indexWhere((e) => e.adNetwork == AdNetwork.unity) ==
-            -1) {
+        _interstitialAds.doesNotContain(
+            AdNetwork.unity, AdUnitType.interstitial)) {
       final interstitialAd =
           EasyUnityAd(interstitialPlacementId, AdUnitType.interstitial);
-      interstitialAds.add(interstitialAd);
+      _interstitialAds.add(interstitialAd);
 
       // overriding the callbacks
       interstitialAd.onAdLoaded = onAdLoadedMethod;
@@ -114,9 +120,9 @@ class EasyAds {
 
     // init interstitial ads
     if (rewardedPlacementId != null &&
-        rewardedAds.indexWhere((e) => e.adNetwork == AdNetwork.unity) == -1) {
+        _rewardedAds.doesNotContain(AdNetwork.unity, AdUnitType.rewarded)) {
       final rewardedAd = EasyUnityAd(rewardedPlacementId, AdUnitType.rewarded);
-      rewardedAds.add(rewardedAd);
+      _rewardedAds.add(rewardedAd);
 
       // overriding the callbacks
       rewardedAd.onAdLoaded = onAdLoadedMethod;
@@ -140,7 +146,7 @@ class EasyAds {
   }
 
   void loadInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
-    for (final e in interstitialAds) {
+    for (final e in _interstitialAds) {
       if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
         e.load();
       }
@@ -148,31 +154,23 @@ class EasyAds {
   }
 
   bool isInterstitialAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
-    final ad = interstitialAds.firstWhereOrNull((e) =>
+    final ad = _interstitialAds.firstWhereOrNull((e) =>
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
         e.isAdLoaded);
     return ad?.isAdLoaded ?? false;
   }
 
   void showInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
-    interstitialAds.shuffle();
+    _interstitialAds.shuffle();
 
-    final ad = interstitialAds.firstWhereOrNull((e) =>
+    final ad = _interstitialAds.firstWhereOrNull((e) =>
         e.isAdLoaded &&
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
     ad?.show();
   }
 
-  void disposeInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
-    for (final e in interstitialAds) {
-      if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
-        e.dispose();
-      }
-    }
-  }
-
   void loadRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
-    for (final e in rewardedAds) {
+    for (final e in _rewardedAds) {
       if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
         e.load();
       }
@@ -180,24 +178,28 @@ class EasyAds {
   }
 
   bool isRewardedAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
-    final ad = rewardedAds.firstWhereOrNull((e) =>
+    final ad = _rewardedAds.firstWhereOrNull((e) =>
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
         e.isAdLoaded);
     return ad?.isAdLoaded ?? false;
   }
 
   void showRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
-    rewardedAds.shuffle();
+    _rewardedAds.shuffle();
 
-    final ad = rewardedAds.firstWhereOrNull((e) =>
+    final ad = _rewardedAds.firstWhereOrNull((e) =>
         e.isAdLoaded &&
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
     ad?.show();
   }
 
-  void disposeRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
-    for (final e in rewardedAds) {
-      if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
+  /// if [adNetwork] is provided only that network's ads will be disposed otherwise it will be ignored
+  /// if [adUnitType] is provided only that ad unit type will be disposed, otherwise it will be ignored
+  void disposeAds(
+      {AdNetwork adNetwork = AdNetwork.any, AdUnitType? adUnitType}) {
+    for (final e in _allAds) {
+      if ((adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
+          (adUnitType == null || adUnitType == e.adUnitType)) {
         e.dispose();
       }
     }
@@ -206,8 +208,7 @@ class EasyAds {
   /// A single listener for unity ad state which will be called
   /// every time unity ad is completed, failed or loaded
   void _onUnityAdListener(UnityAdState state, dynamic args) {
-    final List<EasyAdBase> ads = [...interstitialAds, ...rewardedAds];
-    for (final ad in ads) {
+    for (final ad in _allAds) {
       if (ad is EasyUnityAdBase) ad.onUnityAdListener(state, args);
     }
   }
@@ -218,12 +219,12 @@ class EasyAds {
   void onAdShowedMethod(
           AdNetwork adNetwork, AdUnitType adUnitType, Object? data) =>
       onAdShowed?.call(adNetwork, adUnitType, data);
-  void onAdFailedToLoadMethod(
-          AdNetwork adNetwork, AdUnitType adUnitType, String errorMessage) =>
-      onAdFailedToLoad?.call(adNetwork, adUnitType, errorMessage);
+  void onAdFailedToLoadMethod(AdNetwork adNetwork, AdUnitType adUnitType,
+          Object? data, String errorMessage) =>
+      onAdFailedToLoad?.call(adNetwork, adUnitType, data, errorMessage);
   void onAdFailedToShowMethod(AdNetwork adNetwork, AdUnitType adUnitType,
-          String errorMessage, Object? data) =>
-      onAdFailedToShow?.call(adNetwork, adUnitType, errorMessage, data);
+          Object? data, String errorMessage) =>
+      onAdFailedToShow?.call(adNetwork, adUnitType, data, errorMessage);
   void onAdDismissedMethod(
           AdNetwork adNetwork, AdUnitType adUnitType, Object? data) =>
       onAdDismissed?.call(adNetwork, adUnitType, data);

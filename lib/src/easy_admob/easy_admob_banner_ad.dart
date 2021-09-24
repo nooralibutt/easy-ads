@@ -41,19 +41,18 @@ class EasyAdmobBannerAd extends EasyAdBase {
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
           _bannerAd = ad as BannerAd?;
-          print('Banner Ad Loaded  >>>>>>>>>>>>>>>>>>>>>>>>>>');
           _isAdLoaded = true;
           onAdLoaded?.call(adNetwork, adUnitType, ad);
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           _bannerAd = null;
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(adNetwork, adUnitType, error.toString());
+          onAdFailedToLoad?.call(adNetwork, adUnitType, ad, error.toString());
           ad.dispose();
         },
-        onAdOpened: (Ad ad) => print('Ad opened.'),
-        onAdClosed: (Ad ad) => print('Ad closed.'),
-        onAdImpression: (Ad ad) => print('Ad impression.'),
+        onAdOpened: (Ad ad) => onAdClicked?.call(adNetwork, adUnitType, ad),
+        onAdClosed: (Ad ad) => onAdDismissed?.call(adNetwork, adUnitType, ad),
+        onAdImpression: (Ad ad) => onAdShowed?.call(adNetwork, adUnitType, ad),
       ),
       request: _adRequest,
     );
@@ -64,14 +63,14 @@ class EasyAdmobBannerAd extends EasyAdBase {
   dynamic show() {
     final ad = _bannerAd;
     if (ad == null) {
-      print('Warning: attempt to show rewarded before loaded.');
       return const SizedBox();
     }
 
-    return SizedBox(
+    return Container(
+      alignment: Alignment.center,
       child: AdWidget(ad: ad),
-      height: 50,
-      width: double.infinity,
+      height: _adSize.height.toDouble(),
+      width: _adSize.width.toDouble(),
     );
   }
 }

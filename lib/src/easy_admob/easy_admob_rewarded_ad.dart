@@ -40,41 +40,34 @@ class EasyAdmobRewardedAd extends EasyAdBase {
         request: _adRequest,
         rewardedAdLoadCallback:
             RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
-          print('$ad loaded.');
           _rewardedAd = ad;
           _isAdLoaded = true;
           onAdLoaded?.call(adNetwork, adUnitType, ad);
         }, onAdFailedToLoad: (LoadAdError error) {
-          print('RewardedAd failed to load: $error');
           _rewardedAd = null;
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(adNetwork, adUnitType, error.toString());
+          onAdFailedToLoad?.call(
+              adNetwork, adUnitType, error, error.toString());
         }));
   }
 
   @override
   dynamic show() {
     final ad = _rewardedAd;
-    if (ad == null) {
-      print('Warning: attempt to show rewarded before loaded.');
-      return;
-    }
+    if (ad == null) return;
 
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (RewardedAd ad) {
-        print('ad onAdShowedFullScreenContent.');
         onAdShowed?.call(adNetwork, adUnitType, ad);
       },
       onAdDismissedFullScreenContent: (RewardedAd ad) {
-        print('$ad onAdDismissedFullScreenContent.');
         onAdDismissed?.call(adNetwork, adUnitType, ad);
 
         ad.dispose();
         load();
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-        print('$ad onAdFailedToShowFullScreenContent: $error');
-        onAdFailedToShow?.call(adNetwork, adUnitType, error.toString(), ad);
+        onAdFailedToShow?.call(adNetwork, adUnitType, ad, error.toString());
 
         ad.dispose();
         load();
@@ -83,7 +76,6 @@ class EasyAdmobRewardedAd extends EasyAdBase {
 
     ad.setImmersiveMode(_immersiveModeEnabled);
     ad.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
-      print('$ad with reward $RewardItem(${reward.amount}, ${reward.type}');
       onEarnedReward?.call(adNetwork, adUnitType, reward.type, reward.amount);
     });
     _rewardedAd = null;

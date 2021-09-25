@@ -6,13 +6,13 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class EasyAdmobBannerAd extends EasyAdBase {
   final AdRequest _adRequest;
-  final AdSize _adSize;
+  final AdSize adSize;
 
   EasyAdmobBannerAd(
     String adUnitId,
-    this._adRequest,
-    this._adSize,
-  ) : super(adUnitId);
+    this._adRequest, {
+    this.adSize = AdSize.banner,
+  }) : super(adUnitId);
 
   BannerAd? _bannerAd;
   bool _isAdLoaded = false;
@@ -36,24 +36,23 @@ class EasyAdmobBannerAd extends EasyAdBase {
   Future<void> load() async {
     if (_isAdLoaded) return;
     _bannerAd = BannerAd(
-      size: _adSize,
+      size: adSize,
       adUnitId: adUnitId,
       listener: BannerAdListener(
         onAdLoaded: (Ad ad) {
           _bannerAd = ad as BannerAd?;
-          print('Banner Ad Loaded  >>>>>>>>>>>>>>>>>>>>>>>>>>');
           _isAdLoaded = true;
           onAdLoaded?.call(adNetwork, adUnitType, ad);
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           _bannerAd = null;
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(adNetwork, adUnitType, error.toString());
+          onAdFailedToLoad?.call(adNetwork, adUnitType, ad, error.toString());
           ad.dispose();
         },
-        onAdOpened: (Ad ad) => print('Ad opened.'),
-        onAdClosed: (Ad ad) => print('Ad closed.'),
-        onAdImpression: (Ad ad) => print('Ad impression.'),
+        onAdOpened: (Ad ad) => onAdClicked?.call(adNetwork, adUnitType, ad),
+        onAdClosed: (Ad ad) => onAdDismissed?.call(adNetwork, adUnitType, ad),
+        onAdImpression: (Ad ad) => onAdShowed?.call(adNetwork, adUnitType, ad),
       ),
       request: _adRequest,
     );
@@ -64,14 +63,14 @@ class EasyAdmobBannerAd extends EasyAdBase {
   dynamic show() {
     final ad = _bannerAd;
     if (ad == null) {
-      print('Warning: attempt to show rewarded before loaded.');
       return const SizedBox();
     }
 
-    return SizedBox(
+    return Container(
+      alignment: Alignment.center,
       child: AdWidget(ad: ad),
-      height: 50,
-      width: double.infinity,
+      height: adSize.height.toDouble(),
+      width: adSize.width.toDouble(),
     );
   }
 }

@@ -13,3 +13,8 @@
 * Added Unity ad support
 * Added On Network Initialized callback
 * Updated example with unity ads
+
+## 0.0.4
+
+* Added Applovin ad support
+* Configured project to run example project on ios

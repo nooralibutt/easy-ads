@@ -1,10 +1,12 @@
 import 'dart:io';
 
 import 'package:ads/models/country.dart';
+import 'package:ads/models/i_ad_id_manager.dart';
+import 'package:ads/models/test_ad_id_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:unity_ads_plugin/unity_ads.dart';
+
+const IAdIdManager adIdManager = TestAdIdManager();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,12 +35,6 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
-  static final _unityGameId = Platform.isAndroid ? '4374881' : '4374880';
-  static final _unityInterstitialPlacementId =
-      Platform.isAndroid ? 'Interstitial_Android' : 'Interstitial_iOS';
-  static final _unityRewardedPlacementId =
-      Platform.isAndroid ? 'Rewarded_Android' : 'Rewarded_iOS';
-
   late final EasyAdmobBannerAd _bannerAd;
   @override
   void initState() {
@@ -46,20 +42,20 @@ class _CountryListScreenState extends State<CountryListScreen> {
 
     // Initializing Unity Ads
     EasyAds.instance.initUnity(
-      unityGameId: _unityGameId,
+      unityGameId: adIdManager.unityGameId,
       testMode: true,
-      interstitialPlacementId: _unityInterstitialPlacementId,
-      rewardedPlacementId: _unityRewardedPlacementId,
+      interstitialPlacementId: adIdManager.unityInterstitialId,
+      rewardedPlacementId: adIdManager.unityRewardedId,
     );
 
     // Initializing admob Ads
     EasyAds.instance.initAdmob(
-      interstitialAdUnitId: InterstitialAd.testAdUnitId,
-      rewardedAdUnitId: RewardedAd.testAdUnitId,
+      interstitialAdUnitId: adIdManager.admobInterstitialId,
+      rewardedAdUnitId: adIdManager.admobRewardedId,
     );
 
     // Initializing admob banner
-    _bannerAd = EasyAdmobBannerAd(BannerAd.testAdUnitId, const AdRequest());
+    _bannerAd = EasyAdmobBannerAd(adIdManager.admobBannerId);
     _bannerAd.load();
   }
 
@@ -133,9 +129,6 @@ class CountryDetailScreen extends StatefulWidget {
 }
 
 class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  static final _unityBannerPlacementId =
-      Platform.isAndroid ? 'Banner_Android' : 'Banner_iOS';
-
   late final EasyUnityBannerAd _bannerAd;
 
   @override
@@ -143,7 +136,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
     super.initState();
 
     // Initializing banner and load
-    _bannerAd = EasyUnityBannerAd(_unityBannerPlacementId);
+    _bannerAd = EasyUnityBannerAd(adIdManager.unityBannerId);
     _bannerAd.load();
   }
 

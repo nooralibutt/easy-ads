@@ -51,8 +51,6 @@ class EasyUnityBannerAd extends EasyUnityAdBase {
   void onUnityAdListener(UnityAdState state, args) {}
 
   void _onUnityBannerAdListener(BannerAdState state, args) {
-    print('Banner Listener: $state => $args');
-
     if (state == BannerAdState.error) {
       _isAdLoaded = false;
       onAdFailedToLoad?.call(adNetwork, adUnitType, args,

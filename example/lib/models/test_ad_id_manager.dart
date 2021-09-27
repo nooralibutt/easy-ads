@@ -1,56 +1,40 @@
 import 'dart:io';
 
-import 'package:ads/models/i_ad_id_manager.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class TestAdIdManager extends IAdIdManager {
   const TestAdIdManager();
 
   @override
-  String get unityGameId => Platform.isAndroid ? '4374881' : '4374880';
+  AppAdIds? get admobAdIds => AppAdIds(
+        appId: Platform.isAndroid
+            ? 'ca-app-pub-3940256099942544~3347511713'
+            : 'ca-app-pub-3940256099942544~1458002511',
+        bannerId: BannerAd.testAdUnitId,
+        interstitialId: InterstitialAd.testAdUnitId,
+        rewardedId: RewardedAd.testAdUnitId,
+      );
 
   @override
-  String get unityInterstitialId =>
-      Platform.isAndroid ? 'Interstitial_Android' : 'Interstitial_iOS';
+  AppAdIds? get unityAdIds => AppAdIds(
+        appId: Platform.isAndroid ? '4374881' : '4374880',
+        bannerId: Platform.isAndroid ? 'Banner_Android' : 'Banner_iOS',
+        interstitialId:
+            Platform.isAndroid ? 'Interstitial_Android' : 'Interstitial_iOS',
+        rewardedId: Platform.isAndroid ? 'Rewarded_Android' : 'Rewarded_iOS',
+      );
 
   @override
-  String get unityRewardedId =>
-      Platform.isAndroid ? 'Rewarded_Android' : 'Rewarded_iOS';
+  AppAdIds? get appLovinAdIds => AppAdIds(
+        appId:
+            'OeKTS4Zl758OIlAs3KQ6-3WE1IkdOo3nQNJtRubTzlyFU76TRWeQZAeaSMCr9GcZdxR4p2cnoZ1Gg7p7eSXCdA',
+        interstitialId:
+            Platform.isAndroid ? 'c48f54c6ce5ff297' : 'e33147110a6d12d2',
+        rewardedId:
+            Platform.isAndroid ? 'ffbed216d19efb09' : 'f4af3e10dd48ee4f',
+      );
 
   @override
-  String get unityBannerId =>
-      Platform.isAndroid ? 'Banner_Android' : 'Banner_iOS';
-
-  @override
-  String get admobBannerId => BannerAd.testAdUnitId;
-
-  @override
-  String get admobInterstitialId => InterstitialAd.testAdUnitId;
-
-  @override
-  String get admobRewardedId => RewardedAd.testAdUnitId;
-
-  @override
-  // TODO: implement appLovinBannerId
-  String get appLovinBannerId => throw UnimplementedError();
-
-  @override
-  // TODO: implement appLovinInterstitialId
-  String get appLovinInterstitialId => throw UnimplementedError();
-
-  @override
-  // TODO: implement appLovinRewardedId
-  String get appLovinRewardedId => throw UnimplementedError();
-
-  @override
-  // TODO: implement fbBannerId
-  String get fbBannerId => throw UnimplementedError();
-
-  @override
-  // TODO: implement fbInterstitialId
-  String get fbInterstitialId => throw UnimplementedError();
-
-  @override
-  // TODO: implement fbRewardedId
-  String get fbRewardedId => throw UnimplementedError();
+  AppAdIds? get fbAdIds => null;
 }

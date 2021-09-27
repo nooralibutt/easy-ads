@@ -2,10 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
+import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
 import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
+import 'package:easy_ads_flutter/src/utils/i_ad_id_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:unity_ads_plugin/unity_ads.dart';
 
@@ -34,9 +36,37 @@ class EasyAds {
   /// Initializes the Google Mobile Ads SDK.
   ///
   /// Call this method as early as possible after the app launches
-  Future<void> initialize() async {
-    final status = await MobileAds.instance.initialize();
-    onAdNetworkInitialized?.call(AdNetwork.admob, true, status);
+  Future<void> initialize(IAdIdManager manager, {bool testMode = false}) async {
+    if (manager.admobAdIds?.appId != null) {
+      final status = await MobileAds.instance.initialize();
+      onAdNetworkInitialized?.call(AdNetwork.admob, true, status);
+
+      // Initializing admob Ads
+      EasyAds.instance.initAdmob(
+        interstitialAdUnitId: manager.admobAdIds?.interstitialId,
+        rewardedAdUnitId: manager.admobAdIds?.rewardedId,
+      );
+    }
+
+    final unityGameId = manager.unityAdIds?.appId;
+    if (unityGameId != null) {
+      // Initializing Unity Ads
+      EasyAds.instance.initUnity(
+        unityGameId: unityGameId,
+        testMode: testMode,
+        interstitialPlacementId: manager.unityAdIds?.interstitialId,
+        rewardedPlacementId: manager.unityAdIds?.rewardedId,
+      );
+    }
+
+    final appLovinSdkId = manager.appLovinAdIds?.appId;
+    if (appLovinSdkId != null) {
+      // Initializing Unity Ads
+      EasyAds.instance.initAppLovin(
+        interstitialAdUnitId: manager.appLovinAdIds?.interstitialId,
+        rewardedAdUnitId: manager.appLovinAdIds?.rewardedId,
+      );
+    }
   }
 
   Future<void> initAdmob({

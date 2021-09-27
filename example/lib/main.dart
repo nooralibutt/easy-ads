@@ -75,8 +75,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           'Pakistan - Rewarded') {
                         EasyAds.instance.showRewardedAd();
                       } else {
-                        EasyAds.instance
-                            .showInterstitialAd(adNetwork: AdNetwork.appLovin);
+                        EasyAds.instance.showInterstitialAd();
                       }
                       Navigator.push(
                         context,

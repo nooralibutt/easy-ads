@@ -14,10 +14,10 @@ dependencies:
   google_mobile_ads: ^0.13.4
   collection: ^1.15.0
   unity_ads_plugin: ^0.2.4
-  flutter_applovin_max:
-    git:
-      url: https://github.com/nooralibutt/flutter_applovin_max
-      ref: 'no-adapters'
+  flutter_applovin_max: ^2.0.0
+#    git:
+#      url: https://github.com/nooralibutt/flutter_applovin_max
+#      ref: 'no-adapters'
 
 dev_dependencies:
   flutter_test:

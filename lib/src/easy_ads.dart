@@ -86,11 +86,11 @@ class EasyAds {
       _interstitialAds.add(interstitialAd);
 
       // overriding the callbacks
-      interstitialAd.onAdLoaded = onAdLoadedMethod;
-      interstitialAd.onAdFailedToLoad = onAdFailedToLoadMethod;
-      interstitialAd.onAdShowed = onAdShowedMethod;
-      interstitialAd.onAdFailedToShow = onAdFailedToShowMethod;
-      interstitialAd.onAdDismissed = onAdDismissedMethod;
+      interstitialAd.onAdLoaded = _onAdLoadedMethod;
+      interstitialAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
+      interstitialAd.onAdShowed = _onAdShowedMethod;
+      interstitialAd.onAdFailedToShow = _onAdFailedToShowMethod;
+      interstitialAd.onAdDismissed = _onAdDismissedMethod;
 
       await interstitialAd.load();
     }
@@ -103,11 +103,11 @@ class EasyAds {
       _rewardedAds.add(rewardedAd);
 
       // overriding the callbacks
-      rewardedAd.onAdLoaded = onAdLoadedMethod;
-      rewardedAd.onAdFailedToLoad = onAdFailedToLoadMethod;
-      rewardedAd.onAdShowed = onAdShowedMethod;
-      rewardedAd.onAdFailedToShow = onAdFailedToShowMethod;
-      rewardedAd.onAdDismissed = onAdDismissedMethod;
+      rewardedAd.onAdLoaded = _onAdLoadedMethod;
+      rewardedAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
+      rewardedAd.onAdShowed = _onAdShowedMethod;
+      rewardedAd.onAdFailedToShow = _onAdFailedToShowMethod;
+      rewardedAd.onAdDismissed = _onAdDismissedMethod;
       rewardedAd.onEarnedReward = _onEarnedRewardMethod;
 
       await rewardedAd.load();
@@ -131,11 +131,11 @@ class EasyAds {
       _interstitialAds.add(interstitialAd);
 
       // overriding the callbacks
-      interstitialAd.onAdLoaded = onAdLoadedMethod;
-      interstitialAd.onAdFailedToLoad = onAdFailedToLoadMethod;
-      interstitialAd.onAdShowed = onAdShowedMethod;
-      interstitialAd.onAdFailedToShow = onAdFailedToShowMethod;
-      interstitialAd.onAdDismissed = onAdDismissedMethod;
+      interstitialAd.onAdLoaded = _onAdLoadedMethod;
+      interstitialAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
+      interstitialAd.onAdShowed = _onAdShowedMethod;
+      interstitialAd.onAdFailedToShow = _onAdFailedToShowMethod;
+      interstitialAd.onAdDismissed = _onAdDismissedMethod;
 
       await interstitialAd.initialize();
       await interstitialAd.load();
@@ -149,11 +149,11 @@ class EasyAds {
       _rewardedAds.add(rewardedAd);
 
       // overriding the callbacks
-      rewardedAd.onAdLoaded = onAdLoadedMethod;
-      rewardedAd.onAdFailedToLoad = onAdFailedToLoadMethod;
-      rewardedAd.onAdShowed = onAdShowedMethod;
-      rewardedAd.onAdFailedToShow = onAdFailedToShowMethod;
-      rewardedAd.onAdDismissed = onAdDismissedMethod;
+      rewardedAd.onAdLoaded = _onAdLoadedMethod;
+      rewardedAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
+      rewardedAd.onAdShowed = _onAdShowedMethod;
+      rewardedAd.onAdFailedToShow = _onAdFailedToShowMethod;
+      rewardedAd.onAdDismissed = _onAdDismissedMethod;
       rewardedAd.onEarnedReward = _onEarnedRewardMethod;
 
       await rewardedAd.initialize();
@@ -178,11 +178,11 @@ class EasyAds {
       _interstitialAds.add(interstitialAd);
 
       // overriding the callbacks
-      interstitialAd.onAdLoaded = onAdLoadedMethod;
-      interstitialAd.onAdFailedToLoad = onAdFailedToLoadMethod;
-      interstitialAd.onAdShowed = onAdShowedMethod;
-      interstitialAd.onAdFailedToShow = onAdFailedToShowMethod;
-      interstitialAd.onAdDismissed = onAdDismissedMethod;
+      interstitialAd.onAdLoaded = _onAdLoadedMethod;
+      interstitialAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
+      interstitialAd.onAdShowed = _onAdShowedMethod;
+      interstitialAd.onAdFailedToShow = _onAdFailedToShowMethod;
+      interstitialAd.onAdDismissed = _onAdDismissedMethod;
 
       await interstitialAd.load();
     }
@@ -194,11 +194,11 @@ class EasyAds {
       _rewardedAds.add(rewardedAd);
 
       // overriding the callbacks
-      rewardedAd.onAdLoaded = onAdLoadedMethod;
-      rewardedAd.onAdFailedToLoad = onAdFailedToLoadMethod;
-      rewardedAd.onAdShowed = onAdShowedMethod;
-      rewardedAd.onAdFailedToShow = onAdFailedToShowMethod;
-      rewardedAd.onAdDismissed = onAdDismissedMethod;
+      rewardedAd.onAdLoaded = _onAdLoadedMethod;
+      rewardedAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
+      rewardedAd.onAdShowed = _onAdShowedMethod;
+      rewardedAd.onAdFailedToShow = _onAdFailedToShowMethod;
+      rewardedAd.onAdDismissed = _onAdDismissedMethod;
 
       await rewardedAd.load();
     }
@@ -282,17 +282,17 @@ class EasyAds {
     }
   }
 
-  void onAdLoadedMethod(
+  void _onAdLoadedMethod(
       AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
     print(
         'EasyAds AdLoaded: Network: $adNetwork, AdUnitType: $adUnitType, Custom Data: $data');
     onAdLoaded?.call(adNetwork, adUnitType, data);
   }
 
-  void onAdShowedMethod(
+  void _onAdShowedMethod(
           AdNetwork adNetwork, AdUnitType adUnitType, Object? data) =>
       onAdShowed?.call(adNetwork, adUnitType, data);
-  void onAdFailedToLoadMethod(AdNetwork adNetwork, AdUnitType adUnitType,
+  void _onAdFailedToLoadMethod(AdNetwork adNetwork, AdUnitType adUnitType,
       Object? data, String errorMessage) {
     print(
         'EasyAds AdFailedToLoad: Network: $adNetwork, AdUnitType: $adUnitType, Custom Data: $data');
@@ -300,10 +300,10 @@ class EasyAds {
     onAdFailedToLoad?.call(adNetwork, adUnitType, data, errorMessage);
   }
 
-  void onAdFailedToShowMethod(AdNetwork adNetwork, AdUnitType adUnitType,
+  void _onAdFailedToShowMethod(AdNetwork adNetwork, AdUnitType adUnitType,
           Object? data, String errorMessage) =>
       onAdFailedToShow?.call(adNetwork, adUnitType, data, errorMessage);
-  void onAdDismissedMethod(
+  void _onAdDismissedMethod(
           AdNetwork adNetwork, AdUnitType adUnitType, Object? data) =>
       onAdDismissed?.call(adNetwork, adUnitType, data);
   void _onEarnedRewardMethod(AdNetwork adNetwork, AdUnitType adUnitType,

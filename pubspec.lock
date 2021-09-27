@@ -55,6 +55,15 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_applovin_max:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: no-adapters
+      resolved-ref: bd8642dba3713526ac0d404de43fcbb76dc5db97
+      url: "https://github.com/nooralibutt/flutter_applovin_max"
+    source: git
+    version: "2.0.0"
   flutter_lints:
     dependency: "direct dev"
     description:

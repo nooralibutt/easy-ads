@@ -1,5 +1,9 @@
 PODS:
+  - AppLovinSDK (10.3.5)
   - Flutter (1.0.0)
+  - flutter_applovin_max (0.1.0):
+    - AppLovinSDK
+    - Flutter
   - Google-Mobile-Ads-SDK (8.5.0):
     - GoogleAppMeasurement (< 9.0, >= 7.0)
     - GoogleUserMessagingPlatform (>= 1.1)
@@ -50,11 +54,13 @@ PODS:
 
 DEPENDENCIES:
   - Flutter (from `Flutter`)
+  - flutter_applovin_max (from `.symlinks/plugins/flutter_applovin_max/ios`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - unity_ads_plugin (from `.symlinks/plugins/unity_ads_plugin/ios`)
 
 SPEC REPOS:
   trunk:
+    - AppLovinSDK
     - Google-Mobile-Ads-SDK
     - GoogleAppMeasurement
     - GoogleUserMessagingPlatform
@@ -66,13 +72,17 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   Flutter:
     :path: Flutter
+  flutter_applovin_max:
+    :path: ".symlinks/plugins/flutter_applovin_max/ios"
   google_mobile_ads:
     :path: ".symlinks/plugins/google_mobile_ads/ios"
   unity_ads_plugin:
     :path: ".symlinks/plugins/unity_ads_plugin/ios"
 
 SPEC CHECKSUMS:
+  AppLovinSDK: 3188b9df77128b503cea9822b77e1b4fe7e4761b
   Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  flutter_applovin_max: 396189a0b73c26b28ad61b9f91611426a03ef83e
   Google-Mobile-Ads-SDK: 6f5c41bf73db1656e5b203ba9c31e3d0899a128d
   google_mobile_ads: b3a22ee82112a9f06eea4435c71a97d104e0d271
   GoogleAppMeasurement: 2be61ce546ad074dbe4dd545f222ac6033bb1d9e

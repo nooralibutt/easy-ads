@@ -1,7 +1,4 @@
-import 'dart:io';
-
 import 'package:ads/models/country.dart';
-import 'package:ads/models/i_ad_id_manager.dart';
 import 'package:ads/models/test_ad_id_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
@@ -10,7 +7,7 @@ const IAdIdManager adIdManager = TestAdIdManager();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyAds.instance.initialize();
+  await EasyAds.instance.initialize(adIdManager, testMode: true);
 
   runApp(const MyApp());
 }
@@ -35,28 +32,17 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
-  late final EasyAdmobBannerAd _bannerAd;
+  late final EasyAdmobBannerAd? _bannerAd;
   @override
   void initState() {
     super.initState();
 
-    // Initializing Unity Ads
-    EasyAds.instance.initUnity(
-      unityGameId: adIdManager.unityGameId,
-      testMode: true,
-      interstitialPlacementId: adIdManager.unityInterstitialId,
-      rewardedPlacementId: adIdManager.unityRewardedId,
-    );
-
-    // Initializing admob Ads
-    EasyAds.instance.initAdmob(
-      interstitialAdUnitId: adIdManager.admobInterstitialId,
-      rewardedAdUnitId: adIdManager.admobRewardedId,
-    );
-
     // Initializing admob banner
-    _bannerAd = EasyAdmobBannerAd(adIdManager.admobBannerId);
-    _bannerAd.load();
+    final bannerId = adIdManager.admobAdIds?.bannerId;
+    if (bannerId != null) {
+      _bannerAd = EasyAdmobBannerAd(bannerId);
+      _bannerAd?.load();
+    }
   }
 
   @override
@@ -65,7 +51,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
 
     EasyAds.instance.disposeAds();
 
-    _bannerAd.dispose();
+    _bannerAd?.dispose();
   }
 
   @override
@@ -78,7 +64,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
       ),
       body: Column(
         children: [
-          _bannerAd.show(),
+          _bannerAd?.show() ?? const SizedBox(),
           Expanded(
             child: ListView.builder(
                 itemCount: countryList.length,
@@ -89,7 +75,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           'Pakistan - Rewarded') {
                         EasyAds.instance.showRewardedAd();
                       } else {
-                        EasyAds.instance.showInterstitialAd();
+                        EasyAds.instance
+                            .showInterstitialAd(adNetwork: AdNetwork.appLovin);
                       }
                       Navigator.push(
                         context,
@@ -129,22 +116,27 @@ class CountryDetailScreen extends StatefulWidget {
 }
 
 class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  late final EasyUnityBannerAd _bannerAd;
+  late final EasyUnityBannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
 
+    EasyAds.instance.loadInterstitialAd();
+
     // Initializing banner and load
-    _bannerAd = EasyUnityBannerAd(adIdManager.unityBannerId);
-    _bannerAd.load();
+    final bannerId = adIdManager.unityAdIds?.bannerId;
+    if (bannerId != null) {
+      _bannerAd = EasyUnityBannerAd(bannerId);
+      _bannerAd?.load();
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    _bannerAd.dispose();
+    _bannerAd?.dispose();
   }
 
   @override
@@ -176,7 +168,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
             ),
           ),
           const Spacer(),
-          _bannerAd.show(),
+          _bannerAd?.show() ?? const SizedBox(),
         ],
       ),
     );

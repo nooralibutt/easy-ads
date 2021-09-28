@@ -1,14 +1,13 @@
-import 'dart:io';
-
 import 'package:ads/models/country.dart';
+import 'package:ads/models/test_ad_id_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
-import 'package:unity_ads_plugin/unity_ads.dart';
+
+const IAdIdManager adIdManager = TestAdIdManager();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyAds.instance.initialize();
+  await EasyAds.instance.initialize(adIdManager, testMode: true);
 
   runApp(const MyApp());
 }
@@ -33,34 +32,17 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
-  static final _unityGameId = Platform.isAndroid ? '4374881' : '4374880';
-  static final _unityInterstitialPlacementId =
-      Platform.isAndroid ? 'Interstitial_Android' : 'Interstitial_iOS';
-  static final _unityRewardedPlacementId =
-      Platform.isAndroid ? 'Rewarded_Android' : 'Rewarded_iOS';
-
-  late final EasyAdmobBannerAd _bannerAd;
+  late final EasyAdmobBannerAd? _bannerAd;
   @override
   void initState() {
     super.initState();
 
-    // Initializing Unity Ads
-    EasyAds.instance.initUnity(
-      unityGameId: _unityGameId,
-      testMode: true,
-      interstitialPlacementId: _unityInterstitialPlacementId,
-      rewardedPlacementId: _unityRewardedPlacementId,
-    );
-
-    // Initializing admob Ads
-    EasyAds.instance.initAdmob(
-      interstitialAdUnitId: InterstitialAd.testAdUnitId,
-      rewardedAdUnitId: RewardedAd.testAdUnitId,
-    );
-
     // Initializing admob banner
-    _bannerAd = EasyAdmobBannerAd(BannerAd.testAdUnitId, const AdRequest());
-    _bannerAd.load();
+    final bannerId = adIdManager.admobAdIds?.bannerId;
+    if (bannerId != null) {
+      _bannerAd = EasyAdmobBannerAd(bannerId);
+      _bannerAd?.load();
+    }
   }
 
   @override
@@ -69,7 +51,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
 
     EasyAds.instance.disposeAds();
 
-    _bannerAd.dispose();
+    _bannerAd?.dispose();
   }
 
   @override
@@ -82,7 +64,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
       ),
       body: Column(
         children: [
-          _bannerAd.show(),
+          _bannerAd?.show() ?? const SizedBox(),
           Expanded(
             child: ListView.builder(
                 itemCount: countryList.length,
@@ -133,25 +115,27 @@ class CountryDetailScreen extends StatefulWidget {
 }
 
 class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  static final _unityBannerPlacementId =
-      Platform.isAndroid ? 'Banner_Android' : 'Banner_iOS';
-
-  late final EasyUnityBannerAd _bannerAd;
+  late final EasyUnityBannerAd? _bannerAd;
 
   @override
   void initState() {
     super.initState();
 
+    EasyAds.instance.loadInterstitialAd();
+
     // Initializing banner and load
-    _bannerAd = EasyUnityBannerAd(_unityBannerPlacementId);
-    _bannerAd.load();
+    final bannerId = adIdManager.unityAdIds?.bannerId;
+    if (bannerId != null) {
+      _bannerAd = EasyUnityBannerAd(bannerId);
+      _bannerAd?.load();
+    }
   }
 
   @override
   void dispose() {
     super.dispose();
 
-    _bannerAd.dispose();
+    _bannerAd?.dispose();
   }
 
   @override
@@ -183,7 +167,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
             ),
           ),
           const Spacer(),
-          _bannerAd.show(),
+          _bannerAd?.show() ?? const SizedBox(),
         ],
       ),
     );

@@ -9,7 +9,7 @@ class EasyUnityBannerAd extends EasyUnityAdBase {
 
   EasyUnityBannerAd(
     String adUnitId, {
-    this.adSize = AdSize.banner,
+    this.adSize = AdSize.largeBanner,
   }) : super(adUnitId);
 
   bool _isAdLoaded = false;
@@ -51,8 +51,6 @@ class EasyUnityBannerAd extends EasyUnityAdBase {
   void onUnityAdListener(UnityAdState state, args) {}
 
   void _onUnityBannerAdListener(BannerAdState state, args) {
-    print('Banner Listener: $state => $args');
-
     if (state == BannerAdState.error) {
       _isAdLoaded = false;
       onAdFailedToLoad?.call(adNetwork, adUnitType, args,

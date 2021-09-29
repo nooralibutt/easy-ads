@@ -4,7 +4,7 @@ To easily add ads into your app.
 
 - Google Mobile Ads (banner, interstitial, rewarded ad)
 - Unity Ads (banner, interstitial, rewarded ad)
-- AppLovin Ads (banner, interstitial)
+- AppLovin Ads (interstitial, rewarded ad)
 
 ## Prerequisites
 
@@ -216,7 +216,13 @@ const IAdIdManager adIdManager = TestAdIdManager();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyAds.instance.initialize(adIdManager, testMode: true);
+  await EasyAds.instance.initialize(
+    adIdManager,
+    testMode: true,
+    adMobAdRequest: const AdRequest(),
+    admobConfiguration:
+    RequestConfiguration(testDeviceIds: ['adakjhdjkahdahkjdahkdhk']),
+  );
 
   runApp(MyApp());
 }
@@ -254,28 +260,23 @@ EasyAds.instance.disposeAds();
 
 #### Declare Banner ad
 
-Declare banner ad instance variable and banner ad placement ids
+Declare banner ad instance variable and initialize it. Make sure you have specified ad ids in ad id manager
 
 ```dart
 class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  late final EasyUnityBannerAd? _bannerAd;
+  final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
 ```
 
 #### initialize and load Banner ad
 
-Initialize and Load banner ad in init state
+Load banner ad in init state
 
 ```dart
 @override
 void initState() {
   super.initState();
-
-  // Initializing banner and load
-  final bannerId = adIdManager.unityAdIds?.bannerId;
-  if (bannerId != null) {
-    _bannerAd = EasyUnityBannerAd(bannerId);
-    _bannerAd?.load();
-  }
+  
+  _bannerAd?.load();
 }
 ```
 

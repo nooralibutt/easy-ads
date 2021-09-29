@@ -1,3 +1,9 @@
+## 0.1.0
+
+* Updated docs
+* Adds helper method of createBanner in easy ads
+* Updated initialize method to provide admob test device ids, request configuration and ad request object 
+
 ## 0.0.4
 
 * Added Applovin ad support

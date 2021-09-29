@@ -1,4 +1,5 @@
 import 'package:collection/collection.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
@@ -15,7 +16,9 @@ class EasyAds {
   EasyAds._easyAds();
   static final EasyAds instance = EasyAds._easyAds();
 
-  AdRequest? _adRequest;
+  /// Google admob's ad request
+  AdRequest _adRequest = const AdRequest();
+  late final IAdIdManager adIdManager;
 
   EasyAdNetworkInitialized? onAdNetworkInitialized;
   EasyAdCallback? onAdLoaded;
@@ -36,7 +39,19 @@ class EasyAds {
   /// Initializes the Google Mobile Ads SDK.
   ///
   /// Call this method as early as possible after the app launches
-  Future<void> initialize(IAdIdManager manager, {bool testMode = false}) async {
+  Future<void> initialize(IAdIdManager manager,
+      {bool testMode = false,
+      AdRequest? adMobAdRequest,
+      RequestConfiguration? admobConfiguration}) async {
+    adIdManager = manager;
+    if (adMobAdRequest != null) {
+      _adRequest = adMobAdRequest;
+    }
+
+    if (admobConfiguration != null) {
+      MobileAds.instance.updateRequestConfiguration(admobConfiguration);
+    }
+
     if (manager.admobAdIds?.appId != null) {
       final status = await MobileAds.instance.initialize();
       onAdNetworkInitialized?.call(AdNetwork.admob, true, status);
@@ -69,20 +84,51 @@ class EasyAds {
     }
   }
 
+  /// Returns [EasyAdBase] if ad is created successfully. It assumes that you have already assigned banner id in Ad Id Manager
+  ///
+  /// if [adNetwork] is provided, only that network's ad would be created. For now, only unity and admob banner is supported
+  /// [adSize] is used to provide ad banner size
+  EasyAdBase? createBanner(
+      {required AdNetwork adNetwork, AdSize adSize = AdSize.banner}) {
+    assert(adNetwork == AdNetwork.unity || adNetwork == AdNetwork.admob,
+        'Only admob and unity banners are available right now');
+
+    EasyAdBase? ad;
+    switch (adNetwork) {
+      case AdNetwork.admob:
+        final bannerId = adIdManager.admobAdIds?.bannerId;
+        assert(bannerId != null,
+            'You are trying to create a banner and Admob Banner id is null in ad id manager');
+        if (bannerId != null) {
+          return EasyAdmobBannerAd(bannerId,
+              adSize: adSize, adRequest: _adRequest);
+        }
+        break;
+      case AdNetwork.unity:
+        final bannerId = adIdManager.unityAdIds?.bannerId;
+        assert(bannerId != null,
+            'You are trying to create a banner and Unity Banner id is null in ad id manager');
+        if (bannerId != null) {
+          return EasyUnityBannerAd(bannerId, adSize: adSize);
+        }
+        break;
+      default:
+        ad = null;
+    }
+    return ad;
+  }
+
   Future<void> _initAdmob({
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
-    AdRequest? adRequest,
     bool immersiveModeEnabled = true,
   }) async {
-    _adRequest = adRequest;
-
     // init interstitial ads
     if (interstitialAdUnitId != null &&
         _interstitialAds.doesNotContain(
             AdNetwork.admob, AdUnitType.interstitial)) {
-      final interstitialAd = EasyAdmobInterstitialAd(interstitialAdUnitId,
-          adRequest ?? const AdRequest(), immersiveModeEnabled);
+      final interstitialAd = EasyAdmobInterstitialAd(
+          interstitialAdUnitId, _adRequest, immersiveModeEnabled);
       _interstitialAds.add(interstitialAd);
 
       // overriding the callbacks
@@ -98,8 +144,8 @@ class EasyAds {
     // init rewarded ads
     if (rewardedAdUnitId != null &&
         _rewardedAds.doesNotContain(AdNetwork.admob, AdUnitType.rewarded)) {
-      final rewardedAd = EasyAdmobRewardedAd(rewardedAdUnitId,
-          _adRequest ?? const AdRequest(), immersiveModeEnabled);
+      final rewardedAd = EasyAdmobRewardedAd(
+          rewardedAdUnitId, _adRequest, immersiveModeEnabled);
       _rewardedAds.add(rewardedAd);
 
       // overriding the callbacks
@@ -112,10 +158,6 @@ class EasyAds {
 
       await rewardedAd.load();
     }
-  }
-
-  Future _initFacebook() {
-    return Future(() => null);
   }
 
   Future<void> _initAppLovin({
@@ -214,6 +256,7 @@ class EasyAds {
     }
   }
 
+  /// if [adNetwork] is provided, only that network's ad would be loaded
   void loadInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
     for (final e in _interstitialAds) {
       if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
@@ -222,6 +265,9 @@ class EasyAds {
     }
   }
 
+  /// Returns bool indicating whether ad has been loaded
+  ///
+  /// if [adNetwork] is provided, only that network's ad would be checked
   bool isInterstitialAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
     final ad = _interstitialAds.firstWhereOrNull((e) =>
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
@@ -229,15 +275,28 @@ class EasyAds {
     return ad?.isAdLoaded ?? false;
   }
 
-  void showInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
-    _interstitialAds.shuffle();
+  /// Returns bool indicating whether ad has been displayed successfully or not
+  ///
+  /// if [adNetwork] is provided, only that network's ad would be displayed
+  /// if [random] is true, any random loaded ad would be displayed
+  bool showInterstitialAd(
+      {AdNetwork adNetwork = AdNetwork.any, bool random = false}) {
+    final List<EasyAdBase> ads;
+    if (random) {
+      ads = _interstitialAds.toList()..shuffle();
+    } else {
+      ads = _interstitialAds;
+    }
 
-    final ad = _interstitialAds.firstWhereOrNull((e) =>
+    final ad = ads.firstWhereOrNull((e) =>
         e.isAdLoaded &&
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
     ad?.show();
+
+    return ad != null;
   }
 
+  /// if [adNetwork] is provided, only that network's ad would be loaded
   void loadRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
     for (final e in _rewardedAds) {
       if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
@@ -246,6 +305,9 @@ class EasyAds {
     }
   }
 
+  /// Returns bool indicating whether ad has been loaded
+  ///
+  /// if [adNetwork] is provided, only that network's ad would be checked
   bool isRewardedAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
     final ad = _rewardedAds.firstWhereOrNull((e) =>
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
@@ -253,13 +315,16 @@ class EasyAds {
     return ad?.isAdLoaded ?? false;
   }
 
-  void showRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
-    _rewardedAds.shuffle();
-
+  /// Returns bool indicating whether ad has been displayed successfully or not
+  ///
+  /// if [adNetwork] is provided, only that network's ad would be showed
+  bool showRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
     final ad = _rewardedAds.firstWhereOrNull((e) =>
         e.isAdLoaded &&
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
     ad?.show();
+
+    return ad != null;
   }
 
   /// if [adNetwork] is provided only that network's ads will be disposed otherwise it will be ignored

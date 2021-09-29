@@ -7,7 +7,13 @@ const IAdIdManager adIdManager = TestAdIdManager();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await EasyAds.instance.initialize(adIdManager, testMode: true);
+  await EasyAds.instance.initialize(
+    adIdManager,
+    testMode: true,
+    adMobAdRequest: const AdRequest(),
+    admobConfiguration:
+        RequestConfiguration(testDeviceIds: ['adakjhdjkahdahkjdahkdhk']),
+  );
 
   runApp(const MyApp());
 }
@@ -32,17 +38,14 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
-  late final EasyAdmobBannerAd? _bannerAd;
+  final EasyAdBase? _bannerAd =
+      EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
+
   @override
   void initState() {
     super.initState();
 
-    // Initializing admob banner
-    final bannerId = adIdManager.admobAdIds?.bannerId;
-    if (bannerId != null) {
-      _bannerAd = EasyAdmobBannerAd(bannerId);
-      _bannerAd?.load();
-    }
+    _bannerAd?.load();
   }
 
   @override
@@ -115,7 +118,8 @@ class CountryDetailScreen extends StatefulWidget {
 }
 
 class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  late final EasyUnityBannerAd? _bannerAd;
+  final EasyAdBase? _bannerAd =
+      EasyAds.instance.createBanner(adNetwork: AdNetwork.unity);
 
   @override
   void initState() {
@@ -123,12 +127,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
 
     EasyAds.instance.loadInterstitialAd();
 
-    // Initializing banner and load
-    final bannerId = adIdManager.unityAdIds?.bannerId;
-    if (bannerId != null) {
-      _bannerAd = EasyUnityBannerAd(bannerId);
-      _bannerAd?.load();
-    }
+    _bannerAd?.load();
   }
 
   @override

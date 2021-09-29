@@ -1,6 +1,6 @@
 name: easy_ads_flutter
 description: Easy Ads is a wrapper around famous ad packages which let you integrate ads easily
-version: 0.0.4
+version: 0.1.0
 homepage: https://nooralibutt.com/
 repository: https://github.com/nooralibutt/easy-ads
 
@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_mobile_ads: ^0.13.4
+  google_mobile_ads: ^0.13.5
   collection: ^1.15.0
   unity_ads_plugin: ^0.2.4
   flutter_applovin_max: ^2.0.0

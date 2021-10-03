@@ -23,14 +23,6 @@ class EasyAds {
   AdRequest _adRequest = const AdRequest();
   late final IAdIdManager adIdManager;
 
-  EasyAdNetworkInitialized? onAdNetworkInitialized;
-  EasyAdCallback? onAdLoaded;
-  EasyAdCallback? onAdDismissed;
-  EasyAdCallback? onAdShowed;
-  EasyAdFailedCallback? onAdFailedToLoad;
-  EasyAdFailedCallback? onAdFailedToShow;
-  EasyAdEarnedReward? onEarnedReward;
-
   final _onEventController = StreamController<AdEvent>.broadcast();
   Stream<AdEvent> get onEvent => _onEventController.stream;
 
@@ -60,7 +52,19 @@ class EasyAds {
 
     if (manager.admobAdIds?.appId != null) {
       final status = await MobileAds.instance.initialize();
-      onAdNetworkInitialized?.call(AdNetwork.admob, true, status);
+
+      _onEventController.add(AdEvent(
+        type: AdEventType.adNetworkInitialized,
+        adNetwork: AdNetwork.admob,
+        adUnitType: AdUnitType.interstitial,
+        data: status,
+      ));
+      _onEventController.add(AdEvent(
+        type: AdEventType.adNetworkInitialized,
+        adNetwork: AdNetwork.admob,
+        adUnitType: AdUnitType.rewarded,
+        data: status,
+      ));
 
       // Initializing admob Ads
       EasyAds.instance._initAdmob(
@@ -258,7 +262,19 @@ class EasyAds {
         testMode: testMode,
         listener: _onUnityAdListener,
       );
-      onAdNetworkInitialized?.call(AdNetwork.unity, status == true, status);
+
+      _onEventController.add(AdEvent(
+        type: AdEventType.adNetworkInitialized,
+        adNetwork: AdNetwork.unity,
+        adUnitType: AdUnitType.interstitial,
+        data: status,
+      ));
+      _onEventController.add(AdEvent(
+        type: AdEventType.adNetworkInitialized,
+        adNetwork: AdNetwork.unity,
+        adUnitType: AdUnitType.rewarded,
+        data: status,
+      ));
     }
   }
 
@@ -364,8 +380,6 @@ class EasyAds {
       adUnitType: adUnitType,
       data: data,
     ));
-
-    onAdLoaded?.call(adNetwork, adUnitType, data);
   }
 
   void _onAdShowedMethod(
@@ -376,8 +390,6 @@ class EasyAds {
       adUnitType: adUnitType,
       data: data,
     ));
-
-    onAdShowed?.call(adNetwork, adUnitType, data);
   }
 
   void _onAdFailedToLoadMethod(AdNetwork adNetwork, AdUnitType adUnitType,
@@ -392,8 +404,6 @@ class EasyAds {
       data: data,
       error: errorMessage,
     ));
-
-    onAdFailedToLoad?.call(adNetwork, adUnitType, data, errorMessage);
   }
 
   void _onAdFailedToShowMethod(AdNetwork adNetwork, AdUnitType adUnitType,
@@ -405,8 +415,6 @@ class EasyAds {
       data: data,
       error: errorMessage,
     ));
-
-    onAdFailedToShow?.call(adNetwork, adUnitType, data, errorMessage);
   }
 
   void _onAdDismissedMethod(
@@ -417,8 +425,6 @@ class EasyAds {
       adUnitType: adUnitType,
       data: data,
     ));
-
-    onAdDismissed?.call(adNetwork, adUnitType, data);
   }
 
   void _onEarnedRewardMethod(AdNetwork adNetwork, AdUnitType adUnitType,
@@ -429,7 +435,5 @@ class EasyAds {
       adUnitType: adUnitType,
       data: {'rewardType': rewardType, 'rewardAmount': rewardAmount},
     ));
-
-    onEarnedReward?.call(adNetwork, adUnitType, rewardType, rewardAmount);
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ads/models/country.dart';
 import 'package:ads/models/test_ad_id_manager.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +43,9 @@ class _CountryListScreenState extends State<CountryListScreen> {
   final EasyAdBase? _bannerAd =
       EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
 
+  /// Using it to cancel the subscribed callbacks
+  StreamSubscription? _streamSubscription;
+
   @override
   void initState() {
     super.initState();
@@ -76,17 +81,32 @@ class _CountryListScreenState extends State<CountryListScreen> {
                     onTap: () {
                       if (countryList[index].countryName ==
                           'Pakistan - Rewarded') {
-                        EasyAds.instance.showRewardedAd();
+                        if (EasyAds.instance.showRewardedAd()) {
+                          // Canceling the last callback subscribed
+                          _streamSubscription?.cancel();
+                          // Listening to the callback from showRewardedAd()
+                          _streamSubscription =
+                              EasyAds.instance.onEvent.listen((event) {
+                            if (event.adUnitType == AdUnitType.rewarded &&
+                                event.type == AdEventType.adDismissed) {
+                              goToNextScreen(countryList[index]);
+                            }
+                          });
+                        }
                       } else {
-                        EasyAds.instance.showInterstitialAd();
+                        if (EasyAds.instance.showInterstitialAd()) {
+                          // Canceling the last callback subscribed
+                          _streamSubscription?.cancel();
+                          // Listening to the callback from showInterstitialAd()
+                          _streamSubscription =
+                              EasyAds.instance.onEvent.listen((event) {
+                            if (event.adUnitType == AdUnitType.interstitial &&
+                                event.type == AdEventType.adDismissed) {
+                              goToNextScreen(countryList[index]);
+                            }
+                          });
+                        }
                       }
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              CountryDetailScreen(country: countryList[index]),
-                        ),
-                      );
                     },
                     child: Card(
                       child: Padding(
@@ -102,6 +122,15 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 }),
           ),
         ],
+      ),
+    );
+  }
+
+  void goToNextScreen(Country country) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CountryDetailScreen(country: country),
       ),
     );
   }

@@ -268,11 +268,10 @@ But if you want to dispose ad of specific AdNetwork and AdUnitType, pass the req
 
 #### Declare ad
 
-Declare banner ad instance variable and initialize it. Make sure you have specified ad ids in ad id manager
+Declare banner ad instance variable in the widget class and initialize it. Make sure you have specified ad ids in ad id manager
 
 ```dart
-class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
+final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
 ```
 
 #### Initialize & Load ad

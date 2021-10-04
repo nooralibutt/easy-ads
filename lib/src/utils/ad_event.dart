@@ -14,7 +14,7 @@ enum AdEventType {
 class AdEvent {
   final AdEventType type;
   final AdNetwork adNetwork;
-  final AdUnitType adUnitType;
+  final AdUnitType? adUnitType;
 
   /// Any custom data along with the event
   final Object? data;
@@ -25,7 +25,7 @@ class AdEvent {
   AdEvent({
     required this.type,
     required this.adNetwork,
-    required this.adUnitType,
+    this.adUnitType,
     this.data,
     this.error,
   });

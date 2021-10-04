@@ -56,14 +56,8 @@ class EasyAds {
       _onEventController.add(AdEvent(
         type: AdEventType.adNetworkInitialized,
         adNetwork: AdNetwork.admob,
-        adUnitType: AdUnitType.interstitial,
-        data: status,
-      ));
-      _onEventController.add(AdEvent(
-        type: AdEventType.adNetworkInitialized,
-        adNetwork: AdNetwork.admob,
-        adUnitType: AdUnitType.rewarded,
-        data: status,
+        data: status.adapterStatuses.values.firstOrNull?.state ==
+            AdapterInitializationState.ready,
       ));
 
       // Initializing admob Ads
@@ -266,13 +260,6 @@ class EasyAds {
       _onEventController.add(AdEvent(
         type: AdEventType.adNetworkInitialized,
         adNetwork: AdNetwork.unity,
-        adUnitType: AdUnitType.interstitial,
-        data: status,
-      ));
-      _onEventController.add(AdEvent(
-        type: AdEventType.adNetworkInitialized,
-        adNetwork: AdNetwork.unity,
-        adUnitType: AdUnitType.rewarded,
         data: status,
       ));
     }

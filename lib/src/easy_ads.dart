@@ -5,6 +5,7 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
+import 'package:easy_ads_flutter/src/enums/ad_event_type.dart';
 import 'package:easy_ads_flutter/src/utils/ad_event.dart';
 import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
@@ -245,6 +246,7 @@ class EasyAds {
       rewardedAd.onAdShowed = _onAdShowedMethod;
       rewardedAd.onAdFailedToShow = _onAdFailedToShowMethod;
       rewardedAd.onAdDismissed = _onAdDismissedMethod;
+      rewardedAd.onEarnedReward = _onEarnedRewardMethod;
 
       await rewardedAd.load();
     }

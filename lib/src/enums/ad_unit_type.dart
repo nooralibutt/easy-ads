@@ -6,6 +6,6 @@ enum AdUnitType {
   rewarded,
 }
 
-extension AdNetworkExtension on AdUnitType {
+extension AdUnitTypeExtension on AdUnitType {
   String get value => describeEnum(this);
 }

@@ -227,49 +227,56 @@ void main() async {
   runApp(MyApp());
 }
 ```
+## Interstital/Rewarded Ads
 
-### loading an ad
-
+#### Load ad
 ```dart
-EasyAds.instance.loadRewardedAd();
-
-OR
-
 EasyAds.instance.loadInterstitialAd();
 ```
+Or
+```dart
+EasyAds.instance.loadRewardedAd();
+```
 
-### showing Interstitial ad
-
+#### Show ad
 ```dart
 EasyAds.instance.showInterstitialAd();
 ```
-
-### showing Rewarded ad
-
+Or
 ```dart
 EasyAds.instance.showRewardedAd();
 ```
 
-### disposing an ad
+By default, load & show methods load/show any ads of the available AdNetwork.
+If you want to load/show ads from specific AdNetwork, pass the required AdNetwork in parameters.
 
+Only 3 are currently available:
+```dart
+AdNetwork.admob
+AdNetwork.unity
+AdNetwork.appLovin
+```
+
+#### Dispose ad
 ```dart
 EasyAds.instance.disposeAds();
 ```
+By default, it disposes all the ads. 
+But if you want to dispose ad of specific AdNetwork and AdUnitType, pass the required in the parameters.
 
 ## Banner Ads
 
-#### Declare Banner ad
+#### Declare ad
 
-Declare banner ad instance variable and initialize it. Make sure you have specified ad ids in ad id manager
+Declare banner ad instance variable in the widget class and initialize it. Make sure you have specified ad ids in ad id manager
 
 ```dart
-class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
+final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
 ```
 
-#### initialize and load Banner ad
+#### Initialize & Load ad
 
-Load banner ad in init state
+Load banner ad in the init state like this:
 
 ```dart
 @override
@@ -280,9 +287,9 @@ void initState() {
 }
 ```
 
-#### show banner ad
+#### Show ad
 
-Show banner ad in widget-tree somewhere 
+This is how you may show banner ad in widget-tree somewhere:
 
 ```dart
 @override
@@ -298,7 +305,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-#### dispose banner ad
+#### Dispose ad
 
 ```dart
 @override
@@ -308,3 +315,28 @@ void dispose() {
   _bannerAd?.dispose();
 }
 ```
+
+### Listening to the callbacks
+Declare this object in the class
+```dart
+  StreamSubscription? _streamSubscription;
+```
+
+We are showing InterstitialAd here and also checking if ad has been shown.
+If `true`, we are canceling the subscribed callbacks, if any.
+Then, we are listening to the Stream and accessing the particular event we need
+```dart
+if (EasyAds.instance.showInterstitialAd()) {
+  // Canceling the last callback subscribed
+  _streamSubscription?.cancel();
+  // Listening to the callback from showInterstitialAd()
+  _streamSubscription =
+  EasyAds.instance.onEvent.listen((event) {
+    if (event.adUnitType == AdUnitType.interstitial &&
+        event.type == AdEventType.adDismissed) {
+      goToNextScreen(countryList[index]);
+    }
+  });
+}
+```
+See [Example](https://pub.dev/packages/easy_ads_flutter/example) for better understanding.

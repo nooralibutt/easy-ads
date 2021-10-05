@@ -1,3 +1,8 @@
+## 0.2.0
+* Implemented Event Management for adLoaded, adFailed, adShowed, etc callbacks using streams
+* Added methods to listen callbacks in example
+* Updated docs
+
 ## 0.1.0
 
 * Updated docs

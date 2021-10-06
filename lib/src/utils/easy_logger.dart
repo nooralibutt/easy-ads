@@ -16,7 +16,7 @@ class EasyLogger {
     }
   }
 
-  void _onAdmobInitialized(AdEvent event) {
+  void _onAdNetworkInitialized(AdEvent event) {
     if (event.data == true) {
       _logger.i(
           "${event.adNetwork.value} has been initialized and is ready to use.");
@@ -59,7 +59,7 @@ class EasyLogger {
   void _onAdEvent(AdEvent event) {
     switch (event.type) {
       case AdEventType.adNetworkInitialized:
-        _onAdmobInitialized(event);
+        _onAdNetworkInitialized(event);
         break;
       case AdEventType.adLoaded:
         _onAdLoaded(event);

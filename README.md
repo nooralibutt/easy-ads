@@ -229,7 +229,7 @@ void main() async {
 ```
 ## Interstital/Rewarded Ads
 
-#### Load ad
+### Load ad
 ```dart
 EasyAds.instance.loadInterstitialAd();
 ```
@@ -238,7 +238,7 @@ Or
 EasyAds.instance.loadRewardedAd();
 ```
 
-#### Show ad
+### Show ad
 ```dart
 EasyAds.instance.showInterstitialAd();
 ```
@@ -257,7 +257,7 @@ AdNetwork.unity
 AdNetwork.appLovin
 ```
 
-#### Dispose ad
+### Dispose ad
 ```dart
 EasyAds.instance.disposeAds();
 ```
@@ -266,7 +266,7 @@ But if you want to dispose ad of specific AdNetwork and AdUnitType, pass the req
 
 ## Banner Ads
 
-#### Declare ad
+### Declare ad
 
 Declare banner ad instance variable in the widget class and initialize it. Make sure you have specified ad ids in ad id manager
 
@@ -274,7 +274,7 @@ Declare banner ad instance variable in the widget class and initialize it. Make 
 final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
 ```
 
-#### Initialize & Load ad
+### Initialize & Load ad
 
 Load banner ad in the init state like this:
 
@@ -287,7 +287,7 @@ void initState() {
 }
 ```
 
-#### Show ad
+### Show ad
 
 This is how you may show banner ad in widget-tree somewhere:
 
@@ -305,7 +305,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-#### Dispose ad
+### Dispose ad
 
 ```dart
 @override
@@ -316,7 +316,7 @@ void dispose() {
 }
 ```
 
-### Listening to the callbacks
+## Listening to the callbacks
 Declare this object in the class
 ```dart
   StreamSubscription? _streamSubscription;

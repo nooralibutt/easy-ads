@@ -12,6 +12,7 @@ import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
 import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
+import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/i_ad_id_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:unity_ads_plugin/unity_ads.dart';
@@ -35,13 +36,20 @@ class EasyAds {
   /// All the rewarded ads will be stored in it
   final List<EasyAdBase> _rewardedAds = [];
 
+  /// [_logger] is used to show Ad logs in the console
+  final EasyLogger _logger = EasyLogger();
+
   /// Initializes the Google Mobile Ads SDK.
   ///
   /// Call this method as early as possible after the app launches
-  Future<void> initialize(IAdIdManager manager,
-      {bool testMode = false,
-      AdRequest? adMobAdRequest,
-      RequestConfiguration? admobConfiguration}) async {
+  Future<void> initialize(
+    IAdIdManager manager, {
+    bool testMode = false,
+    AdRequest? adMobAdRequest,
+    RequestConfiguration? admobConfiguration,
+    bool enableLogger = true,
+  }) async {
+    if (enableLogger) _logger.enable(enableLogger);
     adIdManager = manager;
     if (adMobAdRequest != null) {
       _adRequest = adMobAdRequest;
@@ -52,13 +60,13 @@ class EasyAds {
     }
 
     if (manager.admobAdIds?.appId != null) {
-      final status = await MobileAds.instance.initialize();
+      final response = await MobileAds.instance.initialize();
+      final status = response.adapterStatuses.values.firstOrNull?.state;
 
       _onEventController.add(AdEvent(
         type: AdEventType.adNetworkInitialized,
         adNetwork: AdNetwork.admob,
-        data: status.adapterStatuses.values.firstOrNull?.state ==
-            AdapterInitializationState.ready,
+        data: status == AdapterInitializationState.ready,
       ));
 
       // Initializing admob Ads
@@ -234,7 +242,7 @@ class EasyAds {
       await interstitialAd.load();
     }
 
-    // init interstitial ads
+    // init rewarded ads
     if (rewardedPlacementId != null &&
         _rewardedAds.doesNotContain(AdNetwork.unity, AdUnitType.rewarded)) {
       final rewardedAd = EasyUnityAd(rewardedPlacementId, AdUnitType.rewarded);

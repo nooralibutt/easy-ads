@@ -1,3 +1,7 @@
+## 0.3.0
+* Implemented Logger for EasyAds
+* Updated docs
+
 ## 0.2.0
 * Implemented Event Management for adLoaded, adFailed, adShowed, etc callbacks using streams
 * Added methods to listen callbacks in example

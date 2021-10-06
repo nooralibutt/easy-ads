@@ -1,4 +1,14 @@
-To easily add ads into your app.
+# Easy Ads Flutter
+
+[![pub package](https://img.shields.io/pub/v/easy_ads_flutter.svg?logo=dart&logoColor=00b9fc)](https://pub.dartlang.org/packages/easy_ads_flutter)
+[![Last Commits](https://img.shields.io/github/last-commit/nooralibutt/easy-ads?logo=git&logoColor=white)](https://github.com/nooralibutt/easy-ads/commits/master)
+[![Pull Requests](https://img.shields.io/github/issues-pr/nooralibutt/easy-ads?logo=github&logoColor=white)](https://github.com/nooralibutt/easy-ads/pulls)
+[![Code size](https://img.shields.io/github/languages/code-size/nooralibutt/easy-ads?logo=github&logoColor=white)](https://github.com/nooralibutt/easy-ads)
+[![License](https://img.shields.io/github/license/nooralibutt/easy-ads?logo=open-source-initiative&logoColor=green)](https://github.com/nooralibutt/easy-ads/blob/master/LICENSE)
+
+**Show some 💙, 👍 the package & ⭐️ the repo to support the project**
+
+To easily integrate ads from different ad networks into your flutter app.
 
 ## Features
 
@@ -229,7 +239,7 @@ void main() async {
 ```
 ## Interstital/Rewarded Ads
 
-#### Load ad
+### Load ad
 ```dart
 EasyAds.instance.loadInterstitialAd();
 ```
@@ -238,7 +248,7 @@ Or
 EasyAds.instance.loadRewardedAd();
 ```
 
-#### Show ad
+### Show ad
 ```dart
 EasyAds.instance.showInterstitialAd();
 ```
@@ -257,7 +267,7 @@ AdNetwork.unity
 AdNetwork.appLovin
 ```
 
-#### Dispose ad
+### Dispose ad
 ```dart
 EasyAds.instance.disposeAds();
 ```
@@ -266,7 +276,7 @@ But if you want to dispose ad of specific AdNetwork and AdUnitType, pass the req
 
 ## Banner Ads
 
-#### Declare ad
+### Declare ad
 
 Declare banner ad instance variable in the widget class and initialize it. Make sure you have specified ad ids in ad id manager
 
@@ -274,7 +284,7 @@ Declare banner ad instance variable in the widget class and initialize it. Make 
 final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
 ```
 
-#### Initialize & Load ad
+### Initialize & Load ad
 
 Load banner ad in the init state like this:
 
@@ -287,7 +297,7 @@ void initState() {
 }
 ```
 
-#### Show ad
+### Show ad
 
 This is how you may show banner ad in widget-tree somewhere:
 
@@ -305,7 +315,7 @@ Widget build(BuildContext context) {
 }
 ```
 
-#### Dispose ad
+### Dispose ad
 
 ```dart
 @override
@@ -316,7 +326,7 @@ void dispose() {
 }
 ```
 
-### Listening to the callbacks
+## Listening to the callbacks
 Declare this object in the class
 ```dart
   StreamSubscription? _streamSubscription;

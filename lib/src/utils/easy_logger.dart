@@ -32,7 +32,7 @@ class EasyLogger {
 
   void _onAdFailedToLoad(AdEvent event) {
     _logger.e(
-        "${event.adUnitType?.value} ads for ${event.adNetwork.value} could not be loaded.");
+        "${event.adUnitType?.value} ads for ${event.adNetwork.value} could not be loaded.\nERROR: ${event.error}");
   }
 
   void _onAdShowed(AdEvent event) {
@@ -42,7 +42,7 @@ class EasyLogger {
 
   void _onAdFailedShow(AdEvent event) {
     _logger.e(
-        "${event.adUnitType?.value} ad for ${event.adNetwork.value} could not be showed.");
+        "${event.adUnitType?.value} ad for ${event.adNetwork.value} could not be showed.\nERROR: ${event.error}");
   }
 
   void _onAdDismissed(AdEvent event) {

@@ -50,6 +50,13 @@ packages:
       relative: true
     source: path
     version: "0.3.0"
+  facebook_audience_network:
+    dependency: transitive
+    description:
+      name: facebook_audience_network
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0-nullsafety.0"
   fake_async:
     dependency: transitive
     description:

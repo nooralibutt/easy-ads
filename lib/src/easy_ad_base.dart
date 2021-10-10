@@ -34,8 +34,3 @@ typedef EasyAdCallback = void Function(
     AdNetwork adNetwork, AdUnitType adUnitType, Object? data);
 typedef EasyAdEarnedReward = void Function(AdNetwork adNetwork,
     AdUnitType adUnitType, String? rewardType, num? rewardAmount);
-
-extension EasyAdBaseListExtension on List<EasyAdBase> {
-  bool doesNotContain(AdNetwork adNetwork, AdUnitType type) =>
-      indexWhere((e) => e.adNetwork == adNetwork && e.adUnitType == type) == -1;
-}

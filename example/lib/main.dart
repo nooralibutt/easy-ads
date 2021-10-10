@@ -11,10 +11,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyAds.instance.initialize(
     adIdManager,
-    testMode: true,
+    unityTestMode: true,
     adMobAdRequest: const AdRequest(),
     admobConfiguration:
         RequestConfiguration(testDeviceIds: ['adakjhdjkahdahkjdahkdhk']),
+    fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
+    fbiOSAdvertiserTrackingEnabled: true,
   );
 
   runApp(const MyApp());
@@ -87,6 +89,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           // Listening to the callback from showRewardedAd()
                           _streamSubscription =
                               EasyAds.instance.onEvent.listen((event) {
+                            _streamSubscription?.cancel();
+
                             if (event.adUnitType == AdUnitType.rewarded &&
                                 event.type == AdEventType.adDismissed) {
                               goToNextScreen(countryList[index]);
@@ -94,12 +98,15 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           });
                         }
                       } else {
-                        if (EasyAds.instance.showInterstitialAd()) {
+                        if (EasyAds.instance.showInterstitialAd(
+                            adNetwork: AdNetwork.facebook)) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showInterstitialAd()
                           _streamSubscription =
                               EasyAds.instance.onEvent.listen((event) {
+                            _streamSubscription?.cancel();
+
                             if (event.adUnitType == AdUnitType.interstitial &&
                                 event.type == AdEventType.adDismissed) {
                               goToNextScreen(countryList[index]);

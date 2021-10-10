@@ -1,5 +1,5 @@
-## 1.0.0
-* Implemented Facebook ads (interstitial, rewarded and banner)
+## 1.0.0-facebook.0
+* Implemented Pre-released Facebook ads (interstitial, rewarded and banner)
 * Updated docs
 
 ## 0.3.0

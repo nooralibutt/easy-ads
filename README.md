@@ -13,8 +13,9 @@ To easily integrate ads from different ad networks into your flutter app.
 ## Features
 
 - Google Mobile Ads (banner, interstitial, rewarded ad)
+- Facebook Audience Network (banner, interstitial, rewarded ad)
 - Unity Ads (banner, interstitial, rewarded ad)
-- AppLovin Ads (interstitial, rewarded ad)
+- AppLovin Max Ads (interstitial, rewarded ad)
 
 ## Prerequisites
 
@@ -260,12 +261,6 @@ EasyAds.instance.showRewardedAd();
 By default, load & show methods load/show any ads of the available AdNetwork.
 If you want to load/show ads from specific AdNetwork, pass the required AdNetwork in parameters.
 
-Only 3 are currently available:
-```dart
-AdNetwork.admob
-AdNetwork.unity
-AdNetwork.appLovin
-```
 
 ### Dispose ad
 ```dart
@@ -344,6 +339,7 @@ if (EasyAds.instance.showInterstitialAd()) {
   EasyAds.instance.onEvent.listen((event) {
     if (event.adUnitType == AdUnitType.interstitial &&
         event.type == AdEventType.adDismissed) {
+      _streamSubscription?.cancel();
       goToNextScreen(countryList[index]);
     }
   });

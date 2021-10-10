@@ -1,3 +1,7 @@
+## 1.0.0
+* Implemented Facebook ads (interstitial, rewarded and banner)
+* Updated docs
+
 ## 0.3.0
 * Implemented Logger for EasyAds
 * Updated docs

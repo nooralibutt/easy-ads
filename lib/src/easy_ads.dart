@@ -5,7 +5,8 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
-import 'package:easy_ads_flutter/src/easy_facebook/easy_fb_full_screen_ad.dart';
+import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_banner_ad.dart';
+import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/enums/ad_event_type.dart';
 import 'package:easy_ads_flutter/src/utils/ad_event.dart';
 import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_ad.dart';
@@ -116,8 +117,11 @@ class EasyAds {
   /// [adSize] is used to provide ad banner size
   EasyAdBase? createBanner(
       {required AdNetwork adNetwork, AdSize adSize = AdSize.banner}) {
-    assert(adNetwork == AdNetwork.unity || adNetwork == AdNetwork.admob,
-        'Only admob and unity banners are available right now');
+    assert(
+        adNetwork == AdNetwork.unity ||
+            adNetwork == AdNetwork.admob ||
+            adNetwork == AdNetwork.facebook,
+        'Only admob, unity and facebook banners are available right now');
 
     EasyAdBase? ad;
     switch (adNetwork) {
@@ -136,6 +140,14 @@ class EasyAds {
             'You are trying to create a banner and Unity Banner id is null in ad id manager');
         if (bannerId != null) {
           return EasyUnityBannerAd(bannerId, adSize: adSize);
+        }
+        break;
+      case AdNetwork.facebook:
+        final bannerId = adIdManager.fbAdIds?.interstitialId;
+        assert(bannerId != null,
+            'You are trying to create a banner and Facebook Banner id is null in ad id manager');
+        if (bannerId != null) {
+          return EasyFacebookBannerAd(bannerId, adSize: adSize);
         }
         break;
       default:
@@ -308,8 +320,8 @@ class EasyAds {
     if (interstitialPlacementId != null &&
         _interstitialAds.doesNotContain(
             AdNetwork.facebook, AdUnitType.interstitial)) {
-      final interstitialAd =
-          EasyFbFullScreenAd(interstitialPlacementId, AdUnitType.interstitial);
+      final interstitialAd = EasyFacebookFullScreenAd(
+          interstitialPlacementId, AdUnitType.interstitial);
       _interstitialAds.add(interstitialAd);
 
       // overriding the callbacks
@@ -326,7 +338,7 @@ class EasyAds {
     if (rewardedPlacementId != null &&
         _rewardedAds.doesNotContain(AdNetwork.facebook, AdUnitType.rewarded)) {
       final rewardedAd =
-          EasyFbFullScreenAd(rewardedPlacementId, AdUnitType.rewarded);
+          EasyFacebookFullScreenAd(rewardedPlacementId, AdUnitType.rewarded);
       _rewardedAds.add(rewardedAd);
 
       // overriding the callbacks

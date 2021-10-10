@@ -153,7 +153,7 @@ class CountryDetailScreen extends StatefulWidget {
 
 class _CountryDetailScreenState extends State<CountryDetailScreen> {
   final EasyAdBase? _bannerAd =
-      EasyAds.instance.createBanner(adNetwork: AdNetwork.unity);
+      EasyAds.instance.createBanner(adNetwork: AdNetwork.facebook);
 
   @override
   void initState() {

@@ -81,7 +81,11 @@ class EasyFbFullScreenAd extends EasyAdBase {
         break;
       case RewardedVideoAdResult.VIDEO_CLOSED:
         onAdDismissed?.call(adNetwork, adUnitType, 'Dismissed: $value');
-        if (value == true || value["invalidated"] == true) load();
+        if (value == true || value["invalidated"] == true) {
+          _isAdLoaded = false;
+          load();
+          load();
+        }
         break;
     }
   }
@@ -109,7 +113,10 @@ class EasyFbFullScreenAd extends EasyAdBase {
         break;
       case InterstitialAdResult.DISMISSED:
         onAdDismissed?.call(adNetwork, adUnitType, 'Dismissed: $value');
-        if (value["invalidated"] == true) load();
+        if (value["invalidated"] == true) {
+          _isAdLoaded = false;
+          load();
+        }
         break;
     }
   }

@@ -89,10 +89,9 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           // Listening to the callback from showRewardedAd()
                           _streamSubscription =
                               EasyAds.instance.onEvent.listen((event) {
-                            _streamSubscription?.cancel();
-
                             if (event.adUnitType == AdUnitType.rewarded &&
                                 event.type == AdEventType.adDismissed) {
+                              _streamSubscription?.cancel();
                               goToNextScreen(countryList[index]);
                             }
                           });
@@ -105,10 +104,9 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           // Listening to the callback from showInterstitialAd()
                           _streamSubscription =
                               EasyAds.instance.onEvent.listen((event) {
-                            _streamSubscription?.cancel();
-
                             if (event.adUnitType == AdUnitType.interstitial &&
                                 event.type == AdEventType.adDismissed) {
+                              _streamSubscription?.cancel();
                               goToNextScreen(countryList[index]);
                             }
                           });

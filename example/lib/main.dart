@@ -97,8 +97,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           });
                         }
                       } else {
-                        if (EasyAds.instance.showInterstitialAd(
-                            adNetwork: AdNetwork.facebook)) {
+                        if (EasyAds.instance.showInterstitialAd()) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showInterstitialAd()

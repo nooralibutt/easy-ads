@@ -50,6 +50,9 @@ class EasyUnityAd extends EasyUnityAdBase {
         onAdShowed?.call(adNetwork, adUnitType, null);
       } else if (state == UnityAdState.skipped) {
         onAdDismissed?.call(adNetwork, adUnitType, null);
+      } else if (adUnitType == AdUnitType.interstitial &&
+          state == UnityAdState.complete) {
+        onAdDismissed?.call(adNetwork, adUnitType, null);
       } else if (adUnitType == AdUnitType.rewarded &&
           state == UnityAdState.complete) {
         onEarnedReward?.call(adNetwork, adUnitType, null, null);

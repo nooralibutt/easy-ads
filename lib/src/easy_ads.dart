@@ -12,6 +12,7 @@ import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
 import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
+import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/i_ad_id_manager.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -25,8 +26,8 @@ class EasyAds {
   AdRequest _adRequest = const AdRequest();
   late final IAdIdManager adIdManager;
 
-  final _onEventController = StreamController<AdEvent>.broadcast();
-  Stream<AdEvent> get onEvent => _onEventController.stream;
+  final _eventController = EasyEventController();
+  Stream<AdEvent> get onEvent => _eventController.onEvent;
 
   List<EasyAdBase> get _allAds => [..._interstitialAds, ..._rewardedAds];
 
@@ -64,11 +65,8 @@ class EasyAds {
       final response = await MobileAds.instance.initialize();
       final status = response.adapterStatuses.values.firstOrNull?.state;
 
-      _onEventController.add(AdEvent(
-        type: AdEventType.adNetworkInitialized,
-        adNetwork: AdNetwork.admob,
-        data: status == AdapterInitializationState.ready,
-      ));
+      _eventController.fireNetworkInitializedEvent(
+          AdNetwork.admob, status == AdapterInitializationState.ready);
 
       // Initializing admob Ads
       EasyAds.instance._initAdmob(
@@ -114,8 +112,9 @@ class EasyAds {
         assert(bannerId != null,
             'You are trying to create a banner and Admob Banner id is null in ad id manager');
         if (bannerId != null) {
-          return EasyAdmobBannerAd(bannerId,
+          ad = EasyAdmobBannerAd(bannerId,
               adSize: adSize, adRequest: _adRequest);
+          _eventController.setupEvents(ad);
         }
         break;
       case AdNetwork.unity:
@@ -123,7 +122,8 @@ class EasyAds {
         assert(bannerId != null,
             'You are trying to create a banner and Unity Banner id is null in ad id manager');
         if (bannerId != null) {
-          return EasyUnityBannerAd(bannerId, adSize: adSize);
+          ad = EasyUnityBannerAd(bannerId, adSize: adSize);
+          _eventController.setupEvents(ad);
         }
         break;
       default:
@@ -141,36 +141,23 @@ class EasyAds {
     if (interstitialAdUnitId != null &&
         _interstitialAds.doesNotContain(
             AdNetwork.admob, AdUnitType.interstitial)) {
-      final interstitialAd = EasyAdmobInterstitialAd(
+      final ad = EasyAdmobInterstitialAd(
           interstitialAdUnitId, _adRequest, immersiveModeEnabled);
-      _interstitialAds.add(interstitialAd);
+      _interstitialAds.add(ad);
+      _eventController.setupEvents(ad);
 
-      // overriding the callbacks
-      interstitialAd.onAdLoaded = _onAdLoadedMethod;
-      interstitialAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
-      interstitialAd.onAdShowed = _onAdShowedMethod;
-      interstitialAd.onAdFailedToShow = _onAdFailedToShowMethod;
-      interstitialAd.onAdDismissed = _onAdDismissedMethod;
-
-      await interstitialAd.load();
+      await ad.load();
     }
 
     // init rewarded ads
     if (rewardedAdUnitId != null &&
         _rewardedAds.doesNotContain(AdNetwork.admob, AdUnitType.rewarded)) {
-      final rewardedAd = EasyAdmobRewardedAd(
+      final ad = EasyAdmobRewardedAd(
           rewardedAdUnitId, _adRequest, immersiveModeEnabled);
-      _rewardedAds.add(rewardedAd);
+      _rewardedAds.add(ad);
+      _eventController.setupEvents(ad);
 
-      // overriding the callbacks
-      rewardedAd.onAdLoaded = _onAdLoadedMethod;
-      rewardedAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
-      rewardedAd.onAdShowed = _onAdShowedMethod;
-      rewardedAd.onAdFailedToShow = _onAdFailedToShowMethod;
-      rewardedAd.onAdDismissed = _onAdDismissedMethod;
-      rewardedAd.onEarnedReward = _onEarnedRewardMethod;
-
-      await rewardedAd.load();
+      await ad.load();
     }
   }
 
@@ -182,38 +169,25 @@ class EasyAds {
     if (interstitialAdUnitId != null &&
         _interstitialAds.doesNotContain(
             AdNetwork.appLovin, AdUnitType.interstitial)) {
-      final interstitialAd = EasyApplovinFullScreenAd(
+      final ad = EasyApplovinFullScreenAd(
           interstitialAdUnitId, AdUnitType.interstitial);
-      _interstitialAds.add(interstitialAd);
+      _interstitialAds.add(ad);
+      _eventController.setupEvents(ad);
 
-      // overriding the callbacks
-      interstitialAd.onAdLoaded = _onAdLoadedMethod;
-      interstitialAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
-      interstitialAd.onAdShowed = _onAdShowedMethod;
-      interstitialAd.onAdFailedToShow = _onAdFailedToShowMethod;
-      interstitialAd.onAdDismissed = _onAdDismissedMethod;
-
-      await interstitialAd.initialize();
-      await interstitialAd.load();
+      await ad.initialize();
+      await ad.load();
     }
 
     // init rewarded ads
     if (rewardedAdUnitId != null &&
         _rewardedAds.doesNotContain(AdNetwork.appLovin, AdUnitType.rewarded)) {
-      final rewardedAd =
+      final ad =
           EasyApplovinFullScreenAd(rewardedAdUnitId, AdUnitType.rewarded);
-      _rewardedAds.add(rewardedAd);
+      _rewardedAds.add(ad);
+      _eventController.setupEvents(ad);
 
-      // overriding the callbacks
-      rewardedAd.onAdLoaded = _onAdLoadedMethod;
-      rewardedAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
-      rewardedAd.onAdShowed = _onAdShowedMethod;
-      rewardedAd.onAdFailedToShow = _onAdFailedToShowMethod;
-      rewardedAd.onAdDismissed = _onAdDismissedMethod;
-      rewardedAd.onEarnedReward = _onEarnedRewardMethod;
-
-      await rewardedAd.initialize();
-      await rewardedAd.load();
+      await ad.initialize();
+      await ad.load();
     }
   }
 
@@ -229,35 +203,21 @@ class EasyAds {
     if (interstitialPlacementId != null &&
         _interstitialAds.doesNotContain(
             AdNetwork.unity, AdUnitType.interstitial)) {
-      final interstitialAd =
-          EasyUnityAd(interstitialPlacementId, AdUnitType.interstitial);
-      _interstitialAds.add(interstitialAd);
+      final ad = EasyUnityAd(interstitialPlacementId, AdUnitType.interstitial);
+      _interstitialAds.add(ad);
+      _eventController.setupEvents(ad);
 
-      // overriding the callbacks
-      interstitialAd.onAdLoaded = _onAdLoadedMethod;
-      interstitialAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
-      interstitialAd.onAdShowed = _onAdShowedMethod;
-      interstitialAd.onAdFailedToShow = _onAdFailedToShowMethod;
-      interstitialAd.onAdDismissed = _onAdDismissedMethod;
-
-      await interstitialAd.load();
+      await ad.load();
     }
 
     // init rewarded ads
     if (rewardedPlacementId != null &&
         _rewardedAds.doesNotContain(AdNetwork.unity, AdUnitType.rewarded)) {
-      final rewardedAd = EasyUnityAd(rewardedPlacementId, AdUnitType.rewarded);
-      _rewardedAds.add(rewardedAd);
+      final ad = EasyUnityAd(rewardedPlacementId, AdUnitType.rewarded);
+      _rewardedAds.add(ad);
+      _eventController.setupEvents(ad);
 
-      // overriding the callbacks
-      rewardedAd.onAdLoaded = _onAdLoadedMethod;
-      rewardedAd.onAdFailedToLoad = _onAdFailedToLoadMethod;
-      rewardedAd.onAdShowed = _onAdShowedMethod;
-      rewardedAd.onAdFailedToShow = _onAdFailedToShowMethod;
-      rewardedAd.onAdDismissed = _onAdDismissedMethod;
-      rewardedAd.onEarnedReward = _onEarnedRewardMethod;
-
-      await rewardedAd.load();
+      await ad.load();
     }
 
     // placementId
@@ -268,11 +228,8 @@ class EasyAds {
         listener: _onUnityAdListener,
       );
 
-      _onEventController.add(AdEvent(
-        type: AdEventType.adNetworkInitialized,
-        adNetwork: AdNetwork.unity,
-        data: status,
-      ));
+      _eventController.fireNetworkInitializedEvent(
+          AdNetwork.admob, status ?? false);
     }
   }
 
@@ -365,67 +322,5 @@ class EasyAds {
     for (final ad in _allAds) {
       if (ad is EasyUnityAdBase) ad.onUnityAdListener(state, args);
     }
-  }
-
-  void _onAdLoadedMethod(
-      AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adLoaded,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-    ));
-  }
-
-  void _onAdShowedMethod(
-      AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adShowed,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-    ));
-  }
-
-  void _onAdFailedToLoadMethod(AdNetwork adNetwork, AdUnitType adUnitType,
-      Object? data, String errorMessage) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adFailedToLoad,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-      error: errorMessage,
-    ));
-  }
-
-  void _onAdFailedToShowMethod(AdNetwork adNetwork, AdUnitType adUnitType,
-      Object? data, String errorMessage) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adFailedToShow,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-      error: errorMessage,
-    ));
-  }
-
-  void _onAdDismissedMethod(
-      AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adDismissed,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-    ));
-  }
-
-  void _onEarnedRewardMethod(AdNetwork adNetwork, AdUnitType adUnitType,
-      String? rewardType, num? rewardAmount) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.earnedReward,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: {'rewardType': rewardType, 'rewardAmount': rewardAmount},
-    ));
   }
 }

@@ -42,26 +42,14 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
-  final EasyAdBase? _bannerAd =
-      EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
-
   /// Using it to cancel the subscribed callbacks
   StreamSubscription? _streamSubscription;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _bannerAd?.load();
-  }
 
   @override
   void dispose() {
     super.dispose();
 
     EasyAds.instance.disposeAds();
-
-    _bannerAd?.dispose();
   }
 
   @override
@@ -74,7 +62,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
       ),
       body: Column(
         children: [
-          _bannerAd?.show() ?? const SizedBox(),
+          EasyBannerAd(
+              adNetwork: AdNetwork.admob, adSize: AdSize.mediumRectangle),
           Expanded(
             child: ListView.builder(
                 itemCount: countryList.length,
@@ -149,25 +138,6 @@ class CountryDetailScreen extends StatefulWidget {
 }
 
 class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  final EasyAdBase? _bannerAd =
-      EasyAds.instance.createBanner(adNetwork: AdNetwork.unity);
-
-  @override
-  void initState() {
-    super.initState();
-
-    EasyAds.instance.loadInterstitialAd();
-
-    _bannerAd?.load();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _bannerAd?.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -186,18 +156,20 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: Text(
-                widget.country.countryDescription,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  widget.country.countryDescription,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 22),
+                ),
               ),
             ),
           ),
-          const Spacer(),
-          _bannerAd?.show() ?? const SizedBox(),
+          const SizedBox(height: 20),
+          EasyBannerAd(adSize: AdSize.banner, adNetwork: AdNetwork.unity),
         ],
       ),
     );

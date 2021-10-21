@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 enum AdNetwork {
   any,
   admob,
-  facebook,
   appLovin,
   unity,
 }

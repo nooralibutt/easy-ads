@@ -42,6 +42,7 @@ class EasyAds {
   /// Initializes the Google Mobile Ads SDK.
   ///
   /// Call this method as early as possible after the app launches
+  /// [adMobAdRequest] will be used in all the admob requests. By default empty request will be used if nothing passed here.
   Future<void> initialize(
     IAdIdManager manager, {
     bool testMode = false,

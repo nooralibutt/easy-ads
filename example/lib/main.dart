@@ -13,8 +13,10 @@ void main() async {
     adIdManager,
     testMode: true,
     adMobAdRequest: const AdRequest(),
-    admobConfiguration:
-        RequestConfiguration(testDeviceIds: ['adakjhdjkahdahkjdahkdhk']),
+    admobConfiguration: RequestConfiguration(testDeviceIds: [
+      '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
+      '00008030-00163022226A802E',
+    ]),
   );
 
   runApp(const MyApp());

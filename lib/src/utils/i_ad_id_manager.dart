@@ -3,7 +3,6 @@ abstract class IAdIdManager {
 
   AppAdIds? get unityAdIds;
   AppAdIds? get admobAdIds;
-  AppAdIds? get fbAdIds;
   AppAdIds? get appLovinAdIds;
 }
 

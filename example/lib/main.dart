@@ -72,7 +72,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                     onTap: () {
                       if (countryList[index].countryName ==
                           'Pakistan - Rewarded') {
-                        if (EasyAds.instance.showRewardedAd()) {
+                        if (EasyAds.instance.showAd(AdUnitType.rewarded)) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showRewardedAd()
@@ -86,7 +86,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           });
                         }
                       } else {
-                        if (EasyAds.instance.showInterstitialAd()) {
+                        if (EasyAds.instance
+                            .showAd(AdUnitType.interstitial, random: true)) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showInterstitialAd()
@@ -171,7 +172,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          EasyBannerAd(adSize: AdSize.banner, adNetwork: AdNetwork.unity),
+          EasyBannerAd(adSize: AdSize.largeBanner, adNetwork: AdNetwork.unity),
         ],
       ),
     );

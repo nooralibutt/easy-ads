@@ -250,25 +250,43 @@ class EasyAds {
     return ad?.isAdLoaded ?? false;
   }
 
-  /// Returns bool indicating whether ad has been displayed successfully or not
+  /// Displays [adUnitType] ad from [adNetwork]. It will check if first ad it found from list is loaded,
+  /// it will be displayed if [adNetwork] is not mentioned otherwise it will load the ad.
   ///
+  /// Returns bool indicating whether ad has been successfully displayed or not
+  ///
+  /// [adUnitType] should be mentioned here, only interstitial or rewarded should be mentioned here
   /// if [adNetwork] is provided, only that network's ad would be displayed
   /// if [random] is true, any random loaded ad would be displayed
-  bool showInterstitialAd(
+  bool showAd(AdUnitType adUnitType,
       {AdNetwork adNetwork = AdNetwork.any, bool random = false}) {
-    final List<EasyAdBase> ads;
+    assert(
+        adUnitType == AdUnitType.interstitial ||
+            adUnitType == AdUnitType.rewarded,
+        'Only interstitial and rewarded types should be passed to this method');
+
+    List<EasyAdBase> ads =
+        adUnitType == AdUnitType.rewarded ? _rewardedAds : _interstitialAds;
     if (random) {
       ads = _interstitialAds.toList()..shuffle();
     } else {
       ads = _interstitialAds;
     }
 
-    final ad = ads.firstWhereOrNull((e) =>
-        e.isAdLoaded &&
-        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
-    ad?.show();
+    for (final ad in ads) {
+      if (ad.isAdLoaded) {
+        if (adNetwork == AdNetwork.any || adNetwork == ad.adNetwork) {
+          ad.show();
+          return true;
+        }
+      } else {
+        _logger.logInfo(
+            '${ad.adNetwork} ${ad.adUnitType} was not loaded, so called loading');
+        ad.load();
+      }
+    }
 
-    return ad != null;
+    return false;
   }
 
   /// if [adNetwork] is provided, only that network's ad would be loaded
@@ -288,18 +306,6 @@ class EasyAds {
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
         e.isAdLoaded);
     return ad?.isAdLoaded ?? false;
-  }
-
-  /// Returns bool indicating whether ad has been displayed successfully or not
-  ///
-  /// if [adNetwork] is provided, only that network's ad would be showed
-  bool showRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
-    final ad = _rewardedAds.firstWhereOrNull((e) =>
-        e.isAdLoaded &&
-        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork));
-    ad?.show();
-
-    return ad != null;
   }
 
   /// if [adNetwork] is provided only that network's ads will be disposed otherwise it will be ignored

@@ -11,7 +11,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyAds.instance.initialize(
     adIdManager,
-    testMode: true,
+    unityTestMode: true,
     adMobAdRequest: const AdRequest(),
     admobConfiguration: RequestConfiguration(testDeviceIds: [
       '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone

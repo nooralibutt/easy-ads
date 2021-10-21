@@ -369,9 +369,6 @@ class EasyAds {
 
   void _onAdLoadedMethod(
       AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
-    print(
-        'EasyAds AdLoaded: Network: $adNetwork, AdUnitType: $adUnitType, Custom Data: $data');
-
     _onEventController.add(AdEvent(
       type: AdEventType.adLoaded,
       adNetwork: adNetwork,
@@ -392,9 +389,6 @@ class EasyAds {
 
   void _onAdFailedToLoadMethod(AdNetwork adNetwork, AdUnitType adUnitType,
       Object? data, String errorMessage) {
-    print(
-        'EasyAds AdFailedToLoad: Network: $adNetwork, AdUnitType: $adUnitType, Custom Data: $data');
-
     _onEventController.add(AdEvent(
       type: AdEventType.adFailedToLoad,
       adNetwork: adNetwork,

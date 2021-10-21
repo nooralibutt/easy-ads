@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_ads_flutter/src/utils/extensions.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
@@ -76,7 +77,6 @@ class EasyAds {
 
     final unityGameId = manager.unityAdIds?.appId;
     if (unityGameId != null) {
-      // Initializing Unity Ads
       EasyAds.instance._initUnity(
         unityGameId: unityGameId,
         testMode: unityTestMode,
@@ -87,7 +87,6 @@ class EasyAds {
 
     final appLovinSdkId = manager.appLovinAdIds?.appId;
     if (appLovinSdkId != null) {
-      // Initializing Unity Ads
       EasyAds.instance._initAppLovin(
         interstitialAdUnitId: manager.appLovinAdIds?.interstitialId,
         rewardedAdUnitId: manager.appLovinAdIds?.rewardedId,

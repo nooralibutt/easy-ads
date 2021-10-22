@@ -46,13 +46,6 @@ class _CountryListScreenState extends State<CountryListScreen> {
   StreamSubscription? _streamSubscription;
 
   @override
-  void dispose() {
-    super.dispose();
-
-    EasyAds.instance.disposeAds();
-  }
-
-  @override
   Widget build(BuildContext context) {
     const countryList = Country.countryList;
     return Scaffold(

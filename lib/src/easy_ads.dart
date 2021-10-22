@@ -231,25 +231,6 @@ class EasyAds {
     }
   }
 
-  /// if [adNetwork] is provided, only that network's ad would be loaded
-  void loadInterstitialAd({AdNetwork adNetwork = AdNetwork.any}) {
-    for (final e in _interstitialAds) {
-      if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
-        e.load();
-      }
-    }
-  }
-
-  /// Returns bool indicating whether ad has been loaded
-  ///
-  /// if [adNetwork] is provided, only that network's ad would be checked
-  bool isInterstitialAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
-    final ad = _interstitialAds.firstWhereOrNull((e) =>
-        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
-        e.isAdLoaded);
-    return ad?.isAdLoaded ?? false;
-  }
-
   /// Displays [adUnitType] ad from [adNetwork]. It will check if first ad it found from list is loaded,
   /// it will be displayed if [adNetwork] is not mentioned otherwise it will load the ad.
   ///
@@ -289,9 +270,19 @@ class EasyAds {
     return false;
   }
 
+  /// This will load both rewarded and interstitial ads.
+  /// If a particular ad is already loaded, it will not load it again.
+  /// Also you do not have to call this method everytime. Ad is automatically loaded after being displayed.
+  ///
   /// if [adNetwork] is provided, only that network's ad would be loaded
-  void loadRewardedAd({AdNetwork adNetwork = AdNetwork.any}) {
+  void loadAd({AdNetwork adNetwork = AdNetwork.any}) {
     for (final e in _rewardedAds) {
+      if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
+        e.load();
+      }
+    }
+
+    for (final e in _interstitialAds) {
       if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
         e.load();
       }
@@ -308,9 +299,24 @@ class EasyAds {
     return ad?.isAdLoaded ?? false;
   }
 
+  /// Returns bool indicating whether ad has been loaded
+  ///
+  /// if [adNetwork] is provided, only that network's ad would be checked
+  bool isInterstitialAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
+    final ad = _interstitialAds.firstWhereOrNull((e) =>
+        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
+        e.isAdLoaded);
+    return ad?.isAdLoaded ?? false;
+  }
+
+  /// Do not call this method until unless you want to remove ads entirely from the app.
+  /// Best user case for this method could be removeAds In app purchase.
+  ///
+  /// After this, ads would stop loading. You would have to call initialize again.
+  ///
   /// if [adNetwork] is provided only that network's ads will be disposed otherwise it will be ignored
   /// if [adUnitType] is provided only that ad unit type will be disposed, otherwise it will be ignored
-  void disposeAds(
+  void destroyAds(
       {AdNetwork adNetwork = AdNetwork.any, AdUnitType? adUnitType}) {
     for (final e in _allAds) {
       if ((adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&

@@ -208,9 +208,6 @@ class TestAdIdManager extends IAdIdManager {
     rewardedId:
     Platform.isAndroid ? 'ffbed216d19efb09' : 'f4af3e10dd48ee4f',
   );
-
-  @override
-  AppAdIds? get fbAdIds => null;
 }
 ```
 
@@ -228,10 +225,12 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyAds.instance.initialize(
     adIdManager,
-    testMode: true,
+    unityTestMode: true,
     adMobAdRequest: const AdRequest(),
-    admobConfiguration:
-    RequestConfiguration(testDeviceIds: ['adakjhdjkahdahkjdahkdhk']),
+    admobConfiguration: RequestConfiguration(testDeviceIds: [
+      '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
+      '00008030-00163022226A802E',
+    ]),
   );
 
   runApp(MyApp());
@@ -239,65 +238,25 @@ void main() async {
 ```
 ## Interstital/Rewarded Ads
 
-### Load ad
+### Load an ad
+Ad is automatically loaded after being displayed or first time when you call initialize.
+But on safe side, you can call this method. This will load both rewarded and interstitial ads.
+If a particular ad is already loaded, it will not load it again.
 ```dart
-EasyAds.instance.loadInterstitialAd();
-```
-Or
-```dart
-EasyAds.instance.loadRewardedAd();
-```
-
-### Show ad
-```dart
-EasyAds.instance.showInterstitialAd();
-```
-Or
-```dart
-EasyAds.instance.showRewardedAd();
+EasyAds.instance.loadAd();
 ```
 
-By default, load & show methods load/show any ads of the available AdNetwork.
-If you want to load/show ads from specific AdNetwork, pass the required AdNetwork in parameters.
-
-Only 3 are currently available:
+### Show interstitial or rewarded ad
 ```dart
-AdNetwork.admob
-AdNetwork.unity
-AdNetwork.appLovin
+EasyAds.instance.showAd(AdUnitType.rewarded);
 ```
 
-### Dispose ad
+### Show random interstitial ad
 ```dart
-EasyAds.instance.disposeAds();
-```
-By default, it disposes all the ads. 
-But if you want to dispose ad of specific AdNetwork and AdUnitType, pass the required in the parameters.
-
-## Banner Ads
-
-### Declare ad
-
-Declare banner ad instance variable in the widget class and initialize it. Make sure you have specified ad ids in ad id manager
-
-```dart
-final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
+EasyAds.instance.showRandomAd(AdUnitType.interstitial)
 ```
 
-### Initialize & Load ad
-
-Load banner ad in the init state like this:
-
-```dart
-@override
-void initState() {
-  super.initState();
-  
-  _bannerAd?.load();
-}
-```
-
-### Show ad
+## Show Banner Ads
 
 This is how you may show banner ad in widget-tree somewhere:
 
@@ -309,20 +268,10 @@ Widget build(BuildContext context) {
     children: [
       SomeWidget(),
       const Spacer(),
-      _bannerAd?.show() ?? const SizedBox(),
+      EasyBannerAd(
+          adNetwork: AdNetwork.admob, adSize: AdSize.mediumRectangle),
     ],
   );
-}
-```
-
-### Dispose ad
-
-```dart
-@override
-void dispose() {
-  super.dispose();
-
-  _bannerAd?.dispose();
 }
 ```
 
@@ -344,6 +293,7 @@ if (EasyAds.instance.showInterstitialAd()) {
   EasyAds.instance.onEvent.listen((event) {
     if (event.adUnitType == AdUnitType.interstitial &&
         event.type == AdEventType.adDismissed) {
+      _streamSubscription?.cancel();
       goToNextScreen(countryList[index]);
     }
   });

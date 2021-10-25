@@ -16,6 +16,8 @@ class EasyLogger {
     }
   }
 
+  void logInfo(String message) => _logger.i(message);
+
   void _onAdNetworkInitialized(AdEvent event) {
     if (event.data == true) {
       _logger.i(

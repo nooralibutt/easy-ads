@@ -1,3 +1,9 @@
+## 0.4.0
+* Fixes unity interstitial dismiss bug
+* Fixes some bugs and removes facebook
+* Added EasyBannerAd for easy banner integration
+* Updated docs
+
 ## 0.3.0
 * Implemented Logger for EasyAds
 * Updated docs

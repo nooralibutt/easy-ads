@@ -5,6 +5,7 @@
 [![Pull Requests](https://img.shields.io/github/issues-pr/nooralibutt/easy-ads?logo=github&logoColor=white)](https://github.com/nooralibutt/easy-ads/pulls)
 [![Code size](https://img.shields.io/github/languages/code-size/nooralibutt/easy-ads?logo=github&logoColor=white)](https://github.com/nooralibutt/easy-ads)
 [![License](https://img.shields.io/github/license/nooralibutt/easy-ads?logo=open-source-initiative&logoColor=green)](https://github.com/nooralibutt/easy-ads/blob/master/LICENSE)
+[![PayPal](https://img.shields.io/badge/Donate-PayPal-066BB7?logo=paypal)](https://paypal.me/nooralibutt)
 
 **Show some 💙, 👍 the package & ⭐️ the repo to support the project**
 
@@ -300,3 +301,9 @@ if (EasyAds.instance.showInterstitialAd()) {
 }
 ```
 See [Example](https://pub.dev/packages/easy_ads_flutter/example) for better understanding.
+
+## Donate
+
+If you found this plugin helpful and would like to thank me:
+
+[![PayPal](https://img.shields.io/badge/Donate-PayPal-066BB7?logo=paypal)](https://paypal.me/nooralibutt)

@@ -253,7 +253,7 @@ EasyAds.instance.showAd(AdUnitType.rewarded);
 
 ### Show random interstitial ad
 ```dart
-EasyAds.instance.showAd(AdUnitType.interstitial, random: true)
+EasyAds.instance.showRandomAd(AdUnitType.interstitial)
 ```
 
 ## Show Banner Ads

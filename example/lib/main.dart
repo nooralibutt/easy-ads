@@ -79,8 +79,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           });
                         }
                       } else {
-                        if (EasyAds.instance
-                            .showAd(AdUnitType.interstitial, random: true)) {
+                        if (EasyAds.instance.showAd(AdUnitType.interstitial)) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showInterstitialAd()

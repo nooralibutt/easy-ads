@@ -46,7 +46,7 @@ Update your app's `ios/Runner/Info.plist` file to add two keys:
 <key>AppLovinSdkKey</key>
 <string>YOUR_SDK_KEY</string>
 <key>GADApplicationIdentifier</key>
-<string>ca-app-pub-3940256099942544~1458002511</string>
+<string>YOUR_SDK_KEY</string>
 ```
 
 ```xml
@@ -139,7 +139,7 @@ Update your app's `ios/Runner/Info.plist` file to add two keys:
 </array>
 ```
 
-See https://developers.google.com/admob/ios/quick-start#update\_your\_infoplist for more information about configuring `Info.plist` and setting up your App ID.
+See [this guide](https://developers.google.com/admob/ios/quick-start#update\_your\_infoplist) for more information about configuring `Info.plist` and setting up your App ID.
 
 
 ### Android
@@ -168,7 +168,7 @@ Add the AdMob App ID ([identified in the AdMob UI](https://support.google.com/ad
 
 The same value when you initialize the plugin in your Dart code.
 
-See https://goo.gl/fQ2neu for more information about configuring `AndroidManifest.xml` and setting up the App ID.
+See [this guide](https://developers.google.com/admob/flutter/quick-start) for more information about configuring `AndroidManifest.xml` and setting up the App ID.
 
 ## Initialize Ad Ids
 
@@ -237,7 +237,7 @@ void main() async {
   runApp(MyApp());
 }
 ```
-## Interstital/Rewarded Ads
+## Interstitial/Rewarded Ads
 
 ### Load an ad
 Ad is automatically loaded after being displayed or first time when you call initialize.

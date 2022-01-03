@@ -20,7 +20,7 @@ class EasyFacebookBannerAd extends EasyAdBase {
   @override
   AdUnitType get adUnitType => AdUnitType.banner;
   @override
-  AdNetwork get adNetwork => AdNetwork.admob;
+  AdNetwork get adNetwork => AdNetwork.facebook;
 
   @override
   void dispose() {

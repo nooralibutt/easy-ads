@@ -5,6 +5,7 @@
 [![Pull Requests](https://img.shields.io/github/issues-pr/nooralibutt/easy-ads?logo=github&logoColor=white)](https://github.com/nooralibutt/easy-ads/pulls)
 [![Code size](https://img.shields.io/github/languages/code-size/nooralibutt/easy-ads?logo=github&logoColor=white)](https://github.com/nooralibutt/easy-ads)
 [![License](https://img.shields.io/github/license/nooralibutt/easy-ads?logo=open-source-initiative&logoColor=green)](https://github.com/nooralibutt/easy-ads/blob/master/LICENSE)
+[![PayPal](https://img.shields.io/badge/Donate-PayPal-066BB7?logo=paypal)](https://paypal.me/nooralibutt)
 
 **Show some 💙, 👍 the package & ⭐️ the repo to support the project**
 
@@ -46,7 +47,7 @@ Update your app's `ios/Runner/Info.plist` file to add two keys:
 <key>AppLovinSdkKey</key>
 <string>YOUR_SDK_KEY</string>
 <key>GADApplicationIdentifier</key>
-<string>ca-app-pub-3940256099942544~1458002511</string>
+<string>YOUR_SDK_KEY</string>
 ```
 
 ```xml
@@ -139,7 +140,7 @@ Update your app's `ios/Runner/Info.plist` file to add two keys:
 </array>
 ```
 
-See https://developers.google.com/admob/ios/quick-start#update\_your\_infoplist for more information about configuring `Info.plist` and setting up your App ID.
+See [this guide](https://developers.google.com/admob/ios/quick-start#update\_your\_infoplist) for more information about configuring `Info.plist` and setting up your App ID.
 
 
 ### Android
@@ -168,7 +169,7 @@ Add the AdMob App ID ([identified in the AdMob UI](https://support.google.com/ad
 
 The same value when you initialize the plugin in your Dart code.
 
-See https://goo.gl/fQ2neu for more information about configuring `AndroidManifest.xml` and setting up the App ID.
+See [this guide](https://developers.google.com/admob/flutter/quick-start) for more information about configuring `AndroidManifest.xml` and setting up the App ID.
 
 ## Initialize Ad Ids
 
@@ -229,70 +230,38 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyAds.instance.initialize(
     adIdManager,
-    testMode: true,
+    unityTestMode: true,
     adMobAdRequest: const AdRequest(),
-    admobConfiguration:
-    RequestConfiguration(testDeviceIds: ['adakjhdjkahdahkjdahkdhk']),
+    admobConfiguration: RequestConfiguration(testDeviceIds: [
+      '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
+      '00008030-00163022226A802E',
+    ]),
   );
 
   runApp(MyApp());
 }
 ```
-## Interstital/Rewarded Ads
+## Interstitial/Rewarded Ads
 
-### Load ad
+### Load an ad
+Ad is automatically loaded after being displayed or first time when you call initialize.
+But on safe side, you can call this method. This will load both rewarded and interstitial ads.
+If a particular ad is already loaded, it will not load it again.
 ```dart
-EasyAds.instance.loadInterstitialAd();
-```
-Or
-```dart
-EasyAds.instance.loadRewardedAd();
-```
-
-### Show ad
-```dart
-EasyAds.instance.showInterstitialAd();
-```
-Or
-```dart
-EasyAds.instance.showRewardedAd();
+EasyAds.instance.loadAd();
 ```
 
-By default, load & show methods load/show any ads of the available AdNetwork.
-If you want to load/show ads from specific AdNetwork, pass the required AdNetwork in parameters.
-
-
-### Dispose ad
+### Show interstitial or rewarded ad
 ```dart
-EasyAds.instance.disposeAds();
-```
-By default, it disposes all the ads. 
-But if you want to dispose ad of specific AdNetwork and AdUnitType, pass the required in the parameters.
-
-## Banner Ads
-
-### Declare ad
-
-Declare banner ad instance variable in the widget class and initialize it. Make sure you have specified ad ids in ad id manager
-
-```dart
-final EasyAdBase? _bannerAd = EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
+EasyAds.instance.showAd(AdUnitType.rewarded);
 ```
 
-### Initialize & Load ad
-
-Load banner ad in the init state like this:
-
+### Show random interstitial ad
 ```dart
-@override
-void initState() {
-  super.initState();
-  
-  _bannerAd?.load();
-}
+EasyAds.instance.showRandomAd(AdUnitType.interstitial)
 ```
 
-### Show ad
+## Show Banner Ads
 
 This is how you may show banner ad in widget-tree somewhere:
 
@@ -304,20 +273,10 @@ Widget build(BuildContext context) {
     children: [
       SomeWidget(),
       const Spacer(),
-      _bannerAd?.show() ?? const SizedBox(),
+      EasyBannerAd(
+          adNetwork: AdNetwork.admob, adSize: AdSize.mediumRectangle),
     ],
   );
-}
-```
-
-### Dispose ad
-
-```dart
-@override
-void dispose() {
-  super.dispose();
-
-  _bannerAd?.dispose();
 }
 ```
 
@@ -346,3 +305,9 @@ if (EasyAds.instance.showInterstitialAd()) {
 }
 ```
 See [Example](https://pub.dev/packages/easy_ads_flutter/example) for better understanding.
+
+## Donate
+
+If you found this plugin helpful and would like to thank me:
+
+[![PayPal](https://img.shields.io/badge/Donate-PayPal-066BB7?logo=paypal)](https://paypal.me/nooralibutt)

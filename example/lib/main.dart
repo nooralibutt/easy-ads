@@ -13,8 +13,10 @@ void main() async {
     adIdManager,
     unityTestMode: true,
     adMobAdRequest: const AdRequest(),
-    admobConfiguration:
-        RequestConfiguration(testDeviceIds: ['adakjhdjkahdahkjdahkdhk']),
+    admobConfiguration: RequestConfiguration(testDeviceIds: [
+      '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
+      '00008030-00163022226A802E',
+    ]),
     fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
     fbiOSAdvertiserTrackingEnabled: true,
   );
@@ -42,27 +44,8 @@ class CountryListScreen extends StatefulWidget {
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
-  final EasyAdBase? _bannerAd =
-      EasyAds.instance.createBanner(adNetwork: AdNetwork.admob);
-
   /// Using it to cancel the subscribed callbacks
   StreamSubscription? _streamSubscription;
-
-  @override
-  void initState() {
-    super.initState();
-
-    _bannerAd?.load();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    EasyAds.instance.disposeAds();
-
-    _bannerAd?.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +57,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
       ),
       body: Column(
         children: [
-          _bannerAd?.show() ?? const SizedBox(),
+          EasyBannerAd(
+              adNetwork: AdNetwork.admob, adSize: AdSize.mediumRectangle),
           Expanded(
             child: ListView.builder(
                 itemCount: countryList.length,
@@ -83,7 +67,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                     onTap: () {
                       if (countryList[index].countryName ==
                           'Pakistan - Rewarded') {
-                        if (EasyAds.instance.showRewardedAd()) {
+                        if (EasyAds.instance.showAd(AdUnitType.rewarded)) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showRewardedAd()
@@ -97,7 +81,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           });
                         }
                       } else {
-                        if (EasyAds.instance.showInterstitialAd()) {
+                        if (EasyAds.instance.showAd(AdUnitType.interstitial)) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showInterstitialAd()
@@ -151,25 +135,6 @@ class CountryDetailScreen extends StatefulWidget {
 }
 
 class _CountryDetailScreenState extends State<CountryDetailScreen> {
-  final EasyAdBase? _bannerAd =
-      EasyAds.instance.createBanner(adNetwork: AdNetwork.facebook);
-
-  @override
-  void initState() {
-    super.initState();
-
-    EasyAds.instance.loadInterstitialAd();
-
-    _bannerAd?.load();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-
-    _bannerAd?.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -188,18 +153,20 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Center(
-              child: Text(
-                widget.country.countryDescription,
-                style:
-                    const TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Text(
+                  widget.country.countryDescription,
+                  style: const TextStyle(
+                      fontWeight: FontWeight.w600, fontSize: 22),
+                ),
               ),
             ),
           ),
-          const Spacer(),
-          _bannerAd?.show() ?? const SizedBox(),
+          const SizedBox(height: 20),
+          EasyBannerAd(adSize: AdSize.largeBanner, adNetwork: AdNetwork.unity),
         ],
       ),
     );

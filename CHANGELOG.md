@@ -1,3 +1,8 @@
+## 0.5.0
+* Added support for Flutter 2.8
+* Added support for google_mobile_ads: 1.0.1
+* Updated Docs
+
 ## 0.4.0
 * Fixes unity interstitial dismiss bug
 * Fixes some bugs and removes facebook

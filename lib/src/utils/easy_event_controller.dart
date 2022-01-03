@@ -1,10 +1,6 @@
 import 'dart:async';
 
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:easy_ads_flutter/src/enums/ad_event_type.dart';
-import 'package:easy_ads_flutter/src/enums/ad_network.dart';
-import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
-import 'package:easy_ads_flutter/src/utils/ad_event.dart';
 
 /// Easy Event controller manages events received from all type of ad units
 class EasyEventController {

@@ -5,11 +5,14 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
 import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_ad.dart';
+import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_banner_ad.dart';
+import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/extensions.dart';
+import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:unity_ads_plugin/unity_ads.dart';
 
 class EasyAds {
@@ -38,12 +41,15 @@ class EasyAds {
   ///
   /// Call this method as early as possible after the app launches
   /// [adMobAdRequest] will be used in all the admob requests. By default empty request will be used if nothing passed here.
+  /// [fbTestingId] can be obtained by running the app once without the testingId.
   Future<void> initialize(
     IAdIdManager manager, {
     bool unityTestMode = false,
     AdRequest? adMobAdRequest,
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
+    String? fbTestingId,
+    bool fbiOSAdvertiserTrackingEnabled = false,
   }) async {
     if (enableLogger) _logger.enable(enableLogger);
     adIdManager = manager;
@@ -53,6 +59,15 @@ class EasyAds {
 
     if (admobConfiguration != null) {
       MobileAds.instance.updateRequestConfiguration(admobConfiguration);
+    }
+
+    if (manager.fbAdIds?.appId != null) {
+      _initFacebook(
+        testingId: fbTestingId,
+        iOSAdvertiserTrackingEnabled: fbiOSAdvertiserTrackingEnabled,
+        interstitialPlacementId: manager.fbAdIds?.interstitialId,
+        rewardedPlacementId: manager.fbAdIds?.rewardedId,
+      );
     }
 
     if (manager.admobAdIds?.appId != null) {
@@ -94,8 +109,11 @@ class EasyAds {
   /// [adSize] is used to provide ad banner size
   EasyAdBase? createBanner(
       {required AdNetwork adNetwork, AdSize adSize = AdSize.banner}) {
-    assert(adNetwork == AdNetwork.unity || adNetwork == AdNetwork.admob,
-        'Only admob and unity banners are available right now');
+    assert(
+        adNetwork == AdNetwork.unity ||
+            adNetwork == AdNetwork.admob ||
+            adNetwork == AdNetwork.facebook,
+        'Only admob, unity and facebook banners are available right now');
 
     EasyAdBase? ad;
     switch (adNetwork) {
@@ -116,6 +134,14 @@ class EasyAds {
         if (bannerId != null) {
           ad = EasyUnityBannerAd(bannerId, adSize: adSize);
           _eventController.setupEvents(ad);
+        }
+        break;
+      case AdNetwork.facebook:
+        final bannerId = adIdManager.fbAdIds?.interstitialId;
+        assert(bannerId != null,
+            'You are trying to create a banner and Facebook Banner id is null in ad id manager');
+        if (bannerId != null) {
+          return EasyFacebookBannerAd(bannerId, adSize: adSize);
         }
         break;
       default:
@@ -222,6 +248,43 @@ class EasyAds {
 
       _eventController.fireNetworkInitializedEvent(
           AdNetwork.admob, status ?? false);
+    }
+  }
+
+  Future _initFacebook({
+    required bool iOSAdvertiserTrackingEnabled,
+    String? testingId,
+    String? interstitialPlacementId,
+    String? rewardedPlacementId,
+  }) async {
+    final status = await FacebookAudienceNetwork.init(
+        testingId: testingId,
+        iOSAdvertiserTrackingEnabled: iOSAdvertiserTrackingEnabled);
+
+    _eventController.fireNetworkInitializedEvent(
+        AdNetwork.facebook, status ?? false);
+
+    // init interstitial ads
+    if (interstitialPlacementId != null &&
+        _interstitialAds.doesNotContain(
+            AdNetwork.facebook, AdUnitType.interstitial)) {
+      final ad = EasyFacebookFullScreenAd(
+          interstitialPlacementId, AdUnitType.interstitial);
+      _interstitialAds.add(ad);
+      _eventController.setupEvents(ad);
+
+      await ad.load();
+    }
+
+    // init rewarded ads
+    if (rewardedPlacementId != null &&
+        _rewardedAds.doesNotContain(AdNetwork.facebook, AdUnitType.rewarded)) {
+      final ad =
+          EasyFacebookFullScreenAd(rewardedPlacementId, AdUnitType.rewarded);
+      _rewardedAds.add(ad);
+      _eventController.setupEvents(ad);
+
+      await ad.load();
     }
   }
 

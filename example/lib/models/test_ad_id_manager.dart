@@ -33,4 +33,15 @@ class TestAdIdManager extends IAdIdManager {
         rewardedId:
             Platform.isAndroid ? 'ffbed216d19efb09' : 'f4af3e10dd48ee4f',
       );
+
+  @override
+  AppAdIds? get fbAdIds => AppAdIds(
+        appId: '',
+        interstitialId:
+            Platform.isAndroid ? 'YOUR_PLACEMENT_ID' : 'YOUR_PLACEMENT_ID',
+        bannerId: Platform.isAndroid
+            ? 'YOUR_PLACEMENT_ID'
+            : 'YOUR_PLACEMENT_ID',
+        rewardedId: 'YOUR_PLACEMENT_ID',
+      );
 }

@@ -49,7 +49,14 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "0.4.0"
+    version: "1.0.1"
+  facebook_audience_network:
+    dependency: transitive
+    description:
+      name: facebook_audience_network
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   fake_async:
     dependency: transitive
     description:

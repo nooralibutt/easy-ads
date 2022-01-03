@@ -17,6 +17,8 @@ void main() async {
       '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
       '00008030-00163022226A802E',
     ]),
+    fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
+    fbiOSAdvertiserTrackingEnabled: true,
   );
 
   runApp(const MyApp());

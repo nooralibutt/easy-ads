@@ -14,8 +14,9 @@ To easily integrate ads from different ad networks into your flutter app.
 ## Features
 
 - Google Mobile Ads (banner, interstitial, rewarded ad)
+- Facebook Audience Network (banner, interstitial, rewarded ad)
 - Unity Ads (banner, interstitial, rewarded ad)
-- AppLovin Ads (interstitial, rewarded ad)
+- AppLovin Max Ads (interstitial, rewarded ad)
 
 ## Prerequisites
 
@@ -209,6 +210,9 @@ class TestAdIdManager extends IAdIdManager {
     rewardedId:
     Platform.isAndroid ? 'ffbed216d19efb09' : 'f4af3e10dd48ee4f',
   );
+
+  @override
+  AppAdIds? get fbAdIds => null;
 }
 ```
 

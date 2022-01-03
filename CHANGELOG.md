@@ -1,3 +1,11 @@
+## 1.0.1
+* Merged pre release
+* Updated docs
+
+## 1.0.0-facebook.0
+* Implemented Pre-released Facebook ads (interstitial, rewarded and banner)
+* Updated docs
+
 ## 0.5.0
 * Added support for Flutter 2.8
 * Added support for google_mobile_ads: 1.0.1

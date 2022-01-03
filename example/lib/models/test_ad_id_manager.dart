@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class TestAdIdManager extends IAdIdManager {
   const TestAdIdManager();

@@ -39,9 +39,8 @@ class TestAdIdManager extends IAdIdManager {
         appId: '',
         interstitialId:
             Platform.isAndroid ? 'YOUR_PLACEMENT_ID' : 'YOUR_PLACEMENT_ID',
-        bannerId: Platform.isAndroid
-            ? 'YOUR_PLACEMENT_ID'
-            : 'YOUR_PLACEMENT_ID',
+        bannerId:
+            Platform.isAndroid ? 'YOUR_PLACEMENT_ID' : 'YOUR_PLACEMENT_ID',
         rewardedId: 'YOUR_PLACEMENT_ID',
       );
 }

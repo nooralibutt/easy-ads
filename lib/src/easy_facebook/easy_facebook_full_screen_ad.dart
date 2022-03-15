@@ -2,7 +2,6 @@ import 'package:easy_ads_flutter/src/easy_ad_base.dart';
 import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
-import 'package:flutter_applovin_max/flutter_applovin_max.dart';
 
 class EasyFacebookFullScreenAd extends EasyAdBase {
   final AdUnitType _adUnitType;

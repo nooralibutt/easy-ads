@@ -1,6 +1,6 @@
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
-import 'package:unity_ads_plugin/unity_ads.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 class EasyUnityAd extends EasyUnityAdBase {
   final AdUnitType _adUnitType;
@@ -22,8 +22,11 @@ class EasyUnityAd extends EasyUnityAdBase {
   Future<void> load() async {
     if (_isAdLoaded) return;
 
-    final status = await UnityAds.isReady(placementId: adUnitId);
-    _isAdLoaded = status ?? false;
+    await UnityAds.load(
+      placementId: adUnitId,
+      onComplete: onCompleteUnityAd,
+      onFailed: _onFailedUnityAd,
+    );
   }
 
   @override
@@ -35,28 +38,23 @@ class EasyUnityAd extends EasyUnityAdBase {
   }
 
   @override
-  void onUnityAdListener(UnityAdState state, args) {
-    final arguments = args as Map<dynamic, dynamic>?;
-    if (arguments != null && arguments['placementId'] == adUnitId) {
-      if (state == UnityAdState.error) {
-        _isAdLoaded = false;
-        onAdFailedToLoad?.call(adNetwork, adUnitType, args,
-            'Error occurred while loading unity ad');
-      } else if (state == UnityAdState.ready) {
-        _isAdLoaded = true;
-        onAdLoaded?.call(adNetwork, adUnitType, null);
-      } else if (state == UnityAdState.started) {
-        _isAdLoaded = false;
-        onAdShowed?.call(adNetwork, adUnitType, null);
-      } else if (state == UnityAdState.skipped) {
-        onAdDismissed?.call(adNetwork, adUnitType, null);
-      } else if (state == UnityAdState.complete) {
-        if (adUnitType == AdUnitType.rewarded) {
-          onEarnedReward?.call(adNetwork, adUnitType, null, null);
-        } else {
-          onAdDismissed?.call(adNetwork, adUnitType, null);
-        }
-      }
+  void onCompleteUnityAd(args) {
+    _isAdLoaded = true;
+    if (adUnitType == AdUnitType.rewarded) {
+      onEarnedReward?.call(adNetwork, adUnitType, null, null);
+    } else {
+      onAdDismissed?.call(adNetwork, adUnitType, null);
     }
+  }
+
+  @override
+  void onFailedUnityAd(
+      UnityAdsInitializationError error, String errorMessage) {}
+
+  void _onFailedUnityAd(
+      String placementId, UnityAdsLoadError error, String errorMessage) {
+    _isAdLoaded = false;
+    onAdFailedToLoad?.call(
+        adNetwork, adUnitType, error, 'Error occurred while loading unity ad');
   }
 }

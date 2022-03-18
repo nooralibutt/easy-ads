@@ -8,7 +8,6 @@ import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_banner_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
-import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/extensions.dart';
@@ -243,8 +242,11 @@ class EasyAds {
       await UnityAds.init(
         gameId: unityGameId,
         testMode: testMode,
-        onComplete: _onCompleteUnityAd,
-        onFailed: _onFailedUnityAd,
+        onComplete: () =>
+            _eventController.fireNetworkInitializedEvent(AdNetwork.unity, true),
+        onFailed: (UnityAdsInitializationError error, String s) =>
+            _eventController.fireNetworkInitializedEvent(
+                AdNetwork.unity, false),
       );
     }
   }
@@ -403,21 +405,6 @@ class EasyAds {
           (adUnitType == null || adUnitType == e.adUnitType)) {
         e.dispose();
       }
-    }
-  }
-
-  void _onCompleteUnityAd(dynamic args) {
-    _eventController.fireNetworkInitializedEvent(AdNetwork.unity, true);
-    for (final ad in _allAds) {
-      if (ad is EasyUnityAdBase) ad.onCompleteUnityAd(args);
-    }
-  }
-
-  void _onFailedUnityAd(
-      UnityAdsInitializationError error, String errorMessage) {
-    _eventController.fireNetworkInitializedEvent(AdNetwork.unity, false);
-    for (final ad in _allAds) {
-      if (ad is EasyUnityAdBase) ad.onFailedUnityAd(error, errorMessage);
     }
   }
 }

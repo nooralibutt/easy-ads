@@ -1,10 +1,11 @@
-import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
+import 'package:easy_ads_flutter/src/easy_ad_base.dart';
+import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
-class EasyUnityBannerAd extends EasyUnityAdBase {
+class EasyUnityBannerAd extends EasyAdBase {
   final AdSize adSize;
 
   EasyUnityBannerAd(
@@ -13,6 +14,9 @@ class EasyUnityBannerAd extends EasyUnityAdBase {
   }) : super(adUnitId);
 
   bool _isAdLoaded = false;
+
+  @override
+  AdNetwork get adNetwork => AdNetwork.unity;
 
   @override
   AdUnitType get adUnitType => AdUnitType.banner;
@@ -27,10 +31,10 @@ class EasyUnityBannerAd extends EasyUnityAdBase {
   Future<void> load() async {
     if (_isAdLoaded) return;
 
-    await UnityAds.load(
+    UnityAds.load(
       placementId: adUnitId,
-      onComplete: (_) => _isAdLoaded = true,
-      onFailed: (s, e, em) => _isAdLoaded = false,
+      onComplete: onCompleteLoadUnityAd,
+      onFailed: onFailedToLoadUnityAd,
     );
   }
 
@@ -39,9 +43,9 @@ class EasyUnityBannerAd extends EasyUnityAdBase {
     final ad = UnityBannerAd(
       size: BannerSize(width: adSize.width, height: adSize.height),
       placementId: adUnitId,
-      onLoad: onCompleteUnityAd,
-      onFailed: _onFailedUnityBannerAd,
-      onClick: _onClickUnityBannerAd,
+      onLoad: onCompleteUnityBannerAd,
+      onFailed: onFailedUnityBannerAd,
+      onClick: onClickUnityBannerAd,
     );
 
     return Container(
@@ -52,24 +56,31 @@ class EasyUnityBannerAd extends EasyUnityAdBase {
     );
   }
 
-  @override
-  void onCompleteUnityAd(args) {
+  void onCompleteLoadUnityAd(String s) {
     _isAdLoaded = true;
     onAdLoaded?.call(adNetwork, adUnitType, null);
   }
 
-  @override
-  void onFailedUnityAd(
-      UnityAdsInitializationError error, String errorMessage) {}
+  void onFailedToLoadUnityAd(
+      String placementId, UnityAdsLoadError error, String errorMessage) {
+    _isAdLoaded = false;
+    onAdFailedToLoad?.call(
+        adNetwork, adUnitType, error, 'Error occurred while loading unity ad');
+  }
 
-  void _onFailedUnityBannerAd(
+  void onCompleteUnityBannerAd(args) {
+    _isAdLoaded = false;
+    onAdShowed?.call(adNetwork, adUnitType, null);
+  }
+
+  void onFailedUnityBannerAd(
       String placementId, UnityAdsBannerError error, String errorMessage) {
     _isAdLoaded = false;
-    onAdFailedToLoad?.call(adNetwork, adUnitType, error,
+    onAdFailedToShow?.call(adNetwork, adUnitType, error,
         'Error occurred while loading unity banner ad');
   }
 
-  void _onClickUnityBannerAd(String placementId) {
+  void onClickUnityBannerAd(String placementId) {
     onAdClicked?.call(adNetwork, adUnitType, null);
   }
 }

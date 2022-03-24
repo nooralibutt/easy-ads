@@ -216,6 +216,19 @@ class EasyAds {
     String? interstitialPlacementId,
     String? rewardedPlacementId,
   }) async {
+    // placementId
+    if (unityGameId != null) {
+      await UnityAds.init(
+        gameId: unityGameId,
+        testMode: testMode,
+        onComplete: () =>
+            _eventController.fireNetworkInitializedEvent(AdNetwork.unity, true),
+        onFailed: (UnityAdsInitializationError error, String s) =>
+            _eventController.fireNetworkInitializedEvent(
+                AdNetwork.unity, false),
+      );
+    }
+
     // init interstitial ads
     if (interstitialPlacementId != null &&
         _interstitialAds.doesNotContain(
@@ -235,19 +248,6 @@ class EasyAds {
       _eventController.setupEvents(ad);
 
       await ad.load();
-    }
-
-    // placementId
-    if (unityGameId != null) {
-      await UnityAds.init(
-        gameId: unityGameId,
-        testMode: testMode,
-        onComplete: () =>
-            _eventController.fireNetworkInitializedEvent(AdNetwork.unity, true),
-        onFailed: (UnityAdsInitializationError error, String s) =>
-            _eventController.fireNetworkInitializedEvent(
-                AdNetwork.unity, false),
-      );
     }
   }
 

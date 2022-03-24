@@ -74,7 +74,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           _streamSubscription =
                               EasyAds.instance.onEvent.listen((event) {
                             if (event.adUnitType == AdUnitType.rewarded &&
-                                event.type == AdEventType.adDismissed) {
+                                event.type == AdEventType.earnedReward) {
                               _streamSubscription?.cancel();
                               goToNextScreen(countryList[index]);
                             }

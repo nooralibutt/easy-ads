@@ -75,7 +75,7 @@ class EasyAdmobRewardedAd extends EasyAdBase {
     );
 
     ad.setImmersiveMode(_immersiveModeEnabled);
-    ad.show(onUserEarnedReward: (RewardedAd ad, RewardItem reward) {
+    ad.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
       onEarnedReward?.call(adNetwork, adUnitType, reward.type, reward.amount);
     });
     _rewardedAd = null;

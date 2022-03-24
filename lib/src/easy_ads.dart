@@ -8,12 +8,11 @@ import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_banner_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
-import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad_base.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/extensions.dart';
 import 'package:facebook_audience_network/facebook_audience_network.dart';
-import 'package:unity_ads_plugin/unity_ads.dart';
+import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 class EasyAds {
   EasyAds._easyAds();
@@ -217,6 +216,19 @@ class EasyAds {
     String? interstitialPlacementId,
     String? rewardedPlacementId,
   }) async {
+    // placementId
+    if (unityGameId != null) {
+      await UnityAds.init(
+        gameId: unityGameId,
+        testMode: testMode,
+        onComplete: () =>
+            _eventController.fireNetworkInitializedEvent(AdNetwork.unity, true),
+        onFailed: (UnityAdsInitializationError error, String s) =>
+            _eventController.fireNetworkInitializedEvent(
+                AdNetwork.unity, false),
+      );
+    }
+
     // init interstitial ads
     if (interstitialPlacementId != null &&
         _interstitialAds.doesNotContain(
@@ -236,18 +248,6 @@ class EasyAds {
       _eventController.setupEvents(ad);
 
       await ad.load();
-    }
-
-    // placementId
-    if (unityGameId != null) {
-      final status = await UnityAds.init(
-        gameId: unityGameId,
-        testMode: testMode,
-        listener: _onUnityAdListener,
-      );
-
-      _eventController.fireNetworkInitializedEvent(
-          AdNetwork.admob, status ?? false);
     }
   }
 
@@ -405,14 +405,6 @@ class EasyAds {
           (adUnitType == null || adUnitType == e.adUnitType)) {
         e.dispose();
       }
-    }
-  }
-
-  /// A single listener for unity ad state which will be called
-  /// every time unity ad is completed, failed or loaded
-  void _onUnityAdListener(UnityAdState state, dynamic args) {
-    for (final ad in _allAds) {
-      if (ad is EasyUnityAdBase) ad.onUnityAdListener(state, args);
     }
   }
 }

@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:ads/models/country.dart';
 import 'package:ads/models/test_ad_id_manager.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:flutter/material.dart';
 
 const IAdIdManager adIdManager = TestAdIdManager();
 
@@ -74,7 +74,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           _streamSubscription =
                               EasyAds.instance.onEvent.listen((event) {
                             if (event.adUnitType == AdUnitType.rewarded &&
-                                event.type == AdEventType.adDismissed) {
+                                event.type == AdEventType.earnedReward) {
                               _streamSubscription?.cancel();
                               goToNextScreen(countryList[index]);
                             }

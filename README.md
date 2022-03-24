@@ -43,6 +43,9 @@ Update your app's `ios/Runner/Info.plist` file to add two keys:
 * A `GADApplicationIdentifier` key with a string value of your AdMob app ID ([identified in the AdMob UI](https://support.google.com/admob/answer/7356431)).
 * A `SKAdNetworkItems` key with Google's `SKAdNetworkIdentifier` value of `cstr6suwn9.skadnetwork` and for applovin as well
 
+**Note**
+The keys for AppLovin and Google Ads **are required** in Info.plist
+If you're not using any provider, write the line as it is otherwise provide your keys
 ```xml
 <key>AppLovinSdkKey</key>
 <string>YOUR_SDK_KEY</string>
@@ -311,3 +314,11 @@ See [Example](https://pub.dev/packages/easy_ads_flutter/example) for better unde
 If you found this plugin helpful and would like to thank me:
 
 [![PayPal](https://img.shields.io/badge/Donate-PayPal-066BB7?logo=paypal)](https://paypal.me/nooralibutt)
+
+## Authors
+##### Noor Ali Butt
+[![GitHub Follow](https://img.shields.io/badge/Connect--blue.svg?logo=Github&longCache=true&style=social&label=Follow)](https://github.com/nooralibutt) [![LinkedIn Link](https://img.shields.io/badge/Connect--blue.svg?logo=linkedin&longCache=true&style=social&label=Connect
+)](https://www.linkedin.com/in/nooralibutt)
+##### Ahmad Khan
+[![GitHub Follow](https://img.shields.io/badge/Connect--blue.svg?logo=Github&longCache=true&style=social&label=Follow)](https://github.com/rmahmadkhan) [![LinkedIn Link](https://img.shields.io/badge/Connect--blue.svg?logo=linkedin&longCache=true&style=social&label=Connect
+)](https://www.linkedin.com/in/rmahmadkhan)

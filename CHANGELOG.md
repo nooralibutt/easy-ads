@@ -1,3 +1,9 @@
+## 1.0.3
+* Added support for google_mobile_ads: 1.3.0
+* Added support for unity_ads_plugin: 0.3.4
+* Fix bugs for flutter_applovin_max: 0.3.4
+* Updated docs
+
 ## 1.0.2
 * Added support for google_mobile_ads: 1.1.0
 * Added support for unity_ads_plugin: 0.3.3

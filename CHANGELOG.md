@@ -1,3 +1,7 @@
+## 1.0.4
+* Added support for google_mobile_ads: 2.0.0
+* Updated docs
+
 ## 1.0.3
 * Added support for google_mobile_ads: 1.3.0
 * Added support for unity_ads_plugin: 0.3.4

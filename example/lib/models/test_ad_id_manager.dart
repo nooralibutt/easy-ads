@@ -10,9 +10,9 @@ class TestAdIdManager extends IAdIdManager {
         appId: Platform.isAndroid
             ? 'ca-app-pub-3940256099942544~3347511713'
             : 'ca-app-pub-3940256099942544~1458002511',
-        bannerId: BannerAd.testAdUnitId,
-        interstitialId: InterstitialAd.testAdUnitId,
-        rewardedId: RewardedAd.testAdUnitId,
+        bannerId: 'ca-app-pub-3940256099942544/6300978111',
+        interstitialId: 'ca-app-pub-3940256099942544/1033173712',
+        rewardedId: 'ca-app-pub-3940256099942544/5224354917',
       );
 
   @override

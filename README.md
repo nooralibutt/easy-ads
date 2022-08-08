@@ -43,9 +43,11 @@ Update your app's `ios/Runner/Info.plist` file to add two keys:
 * A `GADApplicationIdentifier` key with a string value of your AdMob app ID ([identified in the AdMob UI](https://support.google.com/admob/answer/7356431)).
 * A `SKAdNetworkItems` key with Google's `SKAdNetworkIdentifier` value of `cstr6suwn9.skadnetwork` and for applovin as well
 
-**Note**
-The keys for AppLovin and Google Ads **are required** in Info.plist
-If you're not using any provider, write the line as it is otherwise provide your keys
+#### **Note**
+
+The keys for AppLovin and Google Ads **are required** in Info.plist.
+
+If you're not using any provider, write the line as it is otherwise provide your keys.
 ```xml
 <key>AppLovinSdkKey</key>
 <string>YOUR_SDK_KEY</string>
@@ -190,9 +192,9 @@ class TestAdIdManager extends IAdIdManager {
     appId: Platform.isAndroid
         ? 'ca-app-pub-3940256099942544~3347511713'
         : 'ca-app-pub-3940256099942544~1458002511',
-    bannerId: BannerAd.testAdUnitId,
-    interstitialId: InterstitialAd.testAdUnitId,
-    rewardedId: RewardedAd.testAdUnitId,
+    bannerId: 'ca-app-pub-3940256099942544/6300978111',
+    interstitialId: 'ca-app-pub-3940256099942544/1033173712',
+    rewardedId: 'ca-app-pub-3940256099942544/5224354917',
   );
 
   @override

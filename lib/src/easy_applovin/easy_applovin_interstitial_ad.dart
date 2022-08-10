@@ -20,15 +20,13 @@ class EasyApplovinInterstitialAd extends EasyAdBase {
   bool get isAdLoaded => _isAdLoaded;
 
   @override
-  void dispose() {
-    _isAdLoaded = false;
-  }
+  void dispose() => _isAdLoaded = false;
 
   @override
   Future<void> load() async {
     if (_isAdLoaded) return;
-
     if (adUnitType == AdUnitType.interstitial) {
+      AppLovinMAX.loadInterstitial(adUnitId);
       _isAdLoaded = await AppLovinMAX.isInterstitialReady(adUnitId) ?? false;
     }
     _onAppLovinAdListener();
@@ -37,6 +35,7 @@ class EasyApplovinInterstitialAd extends EasyAdBase {
   @override
   show() {
     if (!_isAdLoaded) return;
+
     if (adUnitType == AdUnitType.interstitial) {
       AppLovinMAX.showInterstitial(adUnitId);
     }

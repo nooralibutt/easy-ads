@@ -28,6 +28,7 @@ class TestAdIdManager extends IAdIdManager {
   AppAdIds? get appLovinAdIds => AppAdIds(
         appId:
             'OeKTS4Zl758OIlAs3KQ6-3WE1IkdOo3nQNJtRubTzlyFU76TRWeQZAeaSMCr9GcZdxR4p2cnoZ1Gg7p7eSXCdA',
+        bannerId: Platform.isAndroid ? 'b2c4f43d3986bcfb' : '80c269494c0e45c2',
         interstitialId:
             Platform.isAndroid ? 'c48f54c6ce5ff297' : 'e33147110a6d12d2',
         rewardedId:

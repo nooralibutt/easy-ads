@@ -14,7 +14,7 @@ dependencies:
   google_mobile_ads: ^2.0.0
   collection: ^1.16.0
   unity_ads_plugin: ^0.3.4
-  applovin_max: 2.0.0
+  applovin_max: ^2.0.0
   facebook_audience_network: ^1.0.1
   logger: ^1.1.0
 

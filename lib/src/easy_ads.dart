@@ -1,10 +1,13 @@
 import 'dart:async';
 
+import 'package:applovin_max/applovin_max.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
-import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_ad.dart';
+import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_banner_ad.dart';
+import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_interstitial_ad.dart';
+import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_rewarded_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_banner_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
@@ -96,6 +99,7 @@ class EasyAds {
     final appLovinSdkId = manager.appLovinAdIds?.appId;
     if (appLovinSdkId != null) {
       EasyAds.instance._initAppLovin(
+        sdkKey: appLovinSdkId,
         interstitialAdUnitId: manager.appLovinAdIds?.interstitialId,
         rewardedAdUnitId: manager.appLovinAdIds?.rewardedId,
       );
@@ -106,15 +110,13 @@ class EasyAds {
   ///
   /// if [adNetwork] is provided, only that network's ad would be created. For now, only unity and admob banner is supported
   /// [adSize] is used to provide ad banner size
-  EasyAdBase? createBanner(
-      {required AdNetwork adNetwork, AdSize adSize = AdSize.banner}) {
-    assert(
-        adNetwork == AdNetwork.unity ||
-            adNetwork == AdNetwork.admob ||
-            adNetwork == AdNetwork.facebook,
-        'Only admob, unity and facebook banners are available right now');
-
+  EasyAdBase? createBanner({
+    required AdNetwork adNetwork,
+    AdSize adSize = AdSize.banner,
+    AdViewPosition applovinBannerPosition = AdViewPosition.bottomCenter,
+  }) {
     EasyAdBase? ad;
+
     switch (adNetwork) {
       case AdNetwork.admob:
         final bannerId = adIdManager.admobAdIds?.bannerId;
@@ -136,11 +138,21 @@ class EasyAds {
         }
         break;
       case AdNetwork.facebook:
-        final bannerId = adIdManager.fbAdIds?.interstitialId;
+        final bannerId = adIdManager.fbAdIds?.bannerId;
         assert(bannerId != null,
             'You are trying to create a banner and Facebook Banner id is null in ad id manager');
         if (bannerId != null) {
-          return EasyFacebookBannerAd(bannerId, adSize: adSize);
+          ad = EasyFacebookBannerAd(bannerId, adSize: adSize);
+          _eventController.setupEvents(ad);
+        }
+        break;
+      case AdNetwork.appLovin:
+        final bannerId = adIdManager.appLovinAdIds?.bannerId;
+        assert(bannerId != null,
+            'You are trying to create a banner and Applovin Banner id is null in ad id manager');
+        if (bannerId != null) {
+          ad = EasyApplovinBannerAd(bannerId, applovinBannerPosition);
+          _eventController.setupEvents(ad);
         }
         break;
       default:
@@ -179,32 +191,34 @@ class EasyAds {
   }
 
   Future<void> _initAppLovin({
+    String? sdkKey,
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
   }) async {
-    // init interstitial ads
-    if (interstitialAdUnitId != null &&
-        _interstitialAds.doesNotContain(
-            AdNetwork.appLovin, AdUnitType.interstitial)) {
-      final ad = EasyApplovinFullScreenAd(
-          interstitialAdUnitId, AdUnitType.interstitial);
-      _interstitialAds.add(ad);
-      _eventController.setupEvents(ad);
+    if (sdkKey != null) {
+      await AppLovinMAX.initialize(sdkKey);
 
-      await ad.initialize();
-      await ad.load();
-    }
+      // init interstitial ads
+      if (interstitialAdUnitId != null &&
+          _interstitialAds.doesNotContain(
+              AdNetwork.appLovin, AdUnitType.interstitial)) {
+        final ad = EasyApplovinInterstitialAd(interstitialAdUnitId);
+        _interstitialAds.add(ad);
+        _eventController.setupEvents(ad);
 
-    // init rewarded ads
-    if (rewardedAdUnitId != null &&
-        _rewardedAds.doesNotContain(AdNetwork.appLovin, AdUnitType.rewarded)) {
-      final ad =
-          EasyApplovinFullScreenAd(rewardedAdUnitId, AdUnitType.rewarded);
-      _rewardedAds.add(ad);
-      _eventController.setupEvents(ad);
+        await ad.load();
+      }
 
-      await ad.initialize();
-      await ad.load();
+      // init rewarded ads
+      if (rewardedAdUnitId != null &&
+          _rewardedAds.doesNotContain(
+              AdNetwork.appLovin, AdUnitType.rewarded)) {
+        final ad = EasyApplovinRewardedAd(rewardedAdUnitId);
+        _rewardedAds.add(ad);
+        _eventController.setupEvents(ad);
+
+        await ad.load();
+      }
     }
   }
 

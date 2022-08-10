@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:flutter/material.dart';
 
 class EasyBannerAd extends StatefulWidget {
   final AdNetwork adNetwork;
@@ -8,9 +8,7 @@ class EasyBannerAd extends StatefulWidget {
     this.adNetwork = AdNetwork.admob,
     this.adSize = AdSize.banner,
     Key? key,
-  })  : assert(adNetwork != AdNetwork.appLovin,
-            "Applovin banner is not supported yet"),
-        super(key: key);
+  }) : super(key: key);
 
   @override
   _EasyBannerAdState createState() => _EasyBannerAdState();

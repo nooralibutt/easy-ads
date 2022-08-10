@@ -110,11 +110,8 @@ class EasyAds {
   ///
   /// if [adNetwork] is provided, only that network's ad would be created. For now, only unity and admob banner is supported
   /// [adSize] is used to provide ad banner size
-  EasyAdBase? createBanner({
-    required AdNetwork adNetwork,
-    AdSize adSize = AdSize.banner,
-    AdViewPosition applovinBannerPosition = AdViewPosition.bottomCenter,
-  }) {
+  EasyAdBase? createBanner(
+      {required AdNetwork adNetwork, AdSize adSize = AdSize.banner}) {
     EasyAdBase? ad;
 
     switch (adNetwork) {
@@ -151,7 +148,7 @@ class EasyAds {
         assert(bannerId != null,
             'You are trying to create a banner and Applovin Banner id is null in ad id manager');
         if (bannerId != null) {
-          ad = EasyApplovinBannerAd(bannerId, applovinBannerPosition);
+          ad = EasyApplovinBannerAd(bannerId);
           _eventController.setupEvents(ad);
         }
         break;

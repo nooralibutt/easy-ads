@@ -2,13 +2,9 @@ import 'package:applovin_max/applovin_max.dart';
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
 import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
-import 'package:flutter/material.dart';
 
 class EasyApplovinBannerAd extends EasyAdBase {
-  final AdViewPosition _position;
-  EasyApplovinBannerAd(String adUnitId, this._position) : super(adUnitId);
-
-  bool _isAdLoaded = false;
+  EasyApplovinBannerAd(String adUnitId) : super(adUnitId);
 
   @override
   AdUnitType get adUnitType => AdUnitType.banner;
@@ -16,50 +12,36 @@ class EasyApplovinBannerAd extends EasyAdBase {
   AdNetwork get adNetwork => AdNetwork.appLovin;
 
   @override
-  void dispose() {
-    _isAdLoaded = false;
-    AppLovinMAX.destroyBanner(adUnitId);
-  }
+  void dispose() {}
 
   @override
-  bool get isAdLoaded => _isAdLoaded;
+  bool get isAdLoaded => false;
 
   @override
-  Future<void> load() async {
-    if (_isAdLoaded) return;
-    if (adUnitType == AdUnitType.banner) {
-      AppLovinMAX.createBanner(adUnitId, _position);
-    }
-    _isAdLoaded = true;
-  }
+  Future<void> load() async {}
 
   @override
   dynamic show() {
-    if (!_isAdLoaded) {
-      return const SizedBox();
-    }
-
-    AppLovinMAX.showBanner(adUnitId);
-    _isAdLoaded = false;
-
     return MaxAdView(
       adUnitId: adUnitId,
       adFormat: AdFormat.banner,
       listener: AdViewAdListener(
-        onAdLoadedCallback: (_) {
-          _isAdLoaded = true;
-          onAdLoaded?.call(adNetwork, adUnitType, null);
+        onAdLoadedCallback: (ad) {
+          onAdLoaded?.call(adNetwork, adUnitType, ad);
         },
-        onAdLoadFailedCallback: (_, __) {
-          _isAdLoaded = false;
+        onAdLoadFailedCallback: (adUnitId, error) {
           onAdFailedToLoad?.call(adNetwork, adUnitType, null,
-              'Error occurred while loading $adNetwork ad');
+              'Error occurred while loading $adNetwork ad with ${error.code.toString()} and message:  ${error.message}');
         },
         onAdClickedCallback: (_) {
           onAdClicked?.call(adNetwork, adUnitType, null);
         },
-        onAdExpandedCallback: (_) {},
-        onAdCollapsedCallback: (_) {},
+        onAdExpandedCallback: (ad) {
+          onAdShowed?.call(adNetwork, adUnitType, ad);
+        },
+        onAdCollapsedCallback: (ad) {
+          onAdDismissed?.call(adNetwork, adUnitType, ad);
+        },
       ),
     );
   }

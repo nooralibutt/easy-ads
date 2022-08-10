@@ -193,7 +193,13 @@ class EasyAds {
     String? rewardedAdUnitId,
   }) async {
     if (sdkKey != null) {
-      await AppLovinMAX.initialize(sdkKey);
+      final response = await AppLovinMAX.initialize(sdkKey);
+
+      if (response != null) {
+        _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, true);
+      } else {
+        _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, false);
+      }
 
       // init interstitial ads
       if (interstitialAdUnitId != null &&

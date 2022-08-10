@@ -2,7 +2,7 @@
 # See https://dart.dev/tools/pub/glossary#lockfile
 packages:
   applovin_max:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: applovin_max
       url: "https://pub.dartlang.org"
@@ -44,14 +44,21 @@ packages:
     source: hosted
     version: "1.1.0"
   collection:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: collection
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-  facebook_audience_network:
+  easy_ads_flutter:
     dependency: "direct main"
+    description:
+      path: ".."
+      relative: true
+    source: path
+    version: "1.0.5"
+  facebook_audience_network:
+    dependency: transitive
     description:
       name: facebook_audience_network
       url: "https://pub.dartlang.org"
@@ -75,14 +82,14 @@ packages:
       name: flutter_lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.1"
+    version: "1.0.4"
   flutter_test:
     dependency: "direct dev"
     description: flutter
     source: sdk
     version: "0.0.0"
   google_mobile_ads:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: google_mobile_ads
       url: "https://pub.dartlang.org"
@@ -94,9 +101,9 @@ packages:
       name: lints
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.0.0"
+    version: "1.0.1"
   logger:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: logger
       url: "https://pub.dartlang.org"
@@ -185,7 +192,7 @@ packages:
     source: hosted
     version: "0.4.9"
   unity_ads_plugin:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: unity_ads_plugin
       url: "https://pub.dartlang.org"

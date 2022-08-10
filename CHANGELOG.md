@@ -1,3 +1,9 @@
+## 1.0.5
+* Added support for applovin_max Official plugin: 2.0.0
+* Fix Facebook banner ads
+* Added support for applovin banner ads
+* Updated docs
+
 ## 1.0.4
 * Added support for google_mobile_ads: 2.0.0
 * Updated docs

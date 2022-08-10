@@ -18,6 +18,7 @@ class EasyApplovinBannerAd extends EasyAdBase {
   @override
   void dispose() {
     _isAdLoaded = false;
+    AppLovinMAX.destroyBanner(adUnitId);
   }
 
   @override
@@ -26,7 +27,9 @@ class EasyApplovinBannerAd extends EasyAdBase {
   @override
   Future<void> load() async {
     if (_isAdLoaded) return;
-    AppLovinMAX.createBanner(adUnitId, _position);
+    if (adUnitType == AdUnitType.banner) {
+      AppLovinMAX.createBanner(adUnitId, _position);
+    }
     _isAdLoaded = true;
   }
 

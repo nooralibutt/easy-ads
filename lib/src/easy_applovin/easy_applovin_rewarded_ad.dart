@@ -20,15 +20,14 @@ class EasyApplovinRewardedAd extends EasyAdBase {
   bool get isAdLoaded => _isAdLoaded;
 
   @override
-  void dispose() {
-    _isAdLoaded = false;
-  }
+  void dispose() => _isAdLoaded = false;
 
   @override
   Future<void> load() async {
     if (_isAdLoaded) return;
 
     if (adUnitType == AdUnitType.rewarded) {
+      AppLovinMAX.loadRewardedAd(adUnitId);
       _isAdLoaded = await AppLovinMAX.isRewardedAdReady(adUnitId) ?? false;
     }
     _onAppLovinAdListener();
@@ -37,6 +36,7 @@ class EasyApplovinRewardedAd extends EasyAdBase {
   @override
   show() {
     if (!_isAdLoaded) return;
+
     if (adUnitType == AdUnitType.rewarded) {
       AppLovinMAX.showRewardedAd(adUnitId);
     }

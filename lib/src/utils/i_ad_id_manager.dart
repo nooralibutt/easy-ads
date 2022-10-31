@@ -27,6 +27,9 @@ class AppAdIds {
   final String appId;
 
   /// if id is null, it will not be implemented
+  final String? appOpenId;
+
+  /// if id is null, it will not be implemented
   final String? interstitialId;
 
   /// if id is null, it will not be implemented
@@ -37,6 +40,7 @@ class AppAdIds {
 
   const AppAdIds({
     required this.appId,
+    this.appOpenId,
     this.interstitialId,
     this.rewardedId,
     this.bannerId,

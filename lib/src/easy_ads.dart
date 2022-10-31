@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:applovin_max/applovin_max.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:easy_ads_flutter/src/easy_admob/app_lifecycle_reactor.dart';
+import 'package:easy_ads_flutter/src/easy_admob/easy_admob_app_open_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
 import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_banner_ad.dart';
@@ -24,11 +26,15 @@ class EasyAds {
   /// Google admob's ad request
   AdRequest _adRequest = const AdRequest();
   late final IAdIdManager adIdManager;
+  late AppLifecycleReactor _appLifecycleReactor;
 
   final _eventController = EasyEventController();
   Stream<AdEvent> get onEvent => _eventController.onEvent;
 
   List<EasyAdBase> get _allAds => [..._interstitialAds, ..._rewardedAds];
+
+  /// All the interstitial ads will be stored in it
+  final List<EasyAdBase> _appOpenAds = [];
 
   /// All the interstitial ads will be stored in it
   final List<EasyAdBase> _interstitialAds = [];
@@ -80,7 +86,8 @@ class EasyAds {
           AdNetwork.admob, status == AdapterInitializationState.ready);
 
       // Initializing admob Ads
-      EasyAds.instance._initAdmob(
+      await EasyAds.instance._initAdmob(
+        appOpenAdUnitId: manager.admobAdIds?.appOpenId,
         interstitialAdUnitId: manager.admobAdIds?.interstitialId,
         rewardedAdUnitId: manager.admobAdIds?.rewardedId,
       );
@@ -159,6 +166,7 @@ class EasyAds {
   }
 
   Future<void> _initAdmob({
+    String? appOpenAdUnitId,
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
     bool immersiveModeEnabled = true,
@@ -184,6 +192,18 @@ class EasyAds {
       _eventController.setupEvents(ad);
 
       await ad.load();
+    }
+
+    if (appOpenAdUnitId != null &&
+        _appOpenAds.doesNotContain(AdNetwork.admob, AdUnitType.appOpen)) {
+      final appOpenAdManager = EasyAdmobAppOpenAd(
+          appOpenAdUnitId, _adRequest, AppOpenAd.orientationPortrait);
+      await appOpenAdManager.load();
+      _appLifecycleReactor =
+          AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+      _appLifecycleReactor.listenToAppStateChanges();
+      _appOpenAds.add(appOpenAdManager);
+      _eventController.setupEvents(appOpenAdManager);
     }
   }
 
@@ -345,13 +365,19 @@ class EasyAds {
   /// if [adNetwork] is provided, only that network's ad would be displayed
   /// if [random] is true, any random loaded ad would be displayed
   bool showAd(AdUnitType adUnitType, {AdNetwork adNetwork = AdNetwork.any}) {
-    assert(
-        adUnitType == AdUnitType.interstitial ||
-            adUnitType == AdUnitType.rewarded,
-        'Only interstitial and rewarded types should be passed to this method');
+    // assert(
+    //     adUnitType == AdUnitType.interstitial ||
+    //         adUnitType == AdUnitType.rewarded,
+    //     'Only interstitial and rewarded types should be passed to this method');
 
-    final List<EasyAdBase> ads =
-        adUnitType == AdUnitType.rewarded ? _rewardedAds : _interstitialAds;
+    List<EasyAdBase> ads = [];
+    if (adUnitType == AdUnitType.rewarded) {
+      ads = _rewardedAds;
+    } else if (adUnitType == AdUnitType.interstitial) {
+      ads = _interstitialAds;
+    } else if (adUnitType == AdUnitType.appOpen) {
+      ads = _appOpenAds;
+    }
 
     for (final ad in ads) {
       if (ad.isAdLoaded) {

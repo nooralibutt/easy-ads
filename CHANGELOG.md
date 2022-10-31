@@ -1,3 +1,7 @@
+## 1.0.6
+* Update Dependencies
+* Adds Admob App Open Ad
+
 ## 1.0.5
 * Added support for applovin_max Official plugin: 2.0.0
 * Fix Facebook banner ads

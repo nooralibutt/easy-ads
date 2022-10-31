@@ -192,6 +192,9 @@ class TestAdIdManager extends IAdIdManager {
     appId: Platform.isAndroid
         ? 'ca-app-pub-3940256099942544~3347511713'
         : 'ca-app-pub-3940256099942544~1458002511',
+    appOpenId: Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/3419835294'
+        : 'ca-app-pub-3940256099942544/5662855259',
     bannerId: 'ca-app-pub-3940256099942544/6300978111',
     interstitialId: 'ca-app-pub-3940256099942544/1033173712',
     rewardedId: 'ca-app-pub-3940256099942544/5224354917',
@@ -272,6 +275,11 @@ EasyAds.instance.showAd(AdUnitType.rewarded);
 ### Show random interstitial ad
 ```dart
 EasyAds.instance.showRandomAd(AdUnitType.interstitial)
+```
+
+### Show appOpen ad
+```dart
+EasyAds.instance.showAd(AdUnitType.appOpen)
 ```
 
 ## Show Banner Ads

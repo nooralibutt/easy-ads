@@ -27,7 +27,7 @@ class Country {
       "Turkey, officially the Republic of Turkey, is a country bridging Europe and Asia. It shares borders with Greece and Bulgaria to the northwest; the Black Sea to the north; Georgia to the northeast",
     ),
     Country(
-      "India",
+      "India - App Open",
       "https://i.dlpng.com/static/png/6979793_preview.png",
       "India, officially the Republic of India, is a country in South Asia. It is the seventh-largest country by area, the second-most populous country, and the most populous democracy in the world",
     ),

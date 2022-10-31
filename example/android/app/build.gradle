@@ -56,4 +56,11 @@ flutter {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    constraints {
+        implementation('com.facebook.android:audience-network-sdk') {
+            version {
+                strictly '6.8.0'
+            }
+        }
+    }
 }

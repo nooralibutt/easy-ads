@@ -58,6 +58,7 @@ class EasyAds {
     bool enableLogger = true,
     String? fbTestingId,
     bool fbiOSAdvertiserTrackingEnabled = false,
+    int appOpenAdOrientation = AppOpenAd.orientationPortrait,
   }) async {
     if (enableLogger) _logger.enable(enableLogger);
     adIdManager = manager;
@@ -90,6 +91,7 @@ class EasyAds {
         appOpenAdUnitId: manager.admobAdIds?.appOpenId,
         interstitialAdUnitId: manager.admobAdIds?.interstitialId,
         rewardedAdUnitId: manager.admobAdIds?.rewardedId,
+        appOpenAdOrientation: appOpenAdOrientation,
       );
     }
 
@@ -170,6 +172,7 @@ class EasyAds {
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
     bool immersiveModeEnabled = true,
+    int appOpenAdOrientation = AppOpenAd.orientationPortrait,
   }) async {
     // init interstitial ads
     if (interstitialAdUnitId != null &&
@@ -196,8 +199,8 @@ class EasyAds {
 
     if (appOpenAdUnitId != null &&
         _appOpenAds.doesNotContain(AdNetwork.admob, AdUnitType.appOpen)) {
-      final appOpenAdManager = EasyAdmobAppOpenAd(
-          appOpenAdUnitId, _adRequest, AppOpenAd.orientationPortrait);
+      final appOpenAdManager =
+          EasyAdmobAppOpenAd(appOpenAdUnitId, _adRequest, appOpenAdOrientation);
       await appOpenAdManager.load();
       _appLifecycleReactor =
           AppLifecycleReactor(appOpenAdManager: appOpenAdManager);

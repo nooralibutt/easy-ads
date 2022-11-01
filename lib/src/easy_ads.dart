@@ -368,11 +368,6 @@ class EasyAds {
   /// if [adNetwork] is provided, only that network's ad would be displayed
   /// if [random] is true, any random loaded ad would be displayed
   bool showAd(AdUnitType adUnitType, {AdNetwork adNetwork = AdNetwork.any}) {
-    // assert(
-    //     adUnitType == AdUnitType.interstitial ||
-    //         adUnitType == AdUnitType.rewarded,
-    //     'Only interstitial and rewarded types should be passed to this method');
-
     List<EasyAdBase> ads = [];
     if (adUnitType == AdUnitType.rewarded) {
       ads = _rewardedAds;

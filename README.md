@@ -13,7 +13,7 @@ To easily integrate ads from different ad networks into your flutter app.
 
 ## Features
 
-- Google Mobile Ads (banner, interstitial, rewarded ad)
+- Google Mobile Ads (banner, appOpen, interstitial, rewarded ad)
 - Facebook Audience Network (banner, interstitial, rewarded ad)
 - Unity Ads (banner, interstitial, rewarded ad)
 - AppLovin Max Ads (interstitial, rewarded ad)
@@ -28,6 +28,7 @@ To easily integrate ads from different ad networks into your flutter app.
     *   Android Gradle Plugin 4.1 or higher (this is the version supported by Flutter out of the box)
 *   Ios
     *   Latest version of Xcode with [enabled command-line tools](https://flutter.dev/docs/get-started/install/macos#install-xcode).
+    *   MinimumOSVersion 11.0.
 *   Recommended: [Create an AdMob account](https://support.google.com/admob/answer/2784575) and [register an Android and/or iOS app](https://support.google.com/admob/answer/2773509) (To show live ads on a published app, it is required to register that app).
 
 ## Platform Specific Setup
@@ -192,6 +193,9 @@ class TestAdIdManager extends IAdIdManager {
     appId: Platform.isAndroid
         ? 'ca-app-pub-3940256099942544~3347511713'
         : 'ca-app-pub-3940256099942544~1458002511',
+    appOpenId: Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/3419835294'
+        : 'ca-app-pub-3940256099942544/5662855259',
     bannerId: 'ca-app-pub-3940256099942544/6300978111',
     interstitialId: 'ca-app-pub-3940256099942544/1033173712',
     rewardedId: 'ca-app-pub-3940256099942544/5224354917',
@@ -245,6 +249,8 @@ void main() async {
     adIdManager,
     unityTestMode: true,
     adMobAdRequest: const AdRequest(),
+    // AppOpen Ad Orientation
+    appOpenAdOrientation: AppOpenAd.orientationPortrait,
     admobConfiguration: RequestConfiguration(testDeviceIds: [
       '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
       '00008030-00163022226A802E',
@@ -254,6 +260,19 @@ void main() async {
   runApp(MyApp());
 }
 ```
+## AppOpen Ad Orientation
+```dart
+static const int orientationPortrait = 1;
+```
+Landscape orientation left. Android does not distinguish between left/right, and will treat this the same way as [orientationLandscapeRight].
+```dart
+static const int orientationLandscapeLeft = 2;
+```
+Landscape orientation right. Android does not distinguish between left/right, and will treat this the same way as [orientationLandscapeLeft].
+```dart
+static const int orientationLandscapeRight = 3;
+```
+
 ## Interstitial/Rewarded Ads
 
 ### Load an ad
@@ -272,6 +291,11 @@ EasyAds.instance.showAd(AdUnitType.rewarded);
 ### Show random interstitial ad
 ```dart
 EasyAds.instance.showRandomAd(AdUnitType.interstitial)
+```
+
+### Show appOpen ad
+```dart
+EasyAds.instance.showAd(AdUnitType.appOpen)
 ```
 
 ## Show Banner Ads

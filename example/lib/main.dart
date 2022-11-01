@@ -14,7 +14,7 @@ void main() async {
     unityTestMode: true,
     adMobAdRequest: const AdRequest(),
     admobConfiguration: RequestConfiguration(testDeviceIds: [
-      '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
+      '4ACA773F6D0C76D2A8934CD1F3EDFDB4', // Mi Phone
       '00008030-00163022226A802E',
     ]),
     fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
@@ -75,6 +75,21 @@ class _CountryListScreenState extends State<CountryListScreen> {
                               EasyAds.instance.onEvent.listen((event) {
                             if (event.adUnitType == AdUnitType.rewarded &&
                                 event.type == AdEventType.earnedReward) {
+                              _streamSubscription?.cancel();
+                              goToNextScreen(countryList[index]);
+                            }
+                          });
+                        }
+                      } else if (countryList[index].countryName ==
+                          'India - App Open') {
+                        if (EasyAds.instance.showAd(AdUnitType.appOpen)) {
+                          // Canceling the last callback subscribed
+                          _streamSubscription?.cancel();
+                          // Listening to the callback from showInterstitialAd()
+                          _streamSubscription =
+                              EasyAds.instance.onEvent.listen((event) {
+                            if (event.adUnitType == AdUnitType.appOpen &&
+                                event.type == AdEventType.adDismissed) {
                               _streamSubscription?.cancel();
                               goToNextScreen(countryList[index]);
                             }

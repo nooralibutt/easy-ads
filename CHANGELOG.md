@@ -1,3 +1,9 @@
+## 1.0.6
+* Update Dependencies
+* Adds Admob App Open Ad
+* Adds orientation for addOpen ad on initialize easyAd
+* Updated docs
+
 ## 1.0.5
 * Added support for applovin_max Official plugin: 2.0.0
 * Fix Facebook banner ads

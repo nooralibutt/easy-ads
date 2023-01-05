@@ -5,6 +5,7 @@ export 'package:easy_ads_flutter/src/easy_admob/app_lifecycle_reactor.dart';
 export 'package:easy_ads_flutter/src/easy_admob/easy_admob_app_open_ad.dart';
 export 'package:easy_ads_flutter/src/easy_admob/easy_admob_banner_ad.dart';
 export 'package:easy_ads_flutter/src/easy_ads.dart';
+export 'package:easy_ads_flutter/src/easy_smart_banner/easy_smart_banner.dart';
 export 'package:easy_ads_flutter/src/easy_unity/easy_unity_banner_ad.dart';
 export 'package:easy_ads_flutter/src/enums/ad_event_type.dart';
 export 'package:easy_ads_flutter/src/enums/ad_network.dart';

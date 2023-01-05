@@ -57,7 +57,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
       ),
       body: Column(
         children: [
-          EasyBannerAd(
+          const EasyBannerAd(
               adNetwork: AdNetwork.admob, adSize: AdSize.mediumRectangle),
           Expanded(
             child: ListView.builder(
@@ -124,6 +124,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                   );
                 }),
           ),
+          const EasySmartBannerAd(),
         ],
       ),
     );
@@ -181,7 +182,6 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
             ),
           ),
           const SizedBox(height: 20),
-          EasyBannerAd(adSize: AdSize.largeBanner, adNetwork: AdNetwork.unity),
         ],
       ),
     );

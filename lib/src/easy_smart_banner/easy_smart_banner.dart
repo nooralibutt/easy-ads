@@ -4,69 +4,90 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 
 class EasySmartBannerAd extends StatefulWidget {
-  const EasySmartBannerAd({Key? key}) : super(key: key);
+  final List<AdNetwork> priorityAdNetworks;
+  const EasySmartBannerAd(
+      {Key? key,
+      this.priorityAdNetworks = const [
+        AdNetwork.admob,
+        AdNetwork.facebook,
+        AdNetwork.appLovin,
+        AdNetwork.unity,
+      ]})
+      : super(key: key);
 
   @override
   State<EasySmartBannerAd> createState() => _EasySmartBannerAdState();
 }
 
 class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
-  final adNetworks = [
-    AdNetwork.admob,
-    AdNetwork.facebook,
-    AdNetwork.appLovin,
-    AdNetwork.unity,
-  ];
-  int index = 0;
+  int _currentADNetworkIndex = 0;
   StreamSubscription? _streamSubscription;
 
   @override
-  void initState() {
-    isAdAvailable();
-    super.initState();
+  void dispose() {
+    _cancelStream();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return isBannerIdAvailable(adNetworks[index]);
+    if (_currentADNetworkIndex >= widget.priorityAdNetworks.length) {
+      return const SizedBox();
+    }
+
+    for (int i = _currentADNetworkIndex;
+        i < widget.priorityAdNetworks.length;
+        i++) {
+      if (_isBannerIdAvailable(widget.priorityAdNetworks[i])) {
+        return _showBannerAd(widget.priorityAdNetworks[i]);
+      }
+    }
+    return const SizedBox();
   }
 
-  void isAdAvailable() {
-    _streamSubscription?.cancel();
+  void _subscribeToAdEvent(AdNetwork priorityAdNetwork) {
+    _cancelStream();
     _streamSubscription = EasyAds.instance.onEvent.listen((event) {
-      if (event.adUnitType == AdUnitType.banner &&
+      if (event.adNetwork == priorityAdNetwork &&
+          event.adUnitType == AdUnitType.banner &&
           event.type == AdEventType.adFailedToLoad) {
-        _streamSubscription?.cancel();
-        if (index >= 4) index = 0;
-        index++;
+        _cancelStream();
+        _currentADNetworkIndex++;
         setState(() {});
+      } else if (event.adNetwork == priorityAdNetwork &&
+          event.adUnitType == AdUnitType.banner &&
+          event.type == AdEventType.adShowed) {
+        _cancelStream();
       }
     });
   }
 
-  Widget isBannerIdAvailable(AdNetwork adNetwork) {
+  bool _isBannerIdAvailable(AdNetwork adNetwork) {
     final adIdManager = EasyAds.instance.adIdManager;
     if (adNetwork == AdNetwork.admob &&
         adIdManager.admobAdIds?.bannerId != null) {
-      index = 0;
-      return const EasyBannerAd(adNetwork: AdNetwork.admob);
+      return true;
     } else if (adNetwork == AdNetwork.facebook &&
         adIdManager.fbAdIds?.bannerId != null) {
-      index = 1;
-      return const EasyBannerAd(adNetwork: AdNetwork.facebook);
+      return true;
     } else if (adNetwork == AdNetwork.appLovin &&
         adIdManager.appLovinAdIds?.bannerId != null) {
-      index = 2;
-      return const EasyBannerAd(adNetwork: AdNetwork.appLovin);
+      return true;
     } else if (adNetwork == AdNetwork.unity &&
         adIdManager.unityAdIds?.bannerId != null) {
-      index = 3;
-      return const EasyBannerAd(adNetwork: AdNetwork.unity);
+      return true;
     } else {
-      if (index >= 4) index = 0;
-      index++;
-      Timer(const Duration(seconds: 2), () => setState(() {}));
-      return const SizedBox();
+      return false;
     }
+  }
+
+  Widget _showBannerAd(AdNetwork priorityAdNetwork) {
+    _subscribeToAdEvent(priorityAdNetwork);
+    return EasyBannerAd(adNetwork: priorityAdNetwork);
+  }
+
+  void _cancelStream() {
+    _streamSubscription?.cancel();
+    _streamSubscription = null;
   }
 }

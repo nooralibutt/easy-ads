@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class EasySmartBannerAd extends StatefulWidget {
   final List<AdNetwork> priorityAdNetworks;
+  final AdSize adSize;
   const EasySmartBannerAd(
       {Key? key,
       this.priorityAdNetworks = const [
@@ -12,7 +13,8 @@ class EasySmartBannerAd extends StatefulWidget {
         AdNetwork.facebook,
         AdNetwork.appLovin,
         AdNetwork.unity,
-      ]})
+      ],
+      this.adSize = AdSize.banner})
       : super(key: key);
 
   @override
@@ -31,16 +33,18 @@ class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
 
   @override
   Widget build(BuildContext context) {
-    if (_currentADNetworkIndex >= widget.priorityAdNetworks.length) {
+    final length = widget.priorityAdNetworks.length;
+    if (_currentADNetworkIndex >= length) {
       return const SizedBox();
     }
 
-    for (int i = _currentADNetworkIndex;
-        i < widget.priorityAdNetworks.length;
-        i++) {
-      if (_isBannerIdAvailable(widget.priorityAdNetworks[i])) {
-        return _showBannerAd(widget.priorityAdNetworks[i]);
+    while (_currentADNetworkIndex < length) {
+      if (_isBannerIdAvailable(
+          widget.priorityAdNetworks[_currentADNetworkIndex])) {
+        return _showBannerAd(widget.priorityAdNetworks[_currentADNetworkIndex]);
       }
+
+      _currentADNetworkIndex++;
     }
     return const SizedBox();
   }
@@ -50,13 +54,15 @@ class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
     _streamSubscription = EasyAds.instance.onEvent.listen((event) {
       if (event.adNetwork == priorityAdNetwork &&
           event.adUnitType == AdUnitType.banner &&
-          event.type == AdEventType.adFailedToLoad) {
+          (event.type == AdEventType.adFailedToLoad ||
+              event.type == AdEventType.adFailedToShow)) {
         _cancelStream();
         _currentADNetworkIndex++;
         setState(() {});
       } else if (event.adNetwork == priorityAdNetwork &&
           event.adUnitType == AdUnitType.banner &&
-          event.type == AdEventType.adShowed) {
+          (event.type == AdEventType.adShowed ||
+              event.type == AdEventType.adLoaded)) {
         _cancelStream();
       }
     });
@@ -83,7 +89,7 @@ class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
 
   Widget _showBannerAd(AdNetwork priorityAdNetwork) {
     _subscribeToAdEvent(priorityAdNetwork);
-    return EasyBannerAd(adNetwork: priorityAdNetwork);
+    return EasyBannerAd(adNetwork: priorityAdNetwork, adSize: widget.adSize);
   }
 
   void _cancelStream() {

@@ -181,6 +181,15 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
+          const EasySmartBannerAd(
+            priorityAdNetworks: [
+              AdNetwork.facebook,
+              AdNetwork.admob,
+              AdNetwork.unity,
+              AdNetwork.appLovin,
+            ],
+            adSize: AdSize.largeBanner,
+          ),
           const SizedBox(height: 20),
         ],
       ),

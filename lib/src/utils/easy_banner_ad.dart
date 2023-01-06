@@ -15,17 +15,29 @@ class EasyBannerAd extends StatefulWidget {
 }
 
 class _EasyBannerAdState extends State<EasyBannerAd> {
-  late final EasyAdBase? _bannerAd = EasyAds.instance
-      .createBanner(adNetwork: widget.adNetwork, adSize: widget.adSize);
+  EasyAdBase? _bannerAd;
 
   @override
   Widget build(BuildContext context) => _bannerAd?.show() ?? const SizedBox();
 
   @override
-  void initState() {
-    _bannerAd?.load();
+  void didUpdateWidget(covariant EasyBannerAd oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
+    createBanner();
+  }
+
+  void createBanner() {
+    _bannerAd = EasyAds.instance
+        .createBanner(adNetwork: widget.adNetwork, adSize: widget.adSize);
+    _bannerAd?.load();
+  }
+
+  @override
+  void initState() {
     super.initState();
+
+    createBanner();
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -30,7 +32,7 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
   void createBanner() {
     _bannerAd = EasyAds.instance
         .createBanner(adNetwork: widget.adNetwork, adSize: widget.adSize);
-    _bannerAd?.load();
+    Timer(const Duration(milliseconds: 500), () => _bannerAd?.load());
   }
 
   @override
@@ -44,5 +46,6 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
   void dispose() {
     super.dispose();
     _bannerAd?.dispose();
+    _bannerAd = null;
   }
 }

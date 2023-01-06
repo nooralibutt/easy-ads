@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 
@@ -15,22 +17,35 @@ class EasyBannerAd extends StatefulWidget {
 }
 
 class _EasyBannerAdState extends State<EasyBannerAd> {
-  late final EasyAdBase? _bannerAd = EasyAds.instance
-      .createBanner(adNetwork: widget.adNetwork, adSize: widget.adSize);
+  EasyAdBase? _bannerAd;
 
   @override
   Widget build(BuildContext context) => _bannerAd?.show() ?? const SizedBox();
 
   @override
-  void initState() {
-    _bannerAd?.load();
+  void didUpdateWidget(covariant EasyBannerAd oldWidget) {
+    super.didUpdateWidget(oldWidget);
 
+    createBanner();
+  }
+
+  void createBanner() {
+    _bannerAd = EasyAds.instance
+        .createBanner(adNetwork: widget.adNetwork, adSize: widget.adSize);
+    Timer(const Duration(milliseconds: 500), () => _bannerAd?.load());
+  }
+
+  @override
+  void initState() {
     super.initState();
+
+    createBanner();
   }
 
   @override
   void dispose() {
     super.dispose();
     _bannerAd?.dispose();
+    _bannerAd = null;
   }
 }

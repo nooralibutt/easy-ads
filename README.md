@@ -317,6 +317,37 @@ Widget build(BuildContext context) {
 }
 ```
 
+## Show Smart Banner Ad
+
+Smart Banner will check one by one the priority ad networks provided by you, if any of the priority network failed to load by some reason then it will automatically jump and try to load the next one so we can prevent revenue loss. 
+
+If you want to set the priority for Smart Banner, just pass the priorityAdNetworks in EasySmartBannerAd constructor just like below.
+Other wise it will set by default as [admob, facebook, appLovin, unity] and default AdSize is AdSize.banner,
+
+This is how you may show banner ad in widget-tree somewhere:
+
+```dart
+@override
+Widget build(BuildContext context) {
+  Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      SomeWidget(),
+      const Spacer(),
+      const EasySmartBannerAd(
+        priorityAdNetworks: [
+          AdNetwork.facebook,
+          AdNetwork.admob,
+          AdNetwork.unity,
+          AdNetwork.appLovin,
+        ],
+        adSize: AdSize.largeBanner,
+      ),
+    ],
+  );
+}
+```
+
 ## Listening to the callbacks
 Declare this object in the class
 ```dart

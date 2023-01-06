@@ -1,3 +1,8 @@
+## 1.0.7
+* Adds Smart Banner
+* Update Dependencies
+* Updated docs
+
 ## 1.0.6
 * Update Dependencies
 * Adds Admob App Open Ad

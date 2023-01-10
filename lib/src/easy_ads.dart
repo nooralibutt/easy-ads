@@ -57,6 +57,7 @@ class EasyAds {
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
     String? fbTestingId,
+    bool isAgeRestrictedUserForApplovin = false,
     bool fbiOSAdvertiserTrackingEnabled = false,
     int appOpenAdOrientation = AppOpenAd.orientationPortrait,
   }) async {
@@ -109,6 +110,7 @@ class EasyAds {
     if (appLovinSdkId != null) {
       EasyAds.instance._initAppLovin(
         sdkKey: appLovinSdkId,
+        isAgeRestrictedUser: isAgeRestrictedUserForApplovin,
         interstitialAdUnitId: manager.appLovinAdIds?.interstitialId,
         rewardedAdUnitId: manager.appLovinAdIds?.rewardedId,
       );
@@ -212,11 +214,13 @@ class EasyAds {
 
   Future<void> _initAppLovin({
     String? sdkKey,
+    bool? isAgeRestrictedUser,
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
   }) async {
     if (sdkKey != null) {
       final response = await AppLovinMAX.initialize(sdkKey);
+      AppLovinMAX.setIsAgeRestrictedUser(isAgeRestrictedUser ?? false);
 
       if (response != null) {
         _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, true);

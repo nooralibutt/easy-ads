@@ -17,6 +17,7 @@ void main() async {
       '4ACA773F6D0C76D2A8934CD1F3EDFDB4', // Mi Phone
       '00008030-00163022226A802E',
     ]),
+    isAgeRestrictedUserForApplovin: true,
     fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
     fbiOSAdvertiserTrackingEnabled: true,
   );

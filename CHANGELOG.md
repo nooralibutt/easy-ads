@@ -1,3 +1,8 @@
+## 1.0.8
+* Adds Applovin Age restricted ads parameter
+* Update Dependencies
+* Updated docs
+
 ## 1.0.7
 * Adds Smart Banner
 * Update Dependencies

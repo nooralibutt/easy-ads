@@ -251,6 +251,8 @@ void main() async {
     adMobAdRequest: const AdRequest(),
     // AppOpen Ad Orientation
     appOpenAdOrientation: AppOpenAd.orientationPortrait,
+    // Set true if you want to show age restricted (age below 16 years) ads for applovin 
+    isAgeRestrictedUserForApplovin: true,
     admobConfiguration: RequestConfiguration(testDeviceIds: [
       '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
       '00008030-00163022226A802E',

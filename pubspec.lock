@@ -15,6 +15,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.9.0"
+  audience_network:
+    dependency: "direct main"
+    description:
+      name: audience_network
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -43,13 +50,6 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
-  facebook_audience_network:
-    dependency: "direct main"
-    description:
-      name: facebook_audience_network
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.0.1"
   fake_async:
     dependency: transitive
     description:

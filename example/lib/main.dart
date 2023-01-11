@@ -58,8 +58,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
       ),
       body: Column(
         children: [
-          const EasyBannerAd(
-              adNetwork: AdNetwork.admob, adSize: AdSize.mediumRectangle),
+          const EasyBannerAd(adNetwork: AdNetwork.facebook),
           Expanded(
             child: ListView.builder(
                 itemCount: countryList.length,
@@ -97,7 +96,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
                           });
                         }
                       } else {
-                        if (EasyAds.instance.showAd(AdUnitType.interstitial)) {
+                        if (EasyAds.instance.showAd(AdUnitType.interstitial,
+                            adNetwork: AdNetwork.facebook)) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showInterstitialAd()

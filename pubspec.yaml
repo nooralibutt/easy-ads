@@ -15,7 +15,7 @@ dependencies:
   collection: ^1.16.0
   unity_ads_plugin: ^0.3.7
   applovin_max: ^2.3.2
-  facebook_audience_network: ^1.0.1
+  audience_network: ^0.0.4
   logger: ^1.1.0
 
 dev_dependencies:

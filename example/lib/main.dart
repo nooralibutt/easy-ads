@@ -70,6 +70,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 networkName: 'Admob AppOpen',
                 onTap: () => _showAd(AdNetwork.admob, AdUnitType.appOpen),
               ),
+              const Divider(thickness: 2),
               Text(
                 'Interstitial',
                 style: Theme.of(context)
@@ -99,6 +100,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 networkName: 'Available Interstitial',
                 onTap: () => _showAvailableAd(AdUnitType.interstitial),
               ),
+              const Divider(thickness: 2),
               Text(
                 'Rewarded',
                 style: Theme.of(context)

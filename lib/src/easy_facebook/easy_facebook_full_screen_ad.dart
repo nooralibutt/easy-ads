@@ -1,7 +1,7 @@
+import 'package:audience_network/audience_network.dart';
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
 import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
-import 'package:facebook_audience_network/facebook_audience_network.dart';
 
 class EasyFacebookFullScreenAd extends EasyAdBase {
   final AdUnitType _adUnitType;
@@ -27,22 +27,24 @@ class EasyFacebookFullScreenAd extends EasyAdBase {
     _isAdLoaded = false;
 
     if (adUnitType == AdUnitType.interstitial) {
-      FacebookInterstitialAd.destroyInterstitialAd();
-    } else {
-      FacebookRewardedVideoAd.destroyRewardedVideoAd();
-    }
+    } else {}
   }
+
+  InterstitialAd? interstitialAd;
+  RewardedAd? rewardedAd;
 
   @override
   Future<void> load() async {
     if (_isAdLoaded) return;
 
     if (adUnitType == AdUnitType.interstitial) {
-      FacebookInterstitialAd.loadInterstitialAd(
-          placementId: adUnitId, listener: _onInterstitialAdListener);
+      interstitialAd = InterstitialAd(adUnitId);
+      interstitialAd?.listener = _onInterstitialAdListener();
+      interstitialAd?.load();
     } else {
-      FacebookRewardedVideoAd.loadRewardedVideoAd(
-          placementId: adUnitId, listener: _onRewardedAdListener);
+      rewardedAd = RewardedAd(adUnitId);
+      rewardedAd?.listener = _onRewardedAdListener();
+      rewardedAd?.load();
     }
   }
 
@@ -51,72 +53,69 @@ class EasyFacebookFullScreenAd extends EasyAdBase {
     if (!_isAdLoaded) return;
 
     if (adUnitType == AdUnitType.interstitial) {
-      await FacebookInterstitialAd.showInterstitialAd();
+      if (interstitialAd == null) {
+        load();
+        return;
+      }
+      await interstitialAd?.show();
     } else {
-      await FacebookRewardedVideoAd.showRewardedVideoAd();
+      if (rewardedAd == null) {
+        load();
+        return;
+      }
+      await rewardedAd?.show();
     }
   }
 
-  void _onRewardedAdListener(RewardedVideoAdResult? result, dynamic value) {
-    if (result == null) return;
-
-    switch (result) {
-      case RewardedVideoAdResult.ERROR:
+  RewardedAdListener _onRewardedAdListener() {
+    return RewardedAdListener(
+      onError: (code, value) {
         _isAdLoaded = false;
         onAdFailedToLoad?.call(adNetwork, adUnitType, null,
-            'Error occurred while loading $value ad');
-        break;
-      case RewardedVideoAdResult.LOADED:
+            'Error occurred while loading $code $value ad');
+      },
+      onLoaded: () {
         _isAdLoaded = true;
-        onAdLoaded?.call(adNetwork, adUnitType, 'Loaded: $value');
-        break;
-      case RewardedVideoAdResult.CLICKED:
-        onAdClicked?.call(adNetwork, adUnitType, 'Clicked: $value');
-        break;
-      case RewardedVideoAdResult.LOGGING_IMPRESSION:
-        break;
-      case RewardedVideoAdResult.VIDEO_COMPLETE:
+        onAdLoaded?.call(adNetwork, adUnitType, 'Loaded');
+      },
+      onClicked: () {
+        onAdClicked?.call(adNetwork, adUnitType, 'Clicked');
+      },
+      onLoggingImpression: () {},
+      onVideoComplete: () {
         onEarnedReward?.call(adNetwork, adUnitType, null, null);
-        break;
-      case RewardedVideoAdResult.VIDEO_CLOSED:
-        onAdDismissed?.call(adNetwork, adUnitType, 'Dismissed: $value');
-        if (value == true || value["invalidated"] == true) {
-          _isAdLoaded = false;
-          load();
-          load();
-        }
-        break;
-    }
+      },
+      onVideoClosed: () {
+        onAdDismissed?.call(adNetwork, adUnitType, 'Dismissed');
+        _isAdLoaded = false;
+        load();
+      },
+    );
   }
 
-  void _onInterstitialAdListener(InterstitialAdResult? result, dynamic value) {
-    if (result == null) return;
-
-    switch (result) {
-      case InterstitialAdResult.ERROR:
+  InterstitialAdListener? _onInterstitialAdListener() {
+    return InterstitialAdListener(
+      onError: (code, value) {
         _isAdLoaded = false;
         onAdFailedToLoad?.call(adNetwork, adUnitType, null,
-            'Error occurred while loading $value ad');
-        break;
-      case InterstitialAdResult.LOADED:
+            'Error occurred while loading $code $value ad');
+      },
+      onLoaded: () {
         _isAdLoaded = true;
-        onAdLoaded?.call(adNetwork, adUnitType, 'Loaded: $value');
-        break;
-      case InterstitialAdResult.CLICKED:
-        onAdClicked?.call(adNetwork, adUnitType, 'Clicked: $value');
-        break;
-      case InterstitialAdResult.LOGGING_IMPRESSION:
-        break;
-      case InterstitialAdResult.DISPLAYED:
-        onAdShowed?.call(adNetwork, adUnitType, 'Displayed: $value');
-        break;
-      case InterstitialAdResult.DISMISSED:
-        onAdDismissed?.call(adNetwork, adUnitType, 'Dismissed: $value');
-        if (value["invalidated"] == true) {
-          _isAdLoaded = false;
-          load();
-        }
-        break;
-    }
+        onAdLoaded?.call(adNetwork, adUnitType, 'Loaded');
+      },
+      onClicked: () {
+        onAdClicked?.call(adNetwork, adUnitType, 'Clicked');
+      },
+      onDisplayed: () {
+        onAdShowed?.call(adNetwork, adUnitType, 'Displayed');
+      },
+      onDismissed: () {
+        onAdDismissed?.call(adNetwork, adUnitType, 'Dismissed');
+        _isAdLoaded = false;
+        load();
+      },
+      onLoggingImpression: () {},
+    );
   }
 }

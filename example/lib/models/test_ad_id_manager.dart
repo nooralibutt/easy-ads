@@ -39,12 +39,10 @@ class TestAdIdManager extends IAdIdManager {
       );
 
   @override
-  AppAdIds? get fbAdIds => AppAdIds(
-        appId: '',
-        interstitialId:
-            Platform.isAndroid ? 'YOUR_PLACEMENT_ID' : 'YOUR_PLACEMENT_ID',
-        bannerId:
-            Platform.isAndroid ? 'YOUR_PLACEMENT_ID' : 'YOUR_PLACEMENT_ID',
-        rewardedId: 'YOUR_PLACEMENT_ID',
+  AppAdIds? get fbAdIds => const AppAdIds(
+        appId: '1579706379118402',
+        interstitialId: 'VID_HD_16_9_15S_LINK#YOUR_PLACEMENT_ID',
+        bannerId: 'IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID',
+        rewardedId: 'VID_HD_16_9_46S_APP_INSTALL#YOUR_PLACEMENT_ID',
       );
 }

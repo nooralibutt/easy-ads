@@ -1,10 +1,9 @@
 import 'dart:async';
 
 import 'package:applovin_max/applovin_max.dart';
+import 'package:audience_network/audience_network.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:easy_ads_flutter/src/easy_admob/app_lifecycle_reactor.dart';
-import 'package:easy_ads_flutter/src/easy_admob/easy_admob_app_open_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
 import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_banner_ad.dart';
@@ -16,7 +15,6 @@ import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/extensions.dart';
-import 'package:facebook_audience_network/facebook_audience_network.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 class EasyAds {
@@ -53,6 +51,7 @@ class EasyAds {
   Future<void> initialize(
     IAdIdManager manager, {
     bool unityTestMode = false,
+    bool fbTestMode = false,
     AdRequest? adMobAdRequest,
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
@@ -74,6 +73,7 @@ class EasyAds {
     if (manager.fbAdIds?.appId != null) {
       _initFacebook(
         testingId: fbTestingId,
+        testMode: fbTestMode,
         iOSAdvertiserTrackingEnabled: fbiOSAdvertiserTrackingEnabled,
         interstitialPlacementId: manager.fbAdIds?.interstitialId,
         rewardedPlacementId: manager.fbAdIds?.rewardedId,
@@ -297,12 +297,14 @@ class EasyAds {
 
   Future _initFacebook({
     required bool iOSAdvertiserTrackingEnabled,
+    required bool testMode,
     String? testingId,
     String? interstitialPlacementId,
     String? rewardedPlacementId,
   }) async {
-    final status = await FacebookAudienceNetwork.init(
+    final status = await AudienceNetwork.init(
         testingId: testingId,
+        testMode: testMode,
         iOSAdvertiserTrackingEnabled: iOSAdvertiserTrackingEnabled);
 
     _eventController.fireNetworkInitializedEvent(

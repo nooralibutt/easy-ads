@@ -1,3 +1,6 @@
+## 2.0.0
+* Change Facebook Ad Plugin from [facebook_audience_network](https://pub.dev/packages/facebook_audience_network) to [audience_network: ^0.0.4](https://pub.dev/packages/audience_network)
+
 ## 1.0.8
 * Adds Applovin Age restricted ads parameter
 * Update Dependencies

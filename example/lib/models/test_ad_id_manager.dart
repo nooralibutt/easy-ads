@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:audience_network/audience_network.dart' as fb;
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 
 class TestAdIdManager extends IAdIdManager {
@@ -42,8 +41,8 @@ class TestAdIdManager extends IAdIdManager {
   @override
   AppAdIds? get fbAdIds => const AppAdIds(
         appId: '1579706379118402',
-        interstitialId: fb.InterstitialAd.testPlacementId,
-        bannerId: fb.BannerAd.testPlacementId,
-        rewardedId: fb.RewardedAd.testPlacementId,
+        interstitialId: 'VID_HD_16_9_15S_LINK#YOUR_PLACEMENT_ID',
+        bannerId: 'IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID',
+        rewardedId: 'VID_HD_16_9_46S_APP_INSTALL#YOUR_PLACEMENT_ID',
       );
 }

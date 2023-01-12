@@ -19,6 +19,7 @@ void main() async {
     ]),
     isAgeRestrictedUserForApplovin: true,
     fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
+    fbTestMode: true,
     fbiOSAdvertiserTrackingEnabled: true,
   );
 
@@ -109,6 +110,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
                               goToNextScreen(countryList[index]);
                             }
                           });
+                        } else {
+                          goToNextScreen(countryList[index]);
                         }
                       }
                     },

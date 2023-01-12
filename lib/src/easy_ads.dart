@@ -51,6 +51,7 @@ class EasyAds {
   Future<void> initialize(
     IAdIdManager manager, {
     bool unityTestMode = false,
+    bool fbTestMode = false,
     AdRequest? adMobAdRequest,
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
@@ -72,6 +73,7 @@ class EasyAds {
     if (manager.fbAdIds?.appId != null) {
       _initFacebook(
         testingId: fbTestingId,
+        testMode: fbTestMode,
         iOSAdvertiserTrackingEnabled: fbiOSAdvertiserTrackingEnabled,
         interstitialPlacementId: manager.fbAdIds?.interstitialId,
         rewardedPlacementId: manager.fbAdIds?.rewardedId,
@@ -295,12 +297,14 @@ class EasyAds {
 
   Future _initFacebook({
     required bool iOSAdvertiserTrackingEnabled,
+    required bool testMode,
     String? testingId,
     String? interstitialPlacementId,
     String? rewardedPlacementId,
   }) async {
     final status = await AudienceNetwork.init(
         testingId: testingId,
+        testMode: testMode,
         iOSAdvertiserTrackingEnabled: iOSAdvertiserTrackingEnabled);
 
     _eventController.fireNetworkInitializedEvent(

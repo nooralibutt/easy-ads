@@ -52,7 +52,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Country List"),
+        title: const Text("Ad Network List"),
         centerTitle: true,
       ),
       body: Center(

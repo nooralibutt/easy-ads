@@ -19,7 +19,7 @@ packages:
     dependency: transitive
     description:
       path: "."
-      ref: HEAD
+      ref: master
       resolved-ref: "8ac913098ac1ef35e7dd8e5bfa33b7c8249de1fe"
       url: "https://github.com/nooralibutt/audience_network_flutter"
     source: git

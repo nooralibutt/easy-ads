@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:ads/models/country.dart';
 import 'package:ads/models/test_ad_id_manager.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
@@ -51,105 +50,142 @@ class _CountryListScreenState extends State<CountryListScreen> {
 
   @override
   Widget build(BuildContext context) {
-    const countryList = Country.countryList;
     return Scaffold(
       appBar: AppBar(
         title: const Text("Country List"),
         centerTitle: true,
       ),
-      body: Column(
-        children: [
-          const EasyBannerAd(adNetwork: AdNetwork.facebook),
-          Expanded(
-            child: ListView.builder(
-                itemCount: countryList.length,
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      if (countryList[index].countryName ==
-                          'Pakistan - Rewarded') {
-                        if (EasyAds.instance.showAd(AdUnitType.rewarded,
-                            adNetwork: AdNetwork.facebook)) {
-                          // Canceling the last callback subscribed
-                          _streamSubscription?.cancel();
-                          // Listening to the callback from showRewardedAd()
-                          _streamSubscription =
-                              EasyAds.instance.onEvent.listen((event) {
-                            if (event.adUnitType == AdUnitType.rewarded &&
-                                event.type == AdEventType.earnedReward) {
-                              _streamSubscription?.cancel();
-                              goToNextScreen(countryList[index]);
-                            }
-                          });
-                        }
-                      } else if (countryList[index].countryName ==
-                          'India - App Open') {
-                        if (EasyAds.instance.showAd(AdUnitType.appOpen)) {
-                          // Canceling the last callback subscribed
-                          _streamSubscription?.cancel();
-                          // Listening to the callback from showInterstitialAd()
-                          _streamSubscription =
-                              EasyAds.instance.onEvent.listen((event) {
-                            if (event.adUnitType == AdUnitType.appOpen &&
-                                event.type == AdEventType.adDismissed) {
-                              _streamSubscription?.cancel();
-                              goToNextScreen(countryList[index]);
-                            }
-                          });
-                        }
-                      } else {
-                        if (EasyAds.instance.showAd(AdUnitType.interstitial,
-                            adNetwork: AdNetwork.facebook)) {
-                          // Canceling the last callback subscribed
-                          _streamSubscription?.cancel();
-                          // Listening to the callback from showInterstitialAd()
-                          _streamSubscription =
-                              EasyAds.instance.onEvent.listen((event) {
-                            if (event.adUnitType == AdUnitType.interstitial &&
-                                event.type == AdEventType.adDismissed) {
-                              _streamSubscription?.cancel();
-                              goToNextScreen(countryList[index]);
-                            }
-                          });
-                        } else {
-                          goToNextScreen(countryList[index]);
-                        }
-                      }
-                    },
-                    child: Card(
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          Country.countryList[index].countryName,
-                          style: const TextStyle(
-                              fontSize: 28, fontWeight: FontWeight.w300),
-                        ),
-                      ),
-                    ),
-                  );
-                }),
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Text(
+                'AppOpen',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+              ),
+              AdButton(
+                networkName: 'Admob AppOpen',
+                onTap: () => _showAd(AdNetwork.admob, AdUnitType.appOpen),
+              ),
+              Text(
+                'Interstitial',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+              ),
+              AdButton(
+                networkName: 'Admob Interstitial',
+                onTap: () => _showAd(AdNetwork.admob, AdUnitType.interstitial),
+              ),
+              AdButton(
+                networkName: 'Facebook Interstitial',
+                onTap: () =>
+                    _showAd(AdNetwork.facebook, AdUnitType.interstitial),
+              ),
+              AdButton(
+                networkName: 'Unity Interstitial',
+                onTap: () => _showAd(AdNetwork.unity, AdUnitType.interstitial),
+              ),
+              AdButton(
+                networkName: 'Applovin Interstitial',
+                onTap: () =>
+                    _showAd(AdNetwork.appLovin, AdUnitType.interstitial),
+              ),
+              AdButton(
+                networkName: 'Available Interstitial',
+                onTap: () => _showAvailableAd(AdUnitType.interstitial),
+              ),
+              Text(
+                'Rewarded',
+                style: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+              ),
+              AdButton(
+                networkName: 'Admob Rewarded',
+                onTap: () => _showAd(AdNetwork.admob, AdUnitType.rewarded),
+              ),
+              AdButton(
+                networkName: 'Facebook Rewarded',
+                onTap: () => _showAd(AdNetwork.facebook, AdUnitType.rewarded),
+              ),
+              AdButton(
+                networkName: 'Unity Rewarded',
+                onTap: () => _showAd(AdNetwork.unity, AdUnitType.rewarded),
+              ),
+              AdButton(
+                networkName: 'Applovin Rewarded',
+                onTap: () => _showAd(AdNetwork.appLovin, AdUnitType.rewarded),
+              ),
+              AdButton(
+                networkName: 'Available Rewarded',
+                onTap: () => _showAvailableAd(AdUnitType.rewarded),
+              ),
+              const EasySmartBannerAd(
+                priorityAdNetworks: [
+                  AdNetwork.facebook,
+                  AdNetwork.admob,
+                  AdNetwork.unity,
+                  AdNetwork.appLovin,
+                ],
+              ),
+            ],
           ),
-          const EasySmartBannerAd(),
-        ],
+        ),
       ),
     );
   }
 
-  void goToNextScreen(Country country) {
+  void _showAd(AdNetwork adNetwork, AdUnitType adUnitType) {
+    if (EasyAds.instance.showAd(adUnitType, adNetwork: adNetwork)) {
+      // Canceling the last callback subscribed
+      _streamSubscription?.cancel();
+      // Listening to the callback from showRewardedAd()
+      _streamSubscription = EasyAds.instance.onEvent.listen((event) {
+        if (event.adUnitType == adUnitType) {
+          _streamSubscription?.cancel();
+          goToNextScreen(adNetwork: adNetwork);
+        }
+      });
+    } else {
+      goToNextScreen(adNetwork: adNetwork);
+    }
+  }
+
+  void _showAvailableAd(AdUnitType adUnitType) {
+    if (EasyAds.instance.showAd(adUnitType)) {
+      // Canceling the last callback subscribed
+      _streamSubscription?.cancel();
+      // Listening to the callback from showRewardedAd()
+      _streamSubscription = EasyAds.instance.onEvent.listen((event) {
+        if (event.adUnitType == adUnitType) {
+          _streamSubscription?.cancel();
+          goToNextScreen();
+        }
+      });
+    } else {
+      goToNextScreen();
+    }
+  }
+
+  void goToNextScreen({AdNetwork? adNetwork}) {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => CountryDetailScreen(country: country),
+        builder: (context) => CountryDetailScreen(adNetwork: adNetwork),
       ),
     );
   }
 }
 
 class CountryDetailScreen extends StatefulWidget {
-  final Country country;
-
-  const CountryDetailScreen({Key? key, required this.country})
-      : super(key: key);
+  final AdNetwork? adNetwork;
+  const CountryDetailScreen({Key? key, this.adNetwork}) : super(key: key);
 
   @override
   State<CountryDetailScreen> createState() => _CountryDetailScreenState();
@@ -160,7 +196,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.country.countryName),
+        title: const Text('United States'),
         centerTitle: true,
       ),
       body: Column(
@@ -168,35 +204,55 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
         children: [
           Container(
             height: 200,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(widget.country.imageUrl),
+                image: NetworkImage(
+                    'https://cdn.britannica.com/33/4833-050-F6E415FE/Flag-United-States-of-America.jpg'),
               ),
             ),
           ),
-          Expanded(
+          const Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(20.0),
+                padding: EdgeInsets.all(20.0),
                 child: Text(
-                  widget.country.countryDescription,
-                  style: const TextStyle(
-                      fontWeight: FontWeight.w600, fontSize: 22),
+                  'The U.S. is a country of 50 states covering a vast swath of North America, with Alaska in the northwest and Hawaii extending the nation’s presence into the Pacific Ocean. Major Atlantic Coast cities are New York, a global finance and culture center, and capital Washington, DC. Midwestern metropolis Chicago is known for influential architecture and on the west coast, Los Angeles\' Hollywood is famed for filmmaking',
+                  style: TextStyle(fontWeight: FontWeight.w600, fontSize: 22),
                 ),
               ),
             ),
           ),
-          const EasySmartBannerAd(
-            priorityAdNetworks: [
-              AdNetwork.facebook,
-              AdNetwork.admob,
-              AdNetwork.unity,
-              AdNetwork.appLovin,
-            ],
-            adSize: AdSize.largeBanner,
-          ),
+          (widget.adNetwork == null)
+              ? const EasySmartBannerAd()
+              : EasyBannerAd(
+                  adNetwork: widget.adNetwork!,
+                  adSize: AdSize.largeBanner,
+                ),
           const SizedBox(height: 20),
         ],
+      ),
+    );
+  }
+}
+
+class AdButton extends StatelessWidget {
+  final String networkName;
+  final VoidCallback onTap;
+  const AdButton({Key? key, required this.onTap, required this.networkName})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            networkName,
+            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w300),
+          ),
+        ),
       ),
     );
   }

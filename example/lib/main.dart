@@ -68,7 +68,8 @@ class _CountryListScreenState extends State<CountryListScreen> {
                     onTap: () {
                       if (countryList[index].countryName ==
                           'Pakistan - Rewarded') {
-                        if (EasyAds.instance.showAd(AdUnitType.rewarded)) {
+                        if (EasyAds.instance.showAd(AdUnitType.rewarded,
+                            adNetwork: AdNetwork.facebook)) {
                           // Canceling the last callback subscribed
                           _streamSubscription?.cancel();
                           // Listening to the callback from showRewardedAd()

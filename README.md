@@ -224,11 +224,9 @@ class TestAdIdManager extends IAdIdManager {
   @override
   AppAdIds? get fbAdIds => AppAdIds(
     appId: 'YOUR_APP_ID',
-    bannerId:
-    Platform.isAndroid ? 'YOUR_PLACEMENT_ID' : 'YOUR_PLACEMENT_ID',
-    interstitialId:
-    Platform.isAndroid ? 'YOUR_PLACEMENT_ID' : 'YOUR_PLACEMENT_ID',
-    rewardedId: 'YOUR_PLACEMENT_ID',
+    interstitialId: 'VID_HD_16_9_15S_LINK#YOUR_PLACEMENT_ID',
+    bannerId: 'IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID',
+    rewardedId: 'VID_HD_16_9_46S_APP_INSTALL#YOUR_PLACEMENT_ID',
   );
 }
 ```
@@ -253,6 +251,9 @@ void main() async {
     appOpenAdOrientation: AppOpenAd.orientationPortrait,
     // Set true if you want to show age restricted (age below 16 years) ads for applovin 
     isAgeRestrictedUserForApplovin: true,
+    // To enable Facebook Test mode ads
+    fbTestMode: true,
+    fbTestingId: 'YOUR_DEVICE_HASH_ID',
     admobConfiguration: RequestConfiguration(testDeviceIds: [
       '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
       '00008030-00163022226A802E',

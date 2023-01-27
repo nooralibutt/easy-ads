@@ -35,7 +35,10 @@ class EasyAdmobBannerAd extends EasyAdBase {
 
   @override
   Future<void> load() async {
-    if (_isAdLoaded) return;
+    await _bannerAd?.dispose();
+    _bannerAd = null;
+    _isAdLoaded = false;
+
     _bannerAd = BannerAd(
       size: adSize,
       adUnitId: adUnitId,
@@ -44,6 +47,7 @@ class EasyAdmobBannerAd extends EasyAdBase {
           _bannerAd = ad as BannerAd?;
           _isAdLoaded = true;
           onAdLoaded?.call(adNetwork, adUnitType, ad);
+          onBannerAdReadyForSetState?.call(adNetwork, adUnitType, ad);
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           _bannerAd = null;
@@ -62,16 +66,16 @@ class EasyAdmobBannerAd extends EasyAdBase {
 
   @override
   dynamic show() {
-    final ad = _bannerAd;
-    if (ad == null) {
+    if (_bannerAd == null || _isAdLoaded == false) {
+      load();
       return const SizedBox();
     }
 
     return Container(
       alignment: Alignment.center,
-      child: AdWidget(ad: ad),
       height: adSize.height.toDouble(),
       width: adSize.width.toDouble(),
+      child: AdWidget(ad: _bannerAd!),
     );
   }
 }

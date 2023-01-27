@@ -5,14 +5,13 @@ import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart' as admob;
 
 class EasyFacebookBannerAd extends EasyAdBase {
-  final admob.AdSize adSize;
+  final admob.AdSize? adSize;
 
   EasyFacebookBannerAd(
     String adUnitId, {
     this.adSize = admob.AdSize.banner,
   }) : super(adUnitId);
 
-  BannerAd? _bannerAd;
   bool _isAdLoaded = false;
 
   @override
@@ -23,22 +22,21 @@ class EasyFacebookBannerAd extends EasyAdBase {
   @override
   void dispose() {
     _isAdLoaded = false;
-    _bannerAd = null;
   }
 
   @override
   bool get isAdLoaded => _isAdLoaded;
 
   @override
-  Future<void> load() async {
-    if (_isAdLoaded) return;
-  }
+  Future<void> load() async {}
 
   @override
   dynamic show() {
     return BannerAd(
       placementId: adUnitId,
-      bannerSize: BannerSize(width: adSize.width, height: adSize.height),
+      bannerSize: adSize == null
+          ? BannerSize.STANDARD
+          : BannerSize(width: adSize!.width, height: adSize!.height),
       listener: _onAdListener(),
     );
   }
@@ -49,6 +47,7 @@ class EasyFacebookBannerAd extends EasyAdBase {
       onLoaded: () {
         _isAdLoaded = true;
         onAdLoaded?.call(adNetwork, adUnitType, 'Loaded');
+        onBannerAdReadyForSetState?.call(adNetwork, adUnitType, 'Loaded');
       },
       onClicked: () {
         onAdClicked?.call(adNetwork, adUnitType, 'Clicked');

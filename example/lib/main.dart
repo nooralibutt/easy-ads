@@ -228,7 +228,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ? const EasySmartBannerAd()
               : EasyBannerAd(
                   adNetwork: widget.adNetwork!,
-                  adSize: AdSize.largeBanner,
+                  adSize: AdSize.banner,
                 ),
           const SizedBox(height: 20),
         ],

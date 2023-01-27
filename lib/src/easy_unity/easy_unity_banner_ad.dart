@@ -6,11 +6,11 @@ import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 class EasyUnityBannerAd extends EasyAdBase {
-  final AdSize adSize;
+  final AdSize? adSize;
 
   EasyUnityBannerAd(
     String adUnitId, {
-    this.adSize = AdSize.largeBanner,
+    this.adSize,
   }) : super(adUnitId);
 
   bool _isAdLoaded = false;
@@ -28,32 +28,21 @@ class EasyUnityBannerAd extends EasyAdBase {
   bool get isAdLoaded => _isAdLoaded;
 
   @override
-  Future<void> load() async {
-    if (_isAdLoaded) return;
-
-    UnityAds.load(
-      placementId: adUnitId,
-      onComplete: onCompleteLoadUnityAd,
-      onFailed: onFailedToLoadUnityAd,
-    );
-  }
+  Future<void> load() async {}
 
   @override
   dynamic show() {
     final ad = UnityBannerAd(
-      size: BannerSize(width: adSize.width, height: adSize.height),
+      size: adSize == null
+          ? BannerSize.standard
+          : BannerSize(width: adSize!.width, height: adSize!.height),
       placementId: adUnitId,
       onLoad: onCompleteUnityBannerAd,
       onFailed: onFailedUnityBannerAd,
       onClick: onClickUnityBannerAd,
     );
 
-    return Container(
-      alignment: Alignment.center,
-      child: ad,
-      height: adSize.height.toDouble(),
-      width: adSize.width.toDouble(),
-    );
+    return Container(alignment: Alignment.center, child: ad);
   }
 
   void onCompleteLoadUnityAd(String s) {
@@ -70,7 +59,8 @@ class EasyUnityBannerAd extends EasyAdBase {
 
   void onCompleteUnityBannerAd(args) {
     _isAdLoaded = false;
-    onAdShowed?.call(adNetwork, adUnitType, null);
+    onAdShowed?.call(adNetwork, adUnitType, args);
+    onBannerAdReadyForSetState?.call(adNetwork, adUnitType, args);
   }
 
   void onFailedUnityBannerAd(

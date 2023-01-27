@@ -28,8 +28,7 @@ class AppLifecycleReactor {
         .forEach((state) => _onAppStateChanged(state));
   }
 
-  void _onAppStateChanged(AppState appState) async {
-    print('New AppState state: $appState');
+  void _onAppStateChanged(AppState appState) {
     if (appState == AppState.foreground) {
       appOpenAdManager.show();
     }

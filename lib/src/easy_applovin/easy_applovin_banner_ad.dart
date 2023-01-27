@@ -28,6 +28,7 @@ class EasyApplovinBannerAd extends EasyAdBase {
       listener: AdViewAdListener(
         onAdLoadedCallback: (ad) {
           onAdLoaded?.call(adNetwork, adUnitType, ad);
+          onBannerAdReadyForSetState?.call(adNetwork, adUnitType, ad);
         },
         onAdLoadFailedCallback: (adUnitId, error) {
           onAdFailedToLoad?.call(adNetwork, adUnitType, null,

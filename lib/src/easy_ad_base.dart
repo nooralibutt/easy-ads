@@ -23,6 +23,7 @@ abstract class EasyAdBase {
   EasyAdFailedCallback? onAdFailedToLoad;
   EasyAdFailedCallback? onAdFailedToShow;
   EasyAdCallback? onAdDismissed;
+  EasyAdCallback? onBannerAdReadyForSetState;
   EasyAdEarnedReward? onEarnedReward;
 }
 

@@ -11,7 +11,7 @@ class EasyBannerAd extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _EasyBannerAdState createState() => _EasyBannerAdState();
+  State<EasyBannerAd> createState() => _EasyBannerAdState();
 }
 
 class _EasyBannerAdState extends State<EasyBannerAd> {

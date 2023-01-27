@@ -1,3 +1,7 @@
+## 2.0.1
+* Fix Banner Ad Bug 
+* Update [Applovin Max](https://pub.dev/packages/applovin_max) Plugin 
+
 ## 2.0.0
 * Change Facebook Ad Plugin from [facebook_audience_network](https://pub.dev/packages/facebook_audience_network) to [audience_network: ^0.0.4](https://pub.dev/packages/audience_network)
 

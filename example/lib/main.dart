@@ -41,7 +41,7 @@ class CountryListScreen extends StatefulWidget {
   const CountryListScreen({Key? key}) : super(key: key);
 
   @override
-  _CountryListScreenState createState() => _CountryListScreenState();
+  State<CountryListScreen> createState() => _CountryListScreenState();
 }
 
 class _CountryListScreenState extends State<CountryListScreen> {
@@ -63,7 +63,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 'AppOpen',
                 style: Theme.of(context)
                     .textTheme
-                    .headline4!
+                    .headlineMedium!
                     .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
               ),
               AdButton(
@@ -75,7 +75,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 'Interstitial',
                 style: Theme.of(context)
                     .textTheme
-                    .headline4!
+                    .headlineMedium!
                     .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
               ),
               AdButton(
@@ -105,7 +105,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 'Rewarded',
                 style: Theme.of(context)
                     .textTheme
-                    .headline4!
+                    .headlineMedium!
                     .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
               ),
               AdButton(

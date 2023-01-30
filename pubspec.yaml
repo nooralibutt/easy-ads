@@ -14,7 +14,7 @@ dependencies:
   google_mobile_ads: ^2.3.0
   collection: ^1.17.0
   unity_ads_plugin: ^0.3.7
-  applovin_max: ^2.3.2
+  applovin_max: ^2.3.3
   audience_network:
     git:
       url: https://github.com/nooralibutt/audience_network_flutter

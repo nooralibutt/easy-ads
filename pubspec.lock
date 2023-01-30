@@ -20,11 +20,12 @@ packages:
   audience_network:
     dependency: "direct main"
     description:
-      name: audience_network
-      sha256: aa2c6a2ad7b811e0b509b5c6b6a23793a1d0197b8e797af23f0c24805f8b51da
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.4"
+      path: "."
+      ref: master
+      resolved-ref: "8ac913098ac1ef35e7dd8e5bfa33b7c8249de1fe"
+      url: "https://github.com/nooralibutt/audience_network_flutter"
+    source: git
+    version: "0.0.5"
   boolean_selector:
     dependency: transitive
     description:

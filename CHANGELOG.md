@@ -1,3 +1,7 @@
+## 2.0.2
+* Fix Initialization Bug
+* Update SKAdNetworkItems for iOS info.plist file
+
 ## 2.0.1
 * Fix Banner Ad Bug 
 * Update [Applovin Max](https://pub.dev/packages/applovin_max) Plugin 

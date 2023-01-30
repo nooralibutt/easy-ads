@@ -70,7 +70,8 @@ class EasyAds {
       MobileAds.instance.updateRequestConfiguration(admobConfiguration);
     }
 
-    if (manager.fbAdIds?.appId != null) {
+    final fbAdId = manager.fbAdIds?.appId;
+    if (fbAdId != null && fbAdId.isNotEmpty) {
       _initFacebook(
         testingId: fbTestingId,
         testMode: fbTestMode,
@@ -80,7 +81,8 @@ class EasyAds {
       );
     }
 
-    if (manager.admobAdIds?.appId != null) {
+    final admobAdId = manager.admobAdIds?.appId;
+    if (admobAdId != null && admobAdId.isNotEmpty) {
       final response = await MobileAds.instance.initialize();
       final status = response.adapterStatuses.values.firstOrNull?.state;
 
@@ -97,7 +99,7 @@ class EasyAds {
     }
 
     final unityGameId = manager.unityAdIds?.appId;
-    if (unityGameId != null) {
+    if (unityGameId != null && unityGameId.isNotEmpty) {
       EasyAds.instance._initUnity(
         unityGameId: unityGameId,
         testMode: unityTestMode,
@@ -107,7 +109,7 @@ class EasyAds {
     }
 
     final appLovinSdkId = manager.appLovinAdIds?.appId;
-    if (appLovinSdkId != null) {
+    if (appLovinSdkId != null && appLovinSdkId.isNotEmpty) {
       EasyAds.instance._initAppLovin(
         sdkKey: appLovinSdkId,
         isAgeRestrictedUser: isAgeRestrictedUserForApplovin,

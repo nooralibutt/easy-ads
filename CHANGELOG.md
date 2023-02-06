@@ -1,3 +1,7 @@
+## 2.1.0
+* Add `easy_audience_network: ^0.0.6` for facebook audience network ads
+* Add `TestAdIdManager()` for testing ads in test mode
+
 ## 2.0.2
 * Fix Initialization Bug
 * Update SKAdNetworkItems for iOS info.plist file

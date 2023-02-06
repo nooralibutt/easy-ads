@@ -13,4 +13,5 @@ export 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 export 'package:easy_ads_flutter/src/utils/ad_event.dart';
 export 'package:easy_ads_flutter/src/utils/easy_banner_ad.dart';
 export 'package:easy_ads_flutter/src/utils/i_ad_id_manager.dart';
+export 'package:easy_ads_flutter/src/utils/test_ad_id_manager.dart';
 export 'package:google_mobile_ads/google_mobile_ads.dart';

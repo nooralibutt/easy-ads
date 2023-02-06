@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:ads/models/test_ad_id_manager.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
 

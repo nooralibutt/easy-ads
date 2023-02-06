@@ -17,14 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.10.0"
-  audience_network:
-    dependency: transitive
-    description:
-      name: audience_network
-      sha256: aa2c6a2ad7b811e0b509b5c6b6a23793a1d0197b8e797af23f0c24805f8b51da
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.0.4"
   boolean_selector:
     dependency: transitive
     description:
@@ -63,7 +55,15 @@ packages:
       path: ".."
       relative: true
     source: path
-    version: "2.0.1"
+    version: "2.0.2"
+  easy_audience_network:
+    dependency: transitive
+    description:
+      name: easy_audience_network
+      sha256: "3bd9f76785163e898683cf59d2c1799f8cd6d04afcd601dd981ced03763bbe93"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
   fake_async:
     dependency: transitive
     description:
@@ -240,5 +240,5 @@ packages:
     source: hosted
     version: "0.3.3"
 sdks:
-  dart: ">=2.18.1 <4.0.0"
+  dart: ">=2.18.1 <3.0.0"
   flutter: ">=2.12.0"

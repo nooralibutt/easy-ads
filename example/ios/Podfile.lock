@@ -3,10 +3,10 @@ PODS:
     - AppLovinSDK (= 11.6.1)
     - Flutter
   - AppLovinSDK (11.6.1)
-  - audience_network (0.0.1):
-    - FBAudienceNetwork (~> 6.9.0)
+  - easy_audience_network (0.0.6):
+    - FBAudienceNetwork (~> 6.12.0)
     - Flutter
-  - FBAudienceNetwork (6.9.0)
+  - FBAudienceNetwork (6.12.0)
   - Flutter (1.0.0)
   - Google-Mobile-Ads-SDK (9.14.0):
     - GoogleAppMeasurement (< 11.0, >= 7.0)
@@ -65,7 +65,7 @@ PODS:
 
 DEPENDENCIES:
   - applovin_max (from `.symlinks/plugins/applovin_max/ios`)
-  - audience_network (from `.symlinks/plugins/audience_network/ios`)
+  - easy_audience_network (from `.symlinks/plugins/easy_audience_network/ios`)
   - Flutter (from `Flutter`)
   - google_mobile_ads (from `.symlinks/plugins/google_mobile_ads/ios`)
   - unity_ads_plugin (from `.symlinks/plugins/unity_ads_plugin/ios`)
@@ -85,8 +85,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   applovin_max:
     :path: ".symlinks/plugins/applovin_max/ios"
-  audience_network:
-    :path: ".symlinks/plugins/audience_network/ios"
+  easy_audience_network:
+    :path: ".symlinks/plugins/easy_audience_network/ios"
   Flutter:
     :path: Flutter
   google_mobile_ads:
@@ -97,8 +97,8 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   applovin_max: 8d1b98dc68d23f5809825f1b4db4368219cb15cc
   AppLovinSDK: c72c4cc9dd61ee59827813bc99af35815c08ffd4
-  audience_network: 68de72bbf721fc9a778c9a69605f52db27c6aed5
-  FBAudienceNetwork: 83096d73433759c10f9cf9b3bad5e5cff58694cb
+  easy_audience_network: b56708ef1ccc75dbc97d87adae8458493395768e
+  FBAudienceNetwork: e0fcc9091fced34910ed0b6da06f129db46ac9e6
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   Google-Mobile-Ads-SDK: 4fe6304b771f8467d29978cb790ec1e56e646946
   google_mobile_ads: 6bfe04d9c9fd5c2a026e6f09ca2d97ae25b78f7e

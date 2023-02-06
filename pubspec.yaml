@@ -15,10 +15,7 @@ dependencies:
   collection: ^1.17.0
   unity_ads_plugin: ^0.3.7
   applovin_max: ^2.3.3
-  audience_network:
-    git:
-      url: https://github.com/nooralibutt/audience_network_flutter
-      ref: master
+  easy_audience_network: ^0.0.6
   logger: ^1.1.0
 
 dev_dependencies:

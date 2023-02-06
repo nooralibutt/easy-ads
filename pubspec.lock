@@ -17,15 +17,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.10.0"
-  audience_network:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: master
-      resolved-ref: "8ac913098ac1ef35e7dd8e5bfa33b7c8249de1fe"
-      url: "https://github.com/nooralibutt/audience_network_flutter"
-    source: git
-    version: "0.0.5"
   boolean_selector:
     dependency: transitive
     description:
@@ -58,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.17.0"
+  easy_audience_network:
+    dependency: "direct main"
+    description:
+      name: easy_audience_network
+      sha256: "3bd9f76785163e898683cf59d2c1799f8cd6d04afcd601dd981ced03763bbe93"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.6"
   fake_async:
     dependency: transitive
     description:
@@ -234,5 +233,5 @@ packages:
     source: hosted
     version: "0.3.3"
 sdks:
-  dart: ">=2.18.1 <4.0.0"
+  dart: ">=2.18.1 <3.0.0"
   flutter: ">=2.12.0"

@@ -11,10 +11,12 @@ import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_rewarded_ad.dar
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_banner_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
+import 'package:easy_ads_flutter/src/utils/auto_hiding_loader_dialog.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/extensions.dart';
 import 'package:easy_audience_network/easy_audience_network.dart';
+import 'package:flutter/material.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 class EasyAds {
@@ -349,8 +351,12 @@ class EasyAds {
   ///
   /// [adUnitType] should be mentioned here, only interstitial or rewarded should be mentioned here
   /// if [adNetwork] is provided, only that network's ad would be displayed
-  /// if [random] is true, any random loaded ad would be displayed
-  bool showAd(AdUnitType adUnitType, {AdNetwork adNetwork = AdNetwork.any}) {
+  /// if [shouldShowLoader] before interstitial. If it's true, you have to provide build context.
+  bool showAd(AdUnitType adUnitType,
+      {AdNetwork adNetwork = AdNetwork.any,
+      bool shouldShowLoader = false,
+      int delayInSeconds = 2,
+      BuildContext? context}) {
     List<EasyAdBase> ads = [];
     if (adUnitType == AdUnitType.rewarded) {
       ads = _rewardedAds;
@@ -363,7 +369,14 @@ class EasyAds {
     if (adNetwork != AdNetwork.any) {
       final ad = ads.firstWhereOrNull((e) => adNetwork == e.adNetwork);
       if (ad?.isAdLoaded == true) {
-        ad?.show();
+        if (ad?.adUnitType == AdUnitType.interstitial &&
+            shouldShowLoader &&
+            context != null) {
+          showLoaderDialog(context, delay: delayInSeconds)
+              .then((_) => ad?.show());
+        } else {
+          ad?.show();
+        }
         return true;
       } else {
         _logger.logInfo(
@@ -376,7 +389,14 @@ class EasyAds {
     for (final ad in ads) {
       if (ad.isAdLoaded) {
         if (adNetwork == AdNetwork.any || adNetwork == ad.adNetwork) {
-          ad.show();
+          if (ad.adUnitType == AdUnitType.interstitial &&
+              shouldShowLoader &&
+              context != null) {
+            showLoaderDialog(context, delay: delayInSeconds)
+                .then((_) => ad.show());
+          } else {
+            ad.show();
+          }
           return true;
         }
       } else {

@@ -15,7 +15,7 @@ void main() async {
     admobConfiguration: RequestConfiguration(testDeviceIds: []),
     fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
     fbTestMode: true,
-    showAdBadge: Platform.isAndroid,
+    showAdBadge: Platform.isIOS,
     fbiOSAdvertiserTrackingEnabled: true,
   );
 
@@ -141,7 +141,11 @@ class _CountryListScreenState extends State<CountryListScreen> {
   }
 
   void _showAd(AdNetwork adNetwork, AdUnitType adUnitType) {
-    if (EasyAds.instance.showAd(adUnitType, adNetwork: adNetwork)) {
+    if (EasyAds.instance.showAd(adUnitType,
+        adNetwork: adNetwork,
+        shouldShowLoader: Platform.isAndroid,
+        context: context,
+        delayInSeconds: 1)) {
       // Canceling the last callback subscribed
       _streamSubscription?.cancel();
       // Listening to the callback from showRewardedAd()
@@ -214,7 +218,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ? const EasySmartBannerAd()
               : EasyBannerAd(
                   adNetwork: widget.adNetwork!,
-                  adSize: AdSize.banner,
+                  adSize: AdSize.largeBanner,
                 ),
           const Expanded(
             child: SingleChildScrollView(

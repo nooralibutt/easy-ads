@@ -1,3 +1,6 @@
+## 2.3.0
+* Adds loader before showing ad for interstitial
+
 ## 2.2.1
 * Fixes large banner issue for badge
 

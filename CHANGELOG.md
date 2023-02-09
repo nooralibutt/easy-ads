@@ -1,3 +1,6 @@
+## 2.2.1
+* Fixes large banner issue for badge
+
 ## 2.2.0
 * Updates readme
 * Updates plugins

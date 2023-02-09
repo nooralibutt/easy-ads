@@ -21,7 +21,7 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
   @override
   Widget build(BuildContext context) {
     if (EasyAds.instance.showAdBadge) {
-      return BadgedBanner(child: _bannerAd?.show());
+      return BadgedBanner(child: _bannerAd?.show(), adSize: widget.adSize);
     }
 
     return _bannerAd?.show() ??

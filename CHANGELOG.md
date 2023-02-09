@@ -1,6 +1,7 @@
 ## 2.2.0
 * Updates readme
 * Updates plugins
+* Adds ad badge for google ad mob compliance
 
 ## 2.1.0
 * Add `easy_audience_network: ^0.0.6` for facebook audience network ads

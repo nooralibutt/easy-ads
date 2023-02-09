@@ -2,6 +2,7 @@ import 'package:easy_ads_flutter/src/easy_ad_base.dart';
 import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 import 'package:easy_audience_network/easy_audience_network.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart' as admob;
 
 class EasyFacebookBannerAd extends EasyAdBase {
@@ -32,12 +33,18 @@ class EasyFacebookBannerAd extends EasyAdBase {
 
   @override
   dynamic show() {
-    return BannerAd(
-      placementId: adUnitId,
-      bannerSize: adSize == null
-          ? BannerSize.STANDARD
-          : BannerSize(width: adSize!.width, height: adSize!.height),
-      listener: _onAdListener(),
+    final bannerSize = adSize == null
+        ? BannerSize.STANDARD
+        : BannerSize(width: adSize!.width, height: adSize!.height);
+
+    return Container(
+      height: bannerSize.height.toDouble(),
+      alignment: Alignment.center,
+      child: BannerAd(
+        placementId: adUnitId,
+        bannerSize: bannerSize,
+        listener: _onAdListener(),
+      ),
     );
   }
 

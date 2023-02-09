@@ -68,7 +68,10 @@ class EasyAdmobBannerAd extends EasyAdBase {
   dynamic show() {
     if (_bannerAd == null || _isAdLoaded == false) {
       load();
-      return const SizedBox();
+      return SizedBox(
+        height: adSize.height.toDouble(),
+        width: adSize.width.toDouble(),
+      );
     }
 
     return Container(

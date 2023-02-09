@@ -1,4 +1,5 @@
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:easy_ads_flutter/src/utils/badged_banner.dart';
 import 'package:flutter/material.dart';
 
 class EasyBannerAd extends StatefulWidget {
@@ -18,7 +19,14 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
   EasyAdBase? _bannerAd;
 
   @override
-  Widget build(BuildContext context) => _bannerAd?.show() ?? const SizedBox();
+  Widget build(BuildContext context) {
+    if (EasyAds.instance.showAdBadge) {
+      return BadgedBanner(child: _bannerAd?.show());
+    }
+
+    return _bannerAd?.show() ??
+        Container(height: widget.adSize.height.toDouble());
+  }
 
   @override
   void didUpdateWidget(covariant EasyBannerAd oldWidget) {

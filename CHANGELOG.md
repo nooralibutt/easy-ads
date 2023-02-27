@@ -1,3 +1,6 @@
+## 2.1.1
+* Update `applovin_max: ^2.4.3`
+
 ## 2.1.0
 * Add `easy_audience_network: ^0.0.6` for facebook audience network ads
 * Add `TestAdIdManager()` for testing ads in test mode

@@ -1,3 +1,9 @@
+## 2.3.1
+* Resolved Merge Conflicts
+
+## 2.1.1
+* Update `applovin_max: ^2.4.3`
+
 ## 2.3.0
 * Adds loader before showing ad for interstitial
 

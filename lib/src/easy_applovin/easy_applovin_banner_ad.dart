@@ -25,6 +25,7 @@ class EasyApplovinBannerAd extends EasyAdBase {
     return MaxAdView(
       adUnitId: adUnitId,
       adFormat: AdFormat.banner,
+      customData: 'EasyApplovinBannerAd',
       listener: AdViewAdListener(
         onAdLoadedCallback: (ad) {
           onAdLoaded?.call(adNetwork, adUnitType, ad);

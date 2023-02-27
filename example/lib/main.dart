@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:flutter/material.dart';
@@ -11,13 +12,10 @@ void main() async {
     adIdManager,
     unityTestMode: true,
     adMobAdRequest: const AdRequest(),
-    admobConfiguration: RequestConfiguration(testDeviceIds: [
-      '4ACA773F6D0C76D2A8934CD1F3EDFDB4', // Mi Phone
-      '00008030-00163022226A802E',
-    ]),
-    isAgeRestrictedUserForApplovin: true,
+    admobConfiguration: RequestConfiguration(testDeviceIds: []),
     fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
     fbTestMode: true,
+    showAdBadge: Platform.isIOS,
     fbiOSAdvertiserTrackingEnabled: true,
   );
 
@@ -143,7 +141,11 @@ class _CountryListScreenState extends State<CountryListScreen> {
   }
 
   void _showAd(AdNetwork adNetwork, AdUnitType adUnitType) {
-    if (EasyAds.instance.showAd(adUnitType, adNetwork: adNetwork)) {
+    if (EasyAds.instance.showAd(adUnitType,
+        adNetwork: adNetwork,
+        shouldShowLoader: Platform.isAndroid,
+        context: context,
+        delayInSeconds: 1)) {
       // Canceling the last callback subscribed
       _streamSubscription?.cancel();
       // Listening to the callback from showRewardedAd()
@@ -212,6 +214,12 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
+          (widget.adNetwork == null)
+              ? const EasySmartBannerAd()
+              : EasyBannerAd(
+                  adNetwork: widget.adNetwork!,
+                  adSize: AdSize.largeBanner,
+                ),
           const Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -223,13 +231,6 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
-          (widget.adNetwork == null)
-              ? const EasySmartBannerAd()
-              : EasyBannerAd(
-                  adNetwork: widget.adNetwork!,
-                  adSize: AdSize.banner,
-                ),
-          const SizedBox(height: 20),
         ],
       ),
     );

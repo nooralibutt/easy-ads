@@ -1,5 +1,19 @@
+## 2.3.1
+* Resolved Merge Conflicts
+
 ## 2.1.1
 * Update `applovin_max: ^2.4.3`
+
+## 2.3.0
+* Adds loader before showing ad for interstitial
+
+## 2.2.1
+* Fixes large banner issue for badge
+
+## 2.2.0
+* Updates readme
+* Updates plugins
+* Adds ad badge for google ad mob compliance
 
 ## 2.1.0
 * Add `easy_audience_network: ^0.0.6` for facebook audience network ads

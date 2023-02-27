@@ -11,10 +11,12 @@ import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_rewarded_ad.dar
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_banner_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/easy_unity/easy_unity_ad.dart';
+import 'package:easy_ads_flutter/src/utils/auto_hiding_loader_dialog.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/extensions.dart';
 import 'package:easy_audience_network/easy_audience_network.dart';
+import 'package:flutter/material.dart';
 import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 class EasyAds {
@@ -43,6 +45,10 @@ class EasyAds {
   /// [_logger] is used to show Ad logs in the console
   final EasyLogger _logger = EasyLogger();
 
+  /// On banner, ad badge will appear
+  bool get showAdBadge => _showAdBadge;
+  bool _showAdBadge = false;
+
   /// Initializes the Google Mobile Ads SDK.
   ///
   /// Call this method as early as possible after the app launches
@@ -59,7 +65,9 @@ class EasyAds {
     bool isAgeRestrictedUserForApplovin = false,
     bool fbiOSAdvertiserTrackingEnabled = false,
     int appOpenAdOrientation = AppOpenAd.orientationPortrait,
+    bool showAdBadge = false,
   }) async {
+    _showAdBadge = showAdBadge;
     if (enableLogger) _logger.enable(enableLogger);
     adIdManager = manager;
     if (adMobAdRequest != null) {
@@ -336,37 +344,6 @@ class EasyAds {
     }
   }
 
-  /// Displays random ad network [adUnitType] ad.
-  /// It will randomly display one network and if that network's ad is not loaded, it will try second and so on until it exhaust all the network ads.
-  /// Returns bool indicating whether ad has been successfully displayed or not
-  ///
-  /// [adUnitType] should be mentioned here, only interstitial or rewarded should be mentioned here
-  bool showRandomAd(AdUnitType adUnitType) {
-    assert(
-        adUnitType == AdUnitType.interstitial ||
-            adUnitType == AdUnitType.rewarded,
-        'Only interstitial and rewarded types should be passed to this method');
-
-    final List<EasyAdBase> ads = (adUnitType == AdUnitType.rewarded
-            ? _rewardedAds
-            : _interstitialAds)
-        .toList(growable: false)
-      ..shuffle();
-
-    for (final ad in ads) {
-      if (ad.isAdLoaded) {
-        ad.show();
-        return true;
-      } else {
-        _logger.logInfo(
-            '${ad.adNetwork} ${ad.adUnitType} was not loaded, so called loading');
-        ad.load();
-      }
-    }
-
-    return false;
-  }
-
   /// Displays [adUnitType] ad from [adNetwork]. It will check if first ad it found from list is loaded,
   /// it will be displayed if [adNetwork] is not mentioned otherwise it will load the ad.
   ///
@@ -374,8 +351,12 @@ class EasyAds {
   ///
   /// [adUnitType] should be mentioned here, only interstitial or rewarded should be mentioned here
   /// if [adNetwork] is provided, only that network's ad would be displayed
-  /// if [random] is true, any random loaded ad would be displayed
-  bool showAd(AdUnitType adUnitType, {AdNetwork adNetwork = AdNetwork.any}) {
+  /// if [shouldShowLoader] before interstitial. If it's true, you have to provide build context.
+  bool showAd(AdUnitType adUnitType,
+      {AdNetwork adNetwork = AdNetwork.any,
+      bool shouldShowLoader = false,
+      int delayInSeconds = 2,
+      BuildContext? context}) {
     List<EasyAdBase> ads = [];
     if (adUnitType == AdUnitType.rewarded) {
       ads = _rewardedAds;
@@ -385,10 +366,37 @@ class EasyAds {
       ads = _appOpenAds;
     }
 
+    if (adNetwork != AdNetwork.any) {
+      final ad = ads.firstWhereOrNull((e) => adNetwork == e.adNetwork);
+      if (ad?.isAdLoaded == true) {
+        if (ad?.adUnitType == AdUnitType.interstitial &&
+            shouldShowLoader &&
+            context != null) {
+          showLoaderDialog(context, delay: delayInSeconds)
+              .then((_) => ad?.show());
+        } else {
+          ad?.show();
+        }
+        return true;
+      } else {
+        _logger.logInfo(
+            '${ad?.adNetwork} ${ad?.adUnitType} was not loaded, so called loading');
+        ad?.load();
+        return false;
+      }
+    }
+
     for (final ad in ads) {
       if (ad.isAdLoaded) {
         if (adNetwork == AdNetwork.any || adNetwork == ad.adNetwork) {
-          ad.show();
+          if (ad.adUnitType == AdUnitType.interstitial &&
+              shouldShowLoader &&
+              context != null) {
+            showLoaderDialog(context, delay: delayInSeconds)
+                .then((_) => ad.show());
+          } else {
+            ad.show();
+          }
           return true;
         }
       } else {

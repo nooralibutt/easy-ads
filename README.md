@@ -16,40 +16,18 @@ To easily integrate ads from different ad networks into your flutter app.
 - Google Mobile Ads (banner, appOpen, interstitial, rewarded ad)
 - Facebook Audience Network (banner, interstitial, rewarded ad)
 - Unity Ads (banner, interstitial, rewarded ad)
-- AppLovin Max Ads (interstitial, rewarded ad)
-
-## Prerequisites
-
-*   Flutter 1.22.0 or higher
-*   Android
-    *   Android Studio 3.2 or higher
-    *   Target Android API level 19 or higher
-    *   Set `compileSdkVersion` to 28 or higher
-    *   Android Gradle Plugin 4.1 or higher (this is the version supported by Flutter out of the box)
-*   Ios
-    *   Latest version of Xcode with [enabled command-line tools](https://flutter.dev/docs/get-started/install/macos#install-xcode).
-    *   MinimumOSVersion 11.0.
-*   Recommended: [Create an AdMob account](https://support.google.com/admob/answer/2784575) and [register an Android and/or iOS app](https://support.google.com/admob/answer/2773509) (To show live ads on a published app, it is required to register that app).
+- AppLovin Max Ads (banner, interstitial, rewarded ad)
 
 ## Platform Specific Setup
 
-
 ### iOS
-
 
 #### Update your Info.plist
 
+* The keys for AppLovin and Google Ads **are required** in Info.plist.
+
 Update your app's `ios/Runner/Info.plist` file to add two keys:
 
-* A `GADApplicationIdentifier` key with a string value of your AdMob app ID ([identified in the AdMob UI](https://support.google.com/admob/answer/7356431)).
-* A `SKAdNetworkItems` key with Google's `SKAdNetworkIdentifier` value of `cstr6suwn9.skadnetwork` and for applovin as well
-
-#### **Note**
-
-* The keys for AppLovin and Google Ads **are required** in Info.plist.
-* You have to add `SKAdNetworkItems` for all networks provided by easy-ads-flutter [info.plist](https://github.com/nooralibutt/easy-ads/blob/master/example/ios/Runner/Info.plist) you can copy paste `SKAdNetworkItems` in  your own project.
-
-If you're not using any provider, write the line as it is otherwise provide your keys.
 ```xml
 <key>AppLovinSdkKey</key>
 <string>YOUR_SDK_KEY</string>
@@ -57,18 +35,11 @@ If you're not using any provider, write the line as it is otherwise provide your
 <string>YOUR_SDK_KEY</string>
 ```
 
-See [this guide](https://developers.google.com/admob/ios/quick-start#update\_your\_infoplist) for more information about configuring `Info.plist` and setting up your App ID.
-
+* You have to add `SKAdNetworkItems` for all networks provided by easy-ads-flutter [info.plist](https://github.com/nooralibutt/easy-ads/blob/master/example/ios/Runner/Info.plist) you can copy paste `SKAdNetworkItems` in  your own project.
 
 ### Android
 
-
 #### Update AndroidManifest.xml
-
-The AdMob App ID must be included in the `AndroidManifest.xml`. Failure to do so will result in a crash on launch of an app.
-
-Add the AdMob App ID ([identified in the AdMob UI](https://support.google.com/admob/answer/7356431)) to the app's `android/app/src/main/AndroidManifest.xml` file by adding a `<meta-data>` tag with name `com.google.android.gms.ads.APPLICATION_ID`, as shown below. You can find your App ID in the AdMob UI. For `android:value` insert your own AdMob App ID in quotes, as shown below.
-
 
 ```xml
 <manifest>
@@ -82,11 +53,6 @@ Add the AdMob App ID ([identified in the AdMob UI](https://support.google.com/ad
     </application>
 </manifest>
 ```
-
-
-The same value when you initialize the plugin in your Dart code.
-
-See [this guide](https://developers.google.com/admob/flutter/quick-start) for more information about configuring `AndroidManifest.xml` and setting up the App ID.
 
 ## Initialize Ad Ids
 
@@ -152,39 +118,18 @@ import 'package:flutter/material.dart';
 
 const IAdIdManager adIdManager = TestAdIdManager();
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await EasyAds.instance.initialize(
+EasyAds.instance.initialize(
     adIdManager,
-    unityTestMode: true,
     adMobAdRequest: const AdRequest(),
-    // AppOpen Ad Orientation
-    appOpenAdOrientation: AppOpenAd.orientationPortrait,
     // Set true if you want to show age restricted (age below 16 years) ads for applovin 
     isAgeRestrictedUserForApplovin: true,
     // To enable Facebook Test mode ads
     fbTestMode: true,
-    fbTestingId: 'YOUR_DEVICE_HASH_ID',
     admobConfiguration: RequestConfiguration(testDeviceIds: [
       '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
       '00008030-00163022226A802E',
     ]),
   );
-
-  runApp(MyApp());
-}
-```
-## AppOpen Ad Orientation
-```dart
-static const int orientationPortrait = 1;
-```
-Landscape orientation left. Android does not distinguish between left/right, and will treat this the same way as [orientationLandscapeRight].
-```dart
-static const int orientationLandscapeLeft = 2;
-```
-Landscape orientation right. Android does not distinguish between left/right, and will treat this the same way as [orientationLandscapeLeft].
-```dart
-static const int orientationLandscapeRight = 3;
 ```
 
 ## Interstitial/Rewarded Ads
@@ -286,21 +231,11 @@ if (EasyAds.instance.showInterstitialAd()) {
   });
 }
 ```
-See [Example](https://pub.dev/packages/easy_ads_flutter/example) for better understanding.
-
-## Donate
-
-If you found this plugin helpful and would like to thank me:
-
-[![PayPal](https://img.shields.io/badge/Donate-PayPal-066BB7?logo=paypal)](https://paypal.me/nooralibutt)
 
 ## Authors
 ##### Noor Ali Butt
 [![GitHub Follow](https://img.shields.io/badge/Connect--blue.svg?logo=Github&longCache=true&style=social&label=Follow)](https://github.com/nooralibutt) [![LinkedIn Link](https://img.shields.io/badge/Connect--blue.svg?logo=linkedin&longCache=true&style=social&label=Connect
 )](https://www.linkedin.com/in/nooralibutt)
-##### Ahmad Khan
-[![GitHub Follow](https://img.shields.io/badge/Connect--blue.svg?logo=Github&longCache=true&style=social&label=Follow)](https://github.com/rmahmadkhan) [![LinkedIn Link](https://img.shields.io/badge/Connect--blue.svg?logo=linkedin&longCache=true&style=social&label=Connect
-)](https://www.linkedin.com/in/rmahmadkhan)
 ##### Hanzla Waheed
 [![GitHub Follow](https://img.shields.io/badge/Connect--blue.svg?logo=Github&longCache=true&style=social&label=Follow)](https://github.com/mhanzla80) [![LinkedIn Link](https://img.shields.io/badge/Connect--blue.svg?logo=linkedin&longCache=true&style=social&label=Connect
 )](https://www.linkedin.com/in/mhanzla80)

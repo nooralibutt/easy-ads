@@ -1,3 +1,7 @@
+## 2.3.2
+* Updates dependencies
+* Adds AppLovin keywords and `AdContentRating` for `isAgeRestrictedUser`
+
 ## 2.3.1
 * Resolved Merge Conflicts
 

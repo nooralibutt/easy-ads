@@ -120,6 +120,7 @@ class EasyAds {
     if (appLovinSdkId != null && appLovinSdkId.isNotEmpty) {
       EasyAds.instance._initAppLovin(
         sdkKey: appLovinSdkId,
+        keywords: adMobAdRequest?.keywords,
         isAgeRestrictedUser: isAgeRestrictedUserForApplovin,
         interstitialAdUnitId: manager.appLovinAdIds?.interstitialId,
         rewardedAdUnitId: manager.appLovinAdIds?.rewardedId,
@@ -223,42 +224,48 @@ class EasyAds {
   }
 
   Future<void> _initAppLovin({
-    String? sdkKey,
+    required String sdkKey,
     bool? isAgeRestrictedUser,
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
+    List<String>? keywords,
   }) async {
-    if (sdkKey != null) {
-      final response = await AppLovinMAX.initialize(sdkKey);
-      AppLovinMAX.setIsAgeRestrictedUser(isAgeRestrictedUser ?? false);
+    final response = await AppLovinMAX.initialize(sdkKey);
 
-      if (response != null) {
-        _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, true);
-      } else {
-        _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, false);
-      }
+    AppLovinMAX.targetingData.maximumAdContentRating =
+        isAgeRestrictedUser == true
+            ? AdContentRating.allAudiences
+            : AdContentRating.none;
 
-      // init interstitial ads
-      if (interstitialAdUnitId != null &&
-          _interstitialAds.doesNotContain(
-              AdNetwork.appLovin, AdUnitType.interstitial)) {
-        final ad = EasyApplovinInterstitialAd(interstitialAdUnitId);
-        _interstitialAds.add(ad);
-        _eventController.setupEvents(ad);
+    if (keywords != null) {
+      AppLovinMAX.targetingData.keywords = keywords;
+    }
 
-        await ad.load();
-      }
+    if (response != null) {
+      _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, true);
+    } else {
+      _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, false);
+    }
 
-      // init rewarded ads
-      if (rewardedAdUnitId != null &&
-          _rewardedAds.doesNotContain(
-              AdNetwork.appLovin, AdUnitType.rewarded)) {
-        final ad = EasyApplovinRewardedAd(rewardedAdUnitId);
-        _rewardedAds.add(ad);
-        _eventController.setupEvents(ad);
+    // init interstitial ads
+    if (interstitialAdUnitId != null &&
+        _interstitialAds.doesNotContain(
+            AdNetwork.appLovin, AdUnitType.interstitial)) {
+      final ad = EasyApplovinInterstitialAd(interstitialAdUnitId);
+      _interstitialAds.add(ad);
+      _eventController.setupEvents(ad);
 
-        await ad.load();
-      }
+      await ad.load();
+    }
+
+    // init rewarded ads
+    if (rewardedAdUnitId != null &&
+        _rewardedAds.doesNotContain(AdNetwork.appLovin, AdUnitType.rewarded)) {
+      final ad = EasyApplovinRewardedAd(rewardedAdUnitId);
+      _rewardedAds.add(ad);
+      _eventController.setupEvents(ad);
+
+      await ad.load();
     }
   }
 

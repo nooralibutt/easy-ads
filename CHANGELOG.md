@@ -1,4 +1,4 @@
-## 2.3.2
+## 2.3.3
 * Updates dependencies
 * Add logs for admob adapters
 

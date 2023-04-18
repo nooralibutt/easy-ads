@@ -28,8 +28,15 @@ class EasyLogger {
   }
 
   void _onAdLoaded(AdEvent event) {
-    _logger.i(
-        "${event.adUnitType?.value} ads for ${event.adNetwork.value} have been loaded.");
+    String message =
+        "${event.adUnitType?.value} ads for ${event.adNetwork.value} have been loaded.";
+    if (event.adNetwork == AdNetwork.admob) {
+      final ad = event.data as Ad?;
+      message +=
+          ' adapter status: ${ad?.responseInfo?.mediationAdapterClassName}';
+    }
+
+    _logger.i(message);
   }
 
   void _onAdFailedToLoad(AdEvent event) {

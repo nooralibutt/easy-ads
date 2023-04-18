@@ -18,6 +18,10 @@ To easily integrate ads from different ad networks into your flutter app.
 - Unity Ads (banner, interstitial, rewarded ad)
 - AppLovin Max Ads (banner, interstitial, rewarded ad)
 
+## Admob Mediation
+- This plugin supports admob mediation [See Details](https://developers.google.com/admob/flutter/mediation/get-started) to see Admob Mediation Guide.
+- You just need to add the naative plaatform setting for admob mediation.
+
 ## Platform Specific Setup
 
 ### iOS

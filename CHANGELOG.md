@@ -1,3 +1,7 @@
+## 2.3.3
+* Updates dependencies
+* Add logs for admob adapters
+
 ## 2.3.2
 * Updates dependencies
 * Adds AppLovin keywords and `AdContentRating` for `isAgeRestrictedUser`

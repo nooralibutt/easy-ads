@@ -94,6 +94,11 @@ class EasyAds {
       final response = await MobileAds.instance.initialize();
       final status = response.adapterStatuses.values.firstOrNull?.state;
 
+      response.adapterStatuses.forEach((key, value) {
+        _logger.logInfo(
+            'Google-mobile-ads Adapter status for $key: ${value.description}');
+      });
+
       _eventController.fireNetworkInitializedEvent(
           AdNetwork.admob, status == AdapterInitializationState.ready);
 

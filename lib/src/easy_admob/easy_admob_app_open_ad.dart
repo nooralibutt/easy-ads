@@ -47,10 +47,9 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
 
   @override
   show() async {
-    if (!isAdLoaded) {
-      await load();
-      return;
-    }
+    await load();
+
+    if (!isAdLoaded) return;
 
     if (_isShowingAd) {
       onAdFailedToShow?.call(adNetwork, adUnitType, null,
@@ -61,25 +60,25 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
     _appOpenAd!.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (AppOpenAd ad) {
         _isShowingAd = true;
-
         onAdShowed?.call(adNetwork, adUnitType, ad);
       },
       onAdDismissedFullScreenContent: (AppOpenAd ad) {
         _isShowingAd = false;
-
         onAdDismissed?.call(adNetwork, adUnitType, ad);
         ad.dispose();
         _appOpenAd = null;
-        load();
+
+        /// Loading Again
+        // load();
       },
       onAdFailedToShowFullScreenContent: (AppOpenAd ad, AdError error) {
         _isShowingAd = false;
-
         onAdFailedToShow?.call(adNetwork, adUnitType, ad, error.toString());
-
         ad.dispose();
         _appOpenAd = null;
-        load();
+
+        /// Loading Again
+        // load();
       },
     );
 

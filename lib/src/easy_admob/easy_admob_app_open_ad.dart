@@ -24,7 +24,9 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
   }
 
   @override
-  Future<void> load() {
+  Future<void> load() => _load();
+
+  Future<void> _load({bool showAdOnLoad = false}) {
     if (isAdLoaded) return Future.value();
 
     return AppOpenAd.load(
@@ -35,6 +37,10 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
         onAdLoaded: (AppOpenAd ad) {
           _appOpenAd = ad;
           onAdLoaded?.call(adNetwork, adUnitType, ad);
+
+          if (showAdOnLoad) {
+            show();
+          }
         },
         onAdFailedToLoad: (LoadAdError error) {
           _appOpenAd = null;
@@ -47,9 +53,12 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
 
   @override
   show() async {
-    await load();
-
-    if (!isAdLoaded) return;
+    if (!isAdLoaded) {
+      onAdFailedToShow?.call(adNetwork, adUnitType, null,
+          'Tried to show ad but no ad was loaded, now sent a call for loading and will show automatically');
+      _load(showAdOnLoad: true);
+      return;
+    }
 
     if (_isShowingAd) {
       onAdFailedToShow?.call(adNetwork, adUnitType, null,
@@ -67,22 +76,16 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
         onAdDismissed?.call(adNetwork, adUnitType, ad);
         ad.dispose();
         _appOpenAd = null;
-
-        /// Pre Loading Again
-        // load();
       },
       onAdFailedToShowFullScreenContent: (AppOpenAd ad, AdError error) {
         _isShowingAd = false;
         onAdFailedToShow?.call(adNetwork, adUnitType, ad, error.toString());
         ad.dispose();
         _appOpenAd = null;
-
-        /// Pre Loading Again
-        // load();
       },
     );
 
-    _appOpenAd!.show();
+    _appOpenAd?.show();
     _appOpenAd = null;
     _isShowingAd = false;
   }

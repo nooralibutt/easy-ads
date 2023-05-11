@@ -58,6 +58,7 @@ class EasyAds {
     IAdIdManager manager, {
     bool unityTestMode = false,
     bool fbTestMode = false,
+    bool isShowAppOpenOnAppStateChange = false,
     AdRequest? adMobAdRequest,
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
@@ -108,6 +109,7 @@ class EasyAds {
         interstitialAdUnitId: manager.admobAdIds?.interstitialId,
         rewardedAdUnitId: manager.admobAdIds?.rewardedId,
         appOpenAdOrientation: appOpenAdOrientation,
+        isShowAppOpenOnAppStateChange: isShowAppOpenOnAppStateChange,
       );
     }
 
@@ -190,6 +192,7 @@ class EasyAds {
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
     bool immersiveModeEnabled = true,
+    bool isShowAppOpenOnAppStateChange = true,
     int appOpenAdOrientation = AppOpenAd.orientationPortrait,
   }) async {
     // init interstitial ads
@@ -220,9 +223,11 @@ class EasyAds {
       final appOpenAdManager =
           EasyAdmobAppOpenAd(appOpenAdUnitId, _adRequest, appOpenAdOrientation);
       await appOpenAdManager.load();
-      _appLifecycleReactor =
-          AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
-      _appLifecycleReactor.listenToAppStateChanges();
+      if (isShowAppOpenOnAppStateChange) {
+        _appLifecycleReactor =
+            AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+        _appLifecycleReactor.listenToAppStateChanges();
+      }
       _appOpenAds.add(appOpenAdManager);
       _eventController.setupEvents(appOpenAdManager);
     }
@@ -425,17 +430,30 @@ class EasyAds {
   /// If a particular ad is already loaded, it will not load it again.
   /// Also you do not have to call this method everytime. Ad is automatically loaded after being displayed.
   ///
-  /// if [adNetwork] is provided, only that network's ad would be loaded
-  void loadAd({AdNetwork adNetwork = AdNetwork.any}) {
-    for (final e in _rewardedAds) {
-      if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
-        e.load();
+  /// if [adNetwork] is provided, only that network's ad will be loaded
+  /// if [adUnitType] is provided, only that unit type will be loaded, otherwise all unit types will be loaded
+  void loadAd({AdNetwork adNetwork = AdNetwork.any, AdUnitType? adUnitType}) {
+    if (adUnitType == null || adUnitType == AdUnitType.rewarded) {
+      for (final e in _rewardedAds) {
+        if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
+          e.load();
+        }
       }
     }
 
-    for (final e in _interstitialAds) {
-      if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
-        e.load();
+    if (adUnitType == null || adUnitType == AdUnitType.interstitial) {
+      for (final e in _interstitialAds) {
+        if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
+          e.load();
+        }
+      }
+    }
+
+    if (adUnitType == null || adUnitType == AdUnitType.appOpen) {
+      for (final e in _appOpenAds) {
+        if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
+          e.load();
+        }
       }
     }
   }
@@ -455,6 +473,16 @@ class EasyAds {
   /// if [adNetwork] is provided, only that network's ad would be checked
   bool isInterstitialAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
     final ad = _interstitialAds.firstWhereOrNull((e) =>
+        (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
+        e.isAdLoaded);
+    return ad?.isAdLoaded ?? false;
+  }
+
+  /// Returns bool indicating whether ad has been loaded
+  ///
+  /// if [adNetwork] is provided, only that network's ad would be checked
+  bool isAppOpenAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
+    final ad = _appOpenAds.firstWhereOrNull((e) =>
         (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
         e.isAdLoaded);
     return ad?.isAdLoaded ?? false;

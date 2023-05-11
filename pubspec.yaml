@@ -11,10 +11,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  google_mobile_ads: ^2.4.0
+  google_mobile_ads: ^3.0.0
   collection: ^1.17.0
   unity_ads_plugin: ^0.3.8
-  applovin_max: ^2.4.6
+  applovin_max: ^2.5.0
   easy_audience_network: ^0.0.6
   logger: ^1.3.0
 

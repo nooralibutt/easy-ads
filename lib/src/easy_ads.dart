@@ -58,7 +58,7 @@ class EasyAds {
     IAdIdManager manager, {
     bool unityTestMode = false,
     bool fbTestMode = false,
-    bool isShowAppOpenOnAppStateChange = true,
+    bool isShowAppOpenOnAppStateChange = false,
     AdRequest? adMobAdRequest,
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,

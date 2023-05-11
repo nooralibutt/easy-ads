@@ -68,7 +68,7 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
         ad.dispose();
         _appOpenAd = null;
 
-        /// Loading Again
+        /// Pre Loading Again
         // load();
       },
       onAdFailedToShowFullScreenContent: (AppOpenAd ad, AdError error) {
@@ -77,7 +77,7 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
         ad.dispose();
         _appOpenAd = null;
 
-        /// Loading Again
+        /// Pre Loading Again
         // load();
       },
     );

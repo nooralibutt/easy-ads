@@ -58,6 +58,14 @@ class EasyAds {
     IAdIdManager manager, {
     bool unityTestMode = false,
     bool fbTestMode = false,
+    bool isShowAppOpenOnAppStateChange = true,
+
+    /// Sets whether this ad will be displayed in immersive mode (Android only).
+    ///
+    /// This is a no-op on iOS.
+    /// See https://developer.android.com/training/system-ui/immersive#immersive
+    /// for more information on immersive mode.
+    bool immersiveModeEnabled = false,
     AdRequest? adMobAdRequest,
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
@@ -108,6 +116,8 @@ class EasyAds {
         interstitialAdUnitId: manager.admobAdIds?.interstitialId,
         rewardedAdUnitId: manager.admobAdIds?.rewardedId,
         appOpenAdOrientation: appOpenAdOrientation,
+        immersiveModeEnabled: immersiveModeEnabled,
+        isShowAppOpenOnAppStateChange: isShowAppOpenOnAppStateChange,
       );
     }
 
@@ -189,7 +199,14 @@ class EasyAds {
     String? appOpenAdUnitId,
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
-    bool immersiveModeEnabled = true,
+
+    /// Sets whether this ad will be displayed in immersive mode (Android only).
+    ///
+    /// This is a no-op on iOS.
+    /// See https://developer.android.com/training/system-ui/immersive#immersive
+    /// for more information on immersive mode.
+    bool immersiveModeEnabled = false,
+    bool isShowAppOpenOnAppStateChange = true,
     int appOpenAdOrientation = AppOpenAd.orientationPortrait,
   }) async {
     // init interstitial ads
@@ -220,9 +237,11 @@ class EasyAds {
       final appOpenAdManager =
           EasyAdmobAppOpenAd(appOpenAdUnitId, _adRequest, appOpenAdOrientation);
       await appOpenAdManager.load();
-      _appLifecycleReactor =
-          AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
-      _appLifecycleReactor.listenToAppStateChanges();
+      if (isShowAppOpenOnAppStateChange) {
+        _appLifecycleReactor =
+            AppLifecycleReactor(appOpenAdManager: appOpenAdManager);
+        _appLifecycleReactor.listenToAppStateChanges();
+      }
       _appOpenAds.add(appOpenAdManager);
       _eventController.setupEvents(appOpenAdManager);
     }

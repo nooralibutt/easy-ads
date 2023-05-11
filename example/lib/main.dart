@@ -9,6 +9,7 @@ const IAdIdManager adIdManager = TestAdIdManager();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyAds.instance.initialize(
+    isShowAppOpenOnAppStateChange: false,
     adIdManager,
     unityTestMode: true,
     adMobAdRequest: const AdRequest(),

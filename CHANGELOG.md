@@ -1,3 +1,7 @@
+## 2.3.4
+* Add `isShowAppOpenOnAppStateChange` check on initialization
+* Updates dependencies
+
 ## 2.3.3
 * Updates dependencies
 * Add logs for admob adapters

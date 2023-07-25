@@ -1,3 +1,7 @@
+## 2.3.5
+* Updates dependencies
+* Update `applovin_max: ^3.0.1` 
+
 ## 2.3.4
 * Add `isShowAppOpenOnAppStateChange` check on initialization
 * Updates dependencies

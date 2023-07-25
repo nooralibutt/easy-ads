@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 Future showLoaderDialog(BuildContext context, {int delay = 2}) {
-  final alert = AlertDialog(
+  const alert = AlertDialog(
     content: Column(
       mainAxisSize: MainAxisSize.min,
-      children: const [
+      children: [
         CircularProgressIndicator(),
         SizedBox(height: 10),
         Text("Loading Ad ..."),

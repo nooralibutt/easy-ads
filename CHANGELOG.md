@@ -1,3 +1,7 @@
+## 2.3.6
+* Updates dependencies
+* Update `applovin_max: ^3.2.0`
+
 ## 2.3.5
 * Updates dependencies
 * Update `applovin_max: ^3.0.1` 

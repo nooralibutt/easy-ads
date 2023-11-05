@@ -368,12 +368,16 @@ class EasyAds {
   ///
   /// [adUnitType] should be mentioned here, only interstitial or rewarded should be mentioned here
   /// if [adNetwork] is provided, only that network's ad would be displayed
-  /// if [shouldShowLoader] before interstitial. If it's true, you have to provide build context.
+  /// if [loaderDuration] is > 0 then it will show loader before showing ad, and use [loaderDuration] in seconds. Also, you have to provide build context.
   bool showAd(AdUnitType adUnitType,
       {AdNetwork adNetwork = AdNetwork.any,
-      bool shouldShowLoader = false,
-      int delayInSeconds = 2,
+      int loaderDuration = 0,
       BuildContext? context}) {
+    if (loaderDuration > 0) {
+      assert(context != null,
+          "Loader duration is greater than zero, context has to be provided in order to show dialog");
+    }
+
     List<EasyAdBase> ads = [];
     if (adUnitType == AdUnitType.rewarded) {
       ads = _rewardedAds;
@@ -387,10 +391,9 @@ class EasyAds {
       final ad = ads.firstWhereOrNull((e) => adNetwork == e.adNetwork);
       if (ad?.isAdLoaded == true) {
         if (ad?.adUnitType == AdUnitType.interstitial &&
-            shouldShowLoader &&
+            loaderDuration > 0 &&
             context != null) {
-          showLoaderDialog(context, delay: delayInSeconds)
-              .then((_) => ad?.show());
+          showLoaderDialog(context, loaderDuration).then((_) => ad?.show());
         } else {
           ad?.show();
         }
@@ -407,10 +410,9 @@ class EasyAds {
       if (ad.isAdLoaded) {
         if (adNetwork == AdNetwork.any || adNetwork == ad.adNetwork) {
           if (ad.adUnitType == AdUnitType.interstitial &&
-              shouldShowLoader &&
+              loaderDuration > 0 &&
               context != null) {
-            showLoaderDialog(context, delay: delayInSeconds)
-                .then((_) => ad.show());
+            showLoaderDialog(context, loaderDuration).then((_) => ad.show());
           } else {
             ad.show();
           }

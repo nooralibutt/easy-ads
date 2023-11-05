@@ -142,11 +142,12 @@ class _CountryListScreenState extends State<CountryListScreen> {
   }
 
   void _showAd(AdNetwork adNetwork, AdUnitType adUnitType) {
-    if (EasyAds.instance.showAd(adUnitType,
-        adNetwork: adNetwork,
-        shouldShowLoader: Platform.isAndroid,
-        context: context,
-        delayInSeconds: 1)) {
+    if (EasyAds.instance.showAd(
+      adUnitType,
+      adNetwork: adNetwork,
+      context: context,
+      loaderDuration: 1,
+    )) {
       // Canceling the last callback subscribed
       _streamSubscription?.cancel();
       // Listening to the callback from showRewardedAd()

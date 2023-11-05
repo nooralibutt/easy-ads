@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-Future showLoaderDialog(BuildContext context, {int delay = 2}) {
+Future showLoaderDialog(BuildContext context, int duration) {
   const alert = AlertDialog(
     content: Column(
       mainAxisSize: MainAxisSize.min,
@@ -12,7 +12,8 @@ Future showLoaderDialog(BuildContext context, {int delay = 2}) {
     ),
   );
 
-  Future.delayed(Duration(seconds: delay), () => Navigator.of(context).pop());
+  Future.delayed(
+      Duration(seconds: duration), () => Navigator.of(context).pop());
   return showDialog(
     barrierDismissible: false,
     context: context,

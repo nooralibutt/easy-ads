@@ -1,3 +1,9 @@
+## 2.4.1
+* Update `applovin_max: ^3.6.0`
+* Update `google_mobile_ads: ^4.0.0`
+* Update `unity_ads_plugin: ^0.3.11`
+* Update `collection: ^1.18.0`
+
 ## 2.4.0
 * Updates loader argument names and adds assert
 * Update `applovin_max: ^3.3.0`

@@ -28,7 +28,7 @@
 
 ## 2.3.2
 * Updates dependencies
-* Adds AppLovin keywords and `AdContentRating` for `isAgeRestrictedUser`
+* Adds Applovin keywords and `AdContentRating` for `isAgeRestrictedUser`
 
 ## 2.3.1
 * Resolved Merge Conflicts
@@ -137,7 +137,7 @@
 
 * Added Applovin ad support
 * Configured project to run example project on ios
-* Added Ad Id Manager for easy instialization and switch between test and actual ad ids
+* Added Ad Id Manager for easy initialization and switch between test and actual ad ids
 
 ## 0.0.3
 

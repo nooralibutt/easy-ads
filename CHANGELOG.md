@@ -1,3 +1,9 @@
+## 2.4.1
+* Update `applovin_max: ^3.6.0`
+* Update `google_mobile_ads: ^4.0.0`
+* Update `unity_ads_plugin: ^0.3.11`
+* Update `collection: ^1.18.0`
+
 ## 2.4.0
 * Updates loader argument names and adds assert
 * Update `applovin_max: ^3.3.0`
@@ -22,7 +28,7 @@
 
 ## 2.3.2
 * Updates dependencies
-* Adds AppLovin keywords and `AdContentRating` for `isAgeRestrictedUser`
+* Adds Applovin keywords and `AdContentRating` for `isAgeRestrictedUser`
 
 ## 2.3.1
 * Resolved Merge Conflicts
@@ -131,7 +137,7 @@
 
 * Added Applovin ad support
 * Configured project to run example project on ios
-* Added Ad Id Manager for easy instialization and switch between test and actual ad ids
+* Added Ad Id Manager for easy initialization and switch between test and actual ad ids
 
 ## 0.0.3
 

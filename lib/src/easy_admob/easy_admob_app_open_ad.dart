@@ -2,9 +2,8 @@ import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 
 class EasyAdmobAppOpenAd extends EasyAdBase {
   final AdRequest _adRequest;
-  final int _orientation;
 
-  EasyAdmobAppOpenAd(super.adUnitId, this._adRequest, this._orientation);
+  EasyAdmobAppOpenAd(super.adUnitId, this._adRequest);
   AppOpenAd? _appOpenAd;
   bool _isShowingAd = false;
 
@@ -32,7 +31,6 @@ class EasyAdmobAppOpenAd extends EasyAdBase {
     return AppOpenAd.load(
       adUnitId: adUnitId,
       request: _adRequest,
-      orientation: _orientation,
       adLoadCallback: AppOpenAdLoadCallback(
         onAdLoaded: (AppOpenAd ad) {
           _appOpenAd = ad;

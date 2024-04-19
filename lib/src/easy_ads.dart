@@ -65,7 +65,6 @@ class EasyAds {
     String? fbTestingId,
     bool isAgeRestrictedUserForApplovin = false,
     bool fbiOSAdvertiserTrackingEnabled = false,
-    int appOpenAdOrientation = AppOpenAd.orientationPortrait,
     bool showAdBadge = false,
   }) async {
     _showAdBadge = showAdBadge;
@@ -108,7 +107,6 @@ class EasyAds {
         appOpenAdUnitId: manager.admobAdIds?.appOpenId,
         interstitialAdUnitId: manager.admobAdIds?.interstitialId,
         rewardedAdUnitId: manager.admobAdIds?.rewardedId,
-        appOpenAdOrientation: appOpenAdOrientation,
         isShowAppOpenOnAppStateChange: isShowAppOpenOnAppStateChange,
       );
     }
@@ -193,7 +191,6 @@ class EasyAds {
     String? rewardedAdUnitId,
     bool immersiveModeEnabled = true,
     bool isShowAppOpenOnAppStateChange = true,
-    int appOpenAdOrientation = AppOpenAd.orientationPortrait,
   }) async {
     // init interstitial ads
     if (interstitialAdUnitId != null &&
@@ -220,8 +217,7 @@ class EasyAds {
 
     if (appOpenAdUnitId != null &&
         _appOpenAds.doesNotContain(AdNetwork.admob, AdUnitType.appOpen)) {
-      final appOpenAdManager =
-          EasyAdmobAppOpenAd(appOpenAdUnitId, _adRequest, appOpenAdOrientation);
+      final appOpenAdManager = EasyAdmobAppOpenAd(appOpenAdUnitId, _adRequest);
       await appOpenAdManager.load();
       if (isShowAppOpenOnAppStateChange) {
         _appLifecycleReactor =

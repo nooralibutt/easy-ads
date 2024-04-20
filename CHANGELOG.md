@@ -1,3 +1,13 @@
+## 2.4.3
+* Updated Changelogs
+
+## 2.4.2
+* Update `applovin_max: ^3.9.2`
+* Update `google_mobile_ads: ^5.0.0`
+* Update `unity_ads_plugin: ^0.3.13`
+* Update `logger: ^2.2.0`
+* Update `flutter_lints: ^3.0.2`
+
 ## 2.4.1
 * Update `applovin_max: ^3.6.0`
 * Update `google_mobile_ads: ^4.0.0`

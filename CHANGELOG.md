@@ -1,3 +1,12 @@
+## 2.5.0
+* Update `applovin_max: ^3.11.0`
+* Update `unity_ads_plugin: ^0.3.20`
+* Update `logger: ^2.4.0`
+* Remove requirement of Applovin SDK key in `Info.plist` and `AndroidManifest.xml`
+* Fix `AppLovinMAX.targetingData` issue with applovin max
+* Remove `AppLovinMAX.targetingData.keywords` in applovin max
+* Add `segments` parameter to add segments in the initialization of applovin max sdk. For implementation, please see [here](https://developers.applovin.com/en/flutter/overview/data-and-keyword-passing/#segment-targeting)
+
 ## 2.4.4
 * Update `applovin_max: ^3.10.0`
 * Update `google_mobile_ads: ^5.1.0`

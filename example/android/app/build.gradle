@@ -34,7 +34,7 @@ android {
 
     defaultConfig {
         applicationId "com.nab.flutter.ads"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName

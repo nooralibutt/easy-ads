@@ -38,8 +38,6 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-       <meta-data android:name="applovin.sdk.key"
-           android:value="OeKTS4Zl758OIlAs3KQ6-3WE1IkdOo3nQNJtRubTzlyFU76TRWeQZAeaSMCr9GcZdxR4p2cnoZ1Gg7p7eSXCdA"/>
        <meta-data
            android:name="com.google.android.gms.ads.APPLICATION_ID"
            android:value="ca-app-pub-3940256099942544~3347511713"/>

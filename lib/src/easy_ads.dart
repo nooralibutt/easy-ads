@@ -21,6 +21,7 @@ import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 
 class EasyAds {
   EasyAds._easyAds();
+
   static final EasyAds instance = EasyAds._easyAds();
 
   /// Google admob's ad request
@@ -29,6 +30,7 @@ class EasyAds {
   late AppLifecycleReactor _appLifecycleReactor;
 
   final _eventController = EasyEventController();
+
   Stream<AdEvent> get onEvent => _eventController.onEvent;
 
   List<EasyAdBase> get _allAds => [..._interstitialAds, ..._rewardedAds];
@@ -66,6 +68,7 @@ class EasyAds {
     bool isAgeRestrictedUserForApplovin = false,
     bool fbiOSAdvertiserTrackingEnabled = false,
     bool showAdBadge = false,
+    Map<int, List<int>>? segments,
   }) async {
     _showAdBadge = showAdBadge;
     if (enableLogger) _logger.enable(enableLogger);
@@ -125,10 +128,10 @@ class EasyAds {
     if (appLovinSdkId != null && appLovinSdkId.isNotEmpty) {
       EasyAds.instance._initAppLovin(
         sdkKey: appLovinSdkId,
-        keywords: adMobAdRequest?.keywords,
         isAgeRestrictedUser: isAgeRestrictedUserForApplovin,
         interstitialAdUnitId: manager.appLovinAdIds?.interstitialId,
         rewardedAdUnitId: manager.appLovinAdIds?.rewardedId,
+        segments: segments,
       );
     }
   }
@@ -234,17 +237,16 @@ class EasyAds {
     bool? isAgeRestrictedUser,
     String? interstitialAdUnitId,
     String? rewardedAdUnitId,
-    List<String>? keywords,
+    Map<int, List<int>>? segments,
   }) async {
     final response = await AppLovinMAX.initialize(sdkKey);
 
-    AppLovinMAX.targetingData.maximumAdContentRating =
-        isAgeRestrictedUser == true
-            ? AdContentRating.allAudiences
-            : AdContentRating.none;
+    AppLovinMAX.setIsAgeRestrictedUser(isAgeRestrictedUser ?? false);
 
-    if (keywords != null) {
-      AppLovinMAX.targetingData.keywords = keywords;
+    if (segments != null) {
+      segments.forEach((key, values) {
+        AppLovinMAX.addSegment(key, values);
+      });
     }
 
     if (response != null) {

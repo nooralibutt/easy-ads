@@ -151,11 +151,6 @@ EasyAds.instance.loadAd();
 EasyAds.instance.showAd(AdUnitType.rewarded);
 ```
 
-### Show random interstitial ad
-```dart
-EasyAds.instance.showRandomAd(AdUnitType.interstitial)
-```
-
 ### Show appOpen ad
 ```dart
 EasyAds.instance.showAd(AdUnitType.appOpen)

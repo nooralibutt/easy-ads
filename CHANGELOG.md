@@ -1,3 +1,9 @@
+## 2.6.0
+
+* Applovin no longer supports isAgeRestrictedUser, read https://developers.applovin.com/en/max/flutter/overview/privacy/
+* Update `applovin_max: ^4.0.0`
+* Update `easy_audience_network: ^0.0.7`
+
 ## 2.5.0
 * Update `applovin_max: ^3.11.0`
 * Update `unity_ads_plugin: ^0.3.20`

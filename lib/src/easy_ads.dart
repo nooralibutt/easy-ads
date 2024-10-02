@@ -239,9 +239,10 @@ class EasyAds {
     String? rewardedAdUnitId,
     Map<int, List<int>>? segments,
   }) async {
-    final response = await AppLovinMAX.initialize(sdkKey);
+    // read this https://developers.applovin.com/en/max/flutter/overview/privacy/
+    if (isAgeRestrictedUser ?? false) return;
 
-    AppLovinMAX.setIsAgeRestrictedUser(isAgeRestrictedUser ?? false);
+    final response = await AppLovinMAX.initialize(sdkKey);
 
     if (segments != null) {
       segments.forEach((key, values) {

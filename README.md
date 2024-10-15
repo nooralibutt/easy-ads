@@ -125,8 +125,6 @@ const IAdIdManager adIdManager = TestAdIdManager();
 EasyAds.instance.initialize(
     adIdManager,
     adMobAdRequest: const AdRequest(),
-    // Set true if you want to show age restricted (age below 16 years) ads for applovin 
-    isAgeRestrictedUserForApplovin: true,
     // To enable Facebook Test mode ads
     fbTestMode: true,
     admobConfiguration: RequestConfiguration(testDeviceIds: [
@@ -149,11 +147,6 @@ EasyAds.instance.loadAd();
 ### Show interstitial or rewarded ad
 ```dart
 EasyAds.instance.showAd(AdUnitType.rewarded);
-```
-
-### Show random interstitial ad
-```dart
-EasyAds.instance.showRandomAd(AdUnitType.interstitial)
 ```
 
 ### Show appOpen ad

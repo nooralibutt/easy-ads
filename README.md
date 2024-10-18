@@ -22,6 +22,9 @@ To easily integrate ads from different ad networks into your flutter app.
 - This plugin supports admob mediation [See Details](https://developers.google.com/admob/flutter/mediation/get-started) to see Admob Mediation Guide.
 - You just need to add the naative plaatform setting for admob mediation.
 
+## GDPR and Privacy Options compliance
+There is a consent manager helper added to support gdpr dialog and privacy dialog `ConsentManager.gatherGdprConsent()` and `ConsentManager.gatherPrivacyConsent()`
+
 ## Platform Specific Setup
 
 ### iOS

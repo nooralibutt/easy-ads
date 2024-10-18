@@ -2,12 +2,17 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 const IAdIdManager adIdManager = TestAdIdManager();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await ConsentManager.gatherGdprConsent(
+      debugGeography: kDebugMode ? DebugGeography.debugGeographyEea : null);
+  await ConsentManager.gatherPrivacyConsent();
+
   await EasyAds.instance.initialize(
     isShowAppOpenOnAppStateChange: false,
     adIdManager,

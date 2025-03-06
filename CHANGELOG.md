@@ -1,3 +1,7 @@
+## 2.8.0
+
+* Updated all dependencies
+
 ## 2.7.0
 
 * Added consent manager for requesting gdpr and privacy consents if configured in admob dashboard

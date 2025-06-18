@@ -13,9 +13,15 @@ class TestAdIdManager extends IAdIdManager {
         appOpenId: Platform.isAndroid
             ? 'ca-app-pub-3940256099942544/9257395921'
             : 'ca-app-pub-3940256099942544/5575463023',
-        bannerId: 'ca-app-pub-3940256099942544/6300978111',
-        interstitialId: 'ca-app-pub-3940256099942544/1033173712',
-        rewardedId: 'ca-app-pub-3940256099942544/5224354917',
+        bannerId: Platform.isAndroid
+            ? 'ca-app-pub-3940256099942544/9214589741'
+            : 'ca-app-pub-3940256099942544/2435281174',
+        interstitialId: Platform.isAndroid
+            ? 'ca-app-pub-3940256099942544/1033173712'
+            : 'ca-app-pub-3940256099942544/4411468910',
+        rewardedId: Platform.isAndroid
+            ? 'ca-app-pub-3940256099942544/5224354917'
+            : 'ca-app-pub-3940256099942544/1712485313',
       );
 
   @override

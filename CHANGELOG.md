@@ -1,3 +1,7 @@
+## 26.0.0
+
+* Updated to latest dependencies
+
 ## 2.8.2
 
 * Updated to latest dependencies

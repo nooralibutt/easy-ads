@@ -8,10 +8,10 @@ class EasyAdmobRewardedAd extends EasyAdBase {
   final bool _immersiveModeEnabled;
 
   EasyAdmobRewardedAd(
-    String adUnitId,
+    super.adUnitId,
     this._adRequest,
     this._immersiveModeEnabled,
-  ) : super(adUnitId);
+  );
 
   RewardedAd? _rewardedAd;
   bool _isAdLoaded = false;
@@ -36,19 +36,26 @@ class EasyAdmobRewardedAd extends EasyAdBase {
   Future<void> load() async {
     if (_isAdLoaded) return;
     await RewardedAd.load(
-        adUnitId: adUnitId,
-        request: _adRequest,
-        rewardedAdLoadCallback:
-            RewardedAdLoadCallback(onAdLoaded: (RewardedAd ad) {
+      adUnitId: adUnitId,
+      request: _adRequest,
+      rewardedAdLoadCallback: RewardedAdLoadCallback(
+        onAdLoaded: (RewardedAd ad) {
           _rewardedAd = ad;
           _isAdLoaded = true;
           onAdLoaded?.call(adNetwork, adUnitType, ad);
-        }, onAdFailedToLoad: (LoadAdError error) {
+        },
+        onAdFailedToLoad: (LoadAdError error) {
           _rewardedAd = null;
           _isAdLoaded = false;
           onAdFailedToLoad?.call(
-              adNetwork, adUnitType, error, error.toString());
-        }));
+            adNetwork,
+            adUnitType,
+            error,
+            error.toString(),
+          );
+        },
+      ),
+    );
   }
 
   @override
@@ -75,9 +82,11 @@ class EasyAdmobRewardedAd extends EasyAdBase {
     );
 
     ad.setImmersiveMode(_immersiveModeEnabled);
-    ad.show(onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-      onEarnedReward?.call(adNetwork, adUnitType, reward.type, reward.amount);
-    });
+    ad.show(
+      onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
+        onEarnedReward?.call(adNetwork, adUnitType, reward.type, reward.amount);
+      },
+    );
     _rewardedAd = null;
     _isAdLoaded = false;
   }

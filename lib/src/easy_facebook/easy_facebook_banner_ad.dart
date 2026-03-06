@@ -8,10 +8,7 @@ import 'package:google_mobile_ads/google_mobile_ads.dart' as admob;
 class EasyFacebookBannerAd extends EasyAdBase {
   final admob.AdSize? adSize;
 
-  EasyFacebookBannerAd(
-    String adUnitId, {
-    this.adSize = admob.AdSize.banner,
-  }) : super(adUnitId);
+  EasyFacebookBannerAd(super.adUnitId, {this.adSize = admob.AdSize.banner});
 
   bool _isAdLoaded = false;
 
@@ -61,8 +58,12 @@ class EasyFacebookBannerAd extends EasyAdBase {
       },
       onError: (code, value) {
         _isAdLoaded = false;
-        onAdFailedToLoad?.call(adNetwork, adUnitType, null,
-            'Error occurred while loading $code $value ad');
+        onAdFailedToLoad?.call(
+          adNetwork,
+          adUnitType,
+          null,
+          'Error occurred while loading $code $value ad',
+        );
       },
     );
   }

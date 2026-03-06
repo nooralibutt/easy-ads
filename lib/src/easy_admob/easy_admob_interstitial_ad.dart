@@ -8,10 +8,10 @@ class EasyAdmobInterstitialAd extends EasyAdBase {
   final bool _immersiveModeEnabled;
 
   EasyAdmobInterstitialAd(
-    String adUnitId,
+    super.adUnitId,
     this._adRequest,
     this._immersiveModeEnabled,
-  ) : super(adUnitId);
+  );
 
   InterstitialAd? _interstitialAd;
   bool _isAdLoaded = false;
@@ -37,21 +37,26 @@ class EasyAdmobInterstitialAd extends EasyAdBase {
     if (_isAdLoaded) return;
 
     await InterstitialAd.load(
-        adUnitId: adUnitId,
-        request: _adRequest,
-        adLoadCallback: InterstitialAdLoadCallback(
-          onAdLoaded: (InterstitialAd ad) {
-            _interstitialAd = ad;
-            _isAdLoaded = true;
-            onAdLoaded?.call(adNetwork, adUnitType, ad);
-          },
-          onAdFailedToLoad: (LoadAdError error) {
-            _interstitialAd = null;
-            _isAdLoaded = false;
-            onAdFailedToLoad?.call(
-                adNetwork, adUnitType, error, error.toString());
-          },
-        ));
+      adUnitId: adUnitId,
+      request: _adRequest,
+      adLoadCallback: InterstitialAdLoadCallback(
+        onAdLoaded: (InterstitialAd ad) {
+          _interstitialAd = ad;
+          _isAdLoaded = true;
+          onAdLoaded?.call(adNetwork, adUnitType, ad);
+        },
+        onAdFailedToLoad: (LoadAdError error) {
+          _interstitialAd = null;
+          _isAdLoaded = false;
+          onAdFailedToLoad?.call(
+            adNetwork,
+            adUnitType,
+            error,
+            error.toString(),
+          );
+        },
+      ),
+    );
   }
 
   @override

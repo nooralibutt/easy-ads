@@ -19,8 +19,8 @@ abstract class ConsentManager {
   }
 
   static Future<bool> gatherPrivacyConsent() async {
-    final consentStatus =
-        await ConsentInformation.instance.getPrivacyOptionsRequirementStatus();
+    final consentStatus = await ConsentInformation.instance
+        .getPrivacyOptionsRequirementStatus();
     if (consentStatus == PrivacyOptionsRequirementStatus.notRequired) {
       return true;
     }
@@ -29,12 +29,15 @@ abstract class ConsentManager {
     return await isPrivacyOptionsRequired();
   }
 
-  static Future<bool> gatherGdprConsent(
-      {DebugGeography? debugGeography}) async {
+  static Future<bool> gatherGdprConsent({
+    DebugGeography? debugGeography,
+  }) async {
     if (await canRequestAds()) return true;
     final consentStatus = await ConsentInformation.instance.getConsentStatus();
     if (consentStatus == ConsentStatus.notRequired ||
-        consentStatus == ConsentStatus.obtained) return true;
+        consentStatus == ConsentStatus.obtained) {
+      return true;
+    }
 
     await _gatherGdprConsent(debugGeography: debugGeography);
 
@@ -44,25 +47,31 @@ abstract class ConsentManager {
 
   /// Helper method to call the Mobile Ads SDK to request consent information
   /// and load/show a consent form if necessary.
-  static Future<FormError?> _gatherGdprConsent(
-      {DebugGeography? debugGeography}) {
+  static Future<FormError?> _gatherGdprConsent({
+    DebugGeography? debugGeography,
+  }) {
     final completer = Completer<FormError?>();
 
     // For testing purposes, you can force a DebugGeography of Eea or NotEea.
     ConsentDebugSettings debugSettings = ConsentDebugSettings(
       debugGeography: debugGeography,
     );
-    ConsentRequestParameters params =
-        ConsentRequestParameters(consentDebugSettings: debugSettings);
+    ConsentRequestParameters params = ConsentRequestParameters(
+      consentDebugSettings: debugSettings,
+    );
 
     // Requesting an update to consent information should be called on every app launch.
-    ConsentInformation.instance.requestConsentInfoUpdate(params, () async {
-      ConsentForm.loadAndShowConsentFormIfRequired((loadAndShowError) {
-        completer.complete(loadAndShowError);
-      });
-    }, (FormError formError) {
-      completer.complete(formError);
-    });
+    ConsentInformation.instance.requestConsentInfoUpdate(
+      params,
+      () async {
+        ConsentForm.loadAndShowConsentFormIfRequired((loadAndShowError) {
+          completer.complete(loadAndShowError);
+        });
+      },
+      (FormError formError) {
+        completer.complete(formError);
+      },
+    );
 
     return completer.future;
   }

@@ -6,16 +6,16 @@ import 'package:flutter/material.dart';
 class EasySmartBannerAd extends StatefulWidget {
   final List<AdNetwork> priorityAdNetworks;
   final AdSize adSize;
-  const EasySmartBannerAd(
-      {Key? key,
-      this.priorityAdNetworks = const [
-        AdNetwork.admob,
-        AdNetwork.facebook,
-        AdNetwork.appLovin,
-        AdNetwork.unity,
-      ],
-      this.adSize = AdSize.banner})
-      : super(key: key);
+  const EasySmartBannerAd({
+    super.key,
+    this.priorityAdNetworks = const [
+      AdNetwork.admob,
+      AdNetwork.facebook,
+      AdNetwork.appLovin,
+      AdNetwork.unity,
+    ],
+    this.adSize = AdSize.banner,
+  });
 
   @override
   State<EasySmartBannerAd> createState() => _EasySmartBannerAdState();
@@ -40,7 +40,8 @@ class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
 
     while (_currentADNetworkIndex < length) {
       if (_isBannerIdAvailable(
-          widget.priorityAdNetworks[_currentADNetworkIndex])) {
+        widget.priorityAdNetworks[_currentADNetworkIndex],
+      )) {
         return _showBannerAd(widget.priorityAdNetworks[_currentADNetworkIndex]);
       }
 

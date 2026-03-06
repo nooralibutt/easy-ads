@@ -6,12 +6,12 @@ import 'package:easy_audience_network/easy_audience_network.dart';
 class EasyFacebookFullScreenAd extends EasyAdBase {
   final AdUnitType _adUnitType;
   bool _isAdLoaded = false;
-  EasyFacebookFullScreenAd(String adUnitId, this._adUnitType)
-      : assert(
-            _adUnitType == AdUnitType.interstitial ||
-                _adUnitType == AdUnitType.rewarded,
-            'Ad Unit Type must be rewarded or interstitial'),
-        super(adUnitId);
+  EasyFacebookFullScreenAd(super.adUnitId, this._adUnitType)
+    : assert(
+        _adUnitType == AdUnitType.interstitial ||
+            _adUnitType == AdUnitType.rewarded,
+        'Ad Unit Type must be rewarded or interstitial',
+      );
 
   @override
   AdNetwork get adNetwork => AdNetwork.facebook;
@@ -71,8 +71,12 @@ class EasyFacebookFullScreenAd extends EasyAdBase {
     return RewardedAdListener(
       onError: (code, value) {
         _isAdLoaded = false;
-        onAdFailedToLoad?.call(adNetwork, adUnitType, null,
-            'Error occurred while loading $code $value ad');
+        onAdFailedToLoad?.call(
+          adNetwork,
+          adUnitType,
+          null,
+          'Error occurred while loading $code $value ad',
+        );
       },
       onLoaded: () {
         _isAdLoaded = true;
@@ -97,8 +101,12 @@ class EasyFacebookFullScreenAd extends EasyAdBase {
     return InterstitialAdListener(
       onError: (code, value) {
         _isAdLoaded = false;
-        onAdFailedToLoad?.call(adNetwork, adUnitType, null,
-            'Error occurred while loading $code $value ad');
+        onAdFailedToLoad?.call(
+          adNetwork,
+          adUnitType,
+          null,
+          'Error occurred while loading $code $value ad',
+        );
       },
       onLoaded: () {
         _isAdLoaded = true;

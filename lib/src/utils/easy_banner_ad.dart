@@ -8,8 +8,8 @@ class EasyBannerAd extends StatefulWidget {
   const EasyBannerAd({
     this.adNetwork = AdNetwork.admob,
     this.adSize = AdSize.banner,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<EasyBannerAd> createState() => _EasyBannerAdState();
@@ -37,8 +37,10 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
   }
 
   void createBanner() {
-    _bannerAd = EasyAds.instance
-        .createBanner(adNetwork: widget.adNetwork, adSize: widget.adSize);
+    _bannerAd = EasyAds.instance.createBanner(
+      adNetwork: widget.adNetwork,
+      adSize: widget.adSize,
+    );
     _bannerAd?.load();
   }
 
@@ -59,7 +61,10 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
   }
 
   void onBannerAdReadyForSetState(
-      AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
+    AdNetwork adNetwork,
+    AdUnitType adUnitType,
+    Object? data,
+  ) {
     setState(() {});
   }
 }

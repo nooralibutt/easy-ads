@@ -8,10 +8,7 @@ import 'package:unity_ads_plugin/unity_ads_plugin.dart';
 class EasyUnityBannerAd extends EasyAdBase {
   final AdSize? adSize;
 
-  EasyUnityBannerAd(
-    String adUnitId, {
-    this.adSize,
-  }) : super(adUnitId);
+  EasyUnityBannerAd(super.adUnitId, {this.adSize});
 
   bool _isAdLoaded = false;
 
@@ -51,10 +48,17 @@ class EasyUnityBannerAd extends EasyAdBase {
   }
 
   void onFailedToLoadUnityAd(
-      String placementId, UnityAdsLoadError error, String errorMessage) {
+    String placementId,
+    UnityAdsLoadError error,
+    String errorMessage,
+  ) {
     _isAdLoaded = false;
     onAdFailedToLoad?.call(
-        adNetwork, adUnitType, error, 'Error occurred while loading unity ad');
+      adNetwork,
+      adUnitType,
+      error,
+      'Error occurred while loading unity ad',
+    );
   }
 
   void onCompleteUnityBannerAd(args) {
@@ -64,10 +68,17 @@ class EasyUnityBannerAd extends EasyAdBase {
   }
 
   void onFailedUnityBannerAd(
-      String placementId, UnityAdsBannerError error, String errorMessage) {
+    String placementId,
+    UnityAdsBannerError error,
+    String errorMessage,
+  ) {
     _isAdLoaded = false;
-    onAdFailedToShow?.call(adNetwork, adUnitType, error,
-        'Error occurred while loading unity banner ad');
+    onAdFailedToShow?.call(
+      adNetwork,
+      adUnitType,
+      error,
+      'Error occurred while loading unity banner ad',
+    );
   }
 
   void onClickUnityBannerAd(String placementId) {

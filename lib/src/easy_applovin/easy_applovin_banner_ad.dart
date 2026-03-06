@@ -4,7 +4,7 @@ import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 
 class EasyApplovinBannerAd extends EasyAdBase {
-  EasyApplovinBannerAd(String adUnitId) : super(adUnitId);
+  EasyApplovinBannerAd(super.adUnitId);
 
   @override
   AdUnitType get adUnitType => AdUnitType.banner;
@@ -32,8 +32,12 @@ class EasyApplovinBannerAd extends EasyAdBase {
           onBannerAdReadyForSetState?.call(adNetwork, adUnitType, ad);
         },
         onAdLoadFailedCallback: (adUnitId, error) {
-          onAdFailedToLoad?.call(adNetwork, adUnitType, null,
-              'Error occurred while loading $adNetwork ad with ${error.code.toString()} and message:  ${error.message}');
+          onAdFailedToLoad?.call(
+            adNetwork,
+            adUnitType,
+            null,
+            'Error occurred while loading $adNetwork ad with ${error.code.toString()} and message:  ${error.message}',
+          );
         },
         onAdClickedCallback: (_) {
           onAdClicked?.call(adNetwork, adUnitType, null);

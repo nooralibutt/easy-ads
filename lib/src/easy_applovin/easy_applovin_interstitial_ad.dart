@@ -4,9 +4,7 @@ import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 
 class EasyApplovinInterstitialAd extends EasyAdBase {
-  EasyApplovinInterstitialAd(
-    String adUnitId,
-  ) : super(adUnitId);
+  EasyApplovinInterstitialAd(super.adUnitId);
 
   bool _isAdLoaded = false;
 
@@ -51,15 +49,23 @@ class EasyApplovinInterstitialAd extends EasyAdBase {
         },
         onAdLoadFailedCallback: (_, __) {
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(adNetwork, adUnitType, null,
-              'Error occurred while loading $adNetwork ad');
+          onAdFailedToLoad?.call(
+            adNetwork,
+            adUnitType,
+            null,
+            'Error occurred while loading $adNetwork ad',
+          );
         },
         onAdDisplayedCallback: (_) {
           onAdShowed?.call(adNetwork, adUnitType, null);
         },
         onAdDisplayFailedCallback: (_, __) {
-          onAdFailedToShow?.call(adNetwork, adUnitType, null,
-              'Error occurred while showing $adNetwork ad');
+          onAdFailedToShow?.call(
+            adNetwork,
+            adUnitType,
+            null,
+            'Error occurred while showing $adNetwork ad',
+          );
         },
         onAdClickedCallback: (_) {
           onAdClicked?.call(adNetwork, adUnitType, null);

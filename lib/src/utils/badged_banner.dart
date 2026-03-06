@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 class BadgedBanner extends StatelessWidget {
   final Widget? child;
   final AdSize adSize;
-  const BadgedBanner({this.child, this.adSize = AdSize.banner, Key? key})
-      : super(key: key);
+  const BadgedBanner({this.child, this.adSize = AdSize.banner, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +18,7 @@ class BadgedBanner extends StatelessWidget {
         alignment: AlignmentDirectional.topStart,
         child: Container(
           height: adSize.height.toDouble(),
-          color: Theme.of(context).primaryColor.withOpacity(0.05),
+          color: Theme.of(context).primaryColor.withAlpha(13),
           child: child,
         ),
       ),

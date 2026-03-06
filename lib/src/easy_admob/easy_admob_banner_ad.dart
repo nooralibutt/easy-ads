@@ -9,11 +9,10 @@ class EasyAdmobBannerAd extends EasyAdBase {
   final AdSize adSize;
 
   EasyAdmobBannerAd(
-    String adUnitId, {
+    super.adUnitId, {
     AdRequest? adRequest,
     this.adSize = AdSize.banner,
-  })  : _adRequest = adRequest ?? const AdRequest(),
-        super(adUnitId);
+  }) : _adRequest = adRequest ?? const AdRequest();
 
   BannerAd? _bannerAd;
   bool _isAdLoaded = false;

@@ -28,11 +28,15 @@ class AppAdIds {
   /// if id is null, it will not be implemented
   final String? bannerId;
 
+  /// if id is null, it will not be implemented
+  final String? nativeBannerId;
+
   const AppAdIds({
     required this.appId,
     this.appOpenId,
     this.interstitialId,
     this.rewardedId,
     this.bannerId,
+    this.nativeBannerId,
   });
 }

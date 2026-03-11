@@ -22,6 +22,9 @@ class TestAdIdManager extends IAdIdManager {
     rewardedId: Platform.isAndroid
         ? 'ca-app-pub-3940256099942544/5224354917'
         : 'ca-app-pub-3940256099942544/1712485313',
+    nativeBannerId: Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/2247696110'
+        : 'ca-app-pub-3940256099942544/3986624511',
   );
 
   @override

@@ -4,6 +4,10 @@ import 'package:collection/collection.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
+import 'package:easy_ads_flutter/src/easy_admob/jit_app_open_ad.dart';
+import 'package:easy_ads_flutter/src/easy_admob/jit_interstitial_ad.dart';
+import 'package:easy_ads_flutter/src/easy_admob/jit_rewarded_ad.dart';
+import 'package:easy_ads_flutter/src/easy_admob/native_ad_widget.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/utils/auto_hiding_loader_dialog.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
@@ -401,5 +405,112 @@ class EasyAds {
         e.dispose();
       }
     }
+  }
+
+  /// Loads and immediately shows a Just-In-Time (JIT) AdMob App Open ad.
+  /// Call this when you want to display an app open ad on-demand (no preloading).
+  ///
+  /// [onFailedToLoadOrShow] — fired if the ad fails to load or show.
+  /// [onAdShowed] — fired when the ad is displayed.
+  /// [onAdDismissed] — fired when the ad is closed.
+  Future<void> showJitAppOpen({
+    VoidCallback? onFailedToLoadOrShow,
+    VoidCallback? onAdShowed,
+    VoidCallback? onAdDismissed,
+  }) async {
+    final appOpenId = adIdManager.admobAdIds?.appOpenId;
+    assert(
+      appOpenId != null && appOpenId.isNotEmpty,
+      'App Open Ad ID is null or empty. Set it in your Ad ID manager before showing ads.',
+    );
+    if (appOpenId == null || appOpenId.isEmpty) {
+      _logger.logInfo('App Open Ad ID is null, skipping ad show.');
+      onFailedToLoadOrShow?.call();
+      return;
+    }
+    JitAppOpenAd(
+      appOpenId,
+      _adRequest,
+      onFailedToLoadOrShow: onFailedToLoadOrShow,
+      onAdShowed: onAdShowed,
+      onAdDismissed: onAdDismissed,
+    ).loadAndShow();
+  }
+
+  /// Loads and immediately shows a Just-In-Time (JIT) AdMob Interstitial ad.
+  /// Call this when you want to display an interstitial ad on-demand (no preloading).
+  ///
+  /// [onFailedToLoadOrShow] — fired if the ad fails to load or show.
+  /// [onAdShowed] — fired when the ad is displayed.
+  /// [onAdDismissed] — fired when the ad is closed.
+  Future<void> showJitInterstitial(
+    BuildContext context, {
+    VoidCallback? onFailedToLoadOrShow,
+    VoidCallback? onAdShowed,
+    VoidCallback? onAdDismissed,
+  }) async {
+    final interstitialId = adIdManager.admobAdIds?.interstitialId;
+    assert(
+      interstitialId != null && interstitialId.isNotEmpty,
+      'Interstitial Ad ID is null or empty. Set it in your Ad ID manager before showing ads.',
+    );
+    if (interstitialId == null || interstitialId.isEmpty) {
+      _logger.logInfo('Interstitial Ad ID is null, skipping ad show.');
+      onFailedToLoadOrShow?.call();
+      return;
+    }
+    JitInterstitialAd(
+      interstitialId,
+      _adRequest,
+      onFailedToLoadOrShow: onFailedToLoadOrShow,
+      onAdShowed: onAdShowed,
+      onAdDismissed: onAdDismissed,
+    ).loadAndShow(context);
+  }
+
+  /// Loads and immediately shows a Just-In-Time (JIT) AdMob Rewarded ad with optional user prompt.
+  /// Handles showing loading overlay and success/error dialogs.
+  ///
+  /// [onEarnedReward] — called when the user earns the reward.
+  Future<void> showJitRewarded(
+    BuildContext context, {
+    required void Function(BuildContext context) onEarnedReward,
+  }) async {
+    final rewardedAdId = adIdManager.admobAdIds?.rewardedId ?? '';
+    assert(
+      rewardedAdId.isNotEmpty,
+      'Rewarded Ad ID is null or empty. Set it in your Ad ID manager before showing ads.',
+    );
+    if (rewardedAdId.isEmpty) {
+      _logger.logInfo('Rewarded Ad ID is null or empty, skipping ad show.');
+      return;
+    }
+    final viewModel = RewardedAdViewModel(
+      rewardedAdId,
+      _adRequest,
+      onEarnedReward: onEarnedReward,
+      context: context,
+    );
+
+    final jitAd = JitRewardedAd();
+    jitAd.loadAndShowAd(context, viewModel);
+  }
+
+  /// Creates a Native Ad Widget for display.
+  /// Returns a [NativeAdWidget] if the ID is valid, otherwise a placeholder widget.
+  Widget createNativeAd() {
+    final nativeId = adIdManager.admobAdIds?.nativeBannerId;
+    assert(
+      nativeId != null && nativeId.isNotEmpty,
+      'Native Ad ID is null or empty. Set it in your Ad ID manager before creating native ads.',
+    );
+    if (nativeId == null || nativeId.isEmpty) {
+      _logger.logInfo('Native Ad ID is null, returning placeholder widget.');
+      return const SizedBox(
+        height: 100,
+        child: Center(child: Text('Native Ad Placeholder')),
+      );
+    }
+    return NativeAdWidget(nativeId, _adRequest);
   }
 }

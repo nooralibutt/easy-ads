@@ -76,3 +76,4 @@ build/
 example/pubspec.lock
 example/ios/Podfile.lock
 pubspec.lock
+ios/Runner.xcodeproj/project.xcworkspace/xcshareddata/

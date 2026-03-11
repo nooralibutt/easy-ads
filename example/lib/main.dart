@@ -70,6 +70,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 networkName: 'Admob AppOpen',
                 onTap: () => _showAd(AdNetwork.admob, AdUnitType.appOpen),
               ),
+              AdButton(
+                networkName: 'JIT Admob AppOpen',
+                onTap: () => _showJitAppOpen(),
+              ),
               const Divider(thickness: 2),
               Text(
                 'Interstitial',
@@ -81,6 +85,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
               AdButton(
                 networkName: 'Admob Interstitial',
                 onTap: () => _showAd(AdNetwork.admob, AdUnitType.interstitial),
+              ),
+              AdButton(
+                networkName: 'Jit Admob Interstitial',
+                onTap: () => _showJitInterstitial(context),
               ),
               AdButton(
                 networkName: 'Facebook Interstitial',
@@ -102,6 +110,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
               AdButton(
                 networkName: 'Admob Rewarded',
                 onTap: () => _showAd(AdNetwork.admob, AdUnitType.rewarded),
+              ),
+              AdButton(
+                networkName: 'Jit Admob Rewarded',
+                onTap: () => _showJitRewarded(),
               ),
               AdButton(
                 networkName: 'Facebook Rewarded',
@@ -166,6 +178,37 @@ class _CountryListScreenState extends State<CountryListScreen> {
       ),
     );
   }
+
+  void _showJitAppOpen() {
+    EasyAds.instance.showJitAppOpen(
+      onFailedToLoadOrShow: () => _showSnack('AppOpen failed'),
+      onAdShowed: () => _showSnack('AppOpen showed'),
+      onAdDismissed: () => _showSnack('AppOpen dismissed'),
+    );
+  }
+
+  void _showJitInterstitial(BuildContext context) {
+    EasyAds.instance.showJitInterstitial(
+      context,
+      onFailedToLoadOrShow: () => _showSnack('Interstitial failed'),
+      onAdShowed: () => _showSnack('Interstitial showed'),
+      onAdDismissed: () => _showSnack('Interstitial dismissed'),
+    );
+  }
+
+  void _showJitRewarded() {
+    EasyAds.instance.showJitRewarded(
+      context,
+      onEarnedReward: (ctx) => _showSnack('Reward earned!'),
+    );
+  }
+
+  void _showSnack(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
+    );
+  }
 }
 
 class CountryDetailScreen extends StatefulWidget {
@@ -211,6 +254,8 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
+          EasyAds.instance.createNativeAd(),
+          SizedBox(height: 20),
         ],
       ),
     );

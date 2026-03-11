@@ -220,8 +220,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
 class AdButton extends StatelessWidget {
   final String networkName;
   final VoidCallback onTap;
-  const AdButton({Key? key, required this.onTap, required this.networkName})
-    : super(key: key);
+  const AdButton({super.key, required this.onTap, required this.networkName});
 
   @override
   Widget build(BuildContext context) {

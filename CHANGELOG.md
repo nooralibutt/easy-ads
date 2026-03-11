@@ -1,3 +1,8 @@
+## 26.3.11
+
+⚠ **Breaking Changes**
+* Removed Unity and AppLovin ads. Any code depending on these SDKs will need to be updated or removed.
+
 ## 26.0.0
 
 * Updated to latest dependencies

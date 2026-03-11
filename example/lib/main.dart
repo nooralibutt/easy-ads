@@ -17,7 +17,6 @@ void main() async {
   await EasyAds.instance.initialize(
     isShowAppOpenOnAppStateChange: false,
     adIdManager,
-    unityTestMode: true,
     adMobAdRequest: const AdRequest(),
     admobConfiguration: RequestConfiguration(testDeviceIds: []),
     fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
@@ -30,7 +29,7 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +41,7 @@ class MyApp extends StatelessWidget {
 }
 
 class CountryListScreen extends StatefulWidget {
-  const CountryListScreen({Key? key}) : super(key: key);
+  const CountryListScreen({super.key});
 
   @override
   State<CountryListScreen> createState() => _CountryListScreenState();
@@ -186,7 +185,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
 
 class CountryDetailScreen extends StatefulWidget {
   final AdNetwork? adNetwork;
-  const CountryDetailScreen({Key? key, this.adNetwork}) : super(key: key);
+  const CountryDetailScreen({super.key, this.adNetwork});
 
   @override
   State<CountryDetailScreen> createState() => _CountryDetailScreenState();

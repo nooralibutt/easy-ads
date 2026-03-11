@@ -55,7 +55,6 @@ class EasyAds {
   /// [fbTestingId] can be obtained by running the app once without the testingId.
   Future<void> initialize(
     IAdIdManager manager, {
-    bool unityTestMode = false,
     bool fbTestMode = false,
     bool isShowAppOpenOnAppStateChange = false,
     AdRequest? adMobAdRequest,

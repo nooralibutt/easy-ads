@@ -87,12 +87,6 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 onTap: () =>
                     _showAd(AdNetwork.facebook, AdUnitType.interstitial),
               ),
-
-              AdButton(
-                networkName: 'Applovin Interstitial',
-                onTap: () =>
-                    _showAd(AdNetwork.appLovin, AdUnitType.interstitial),
-              ),
               AdButton(
                 networkName: 'Available Interstitial',
                 onTap: () => _showAvailableAd(AdUnitType.interstitial),
@@ -113,21 +107,12 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 networkName: 'Facebook Rewarded',
                 onTap: () => _showAd(AdNetwork.facebook, AdUnitType.rewarded),
               ),
-
-              AdButton(
-                networkName: 'Applovin Rewarded',
-                onTap: () => _showAd(AdNetwork.appLovin, AdUnitType.rewarded),
-              ),
               AdButton(
                 networkName: 'Available Rewarded',
                 onTap: () => _showAvailableAd(AdUnitType.rewarded),
               ),
               const EasySmartBannerAd(
-                priorityAdNetworks: [
-                  AdNetwork.facebook,
-                  AdNetwork.admob,
-                  AdNetwork.appLovin,
-                ],
+                priorityAdNetworks: [AdNetwork.facebook, AdNetwork.admob],
               ),
             ],
           ),

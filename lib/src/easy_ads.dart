@@ -1,13 +1,9 @@
 import 'dart:async';
 
-import 'package:applovin_max/applovin_max.dart';
 import 'package:collection/collection.dart';
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/easy_admob_rewarded_ad.dart';
-import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_banner_ad.dart';
-import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_interstitial_ad.dart';
-import 'package:easy_ads_flutter/src/easy_applovin/easy_applovin_rewarded_ad.dart';
 import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/utils/auto_hiding_loader_dialog.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
@@ -112,17 +108,6 @@ class EasyAds {
         isShowAppOpenOnAppStateChange: isShowAppOpenOnAppStateChange,
       );
     }
-
-    final appLovinSdkId = manager.appLovinAdIds?.appId;
-    if (appLovinSdkId != null && appLovinSdkId.isNotEmpty) {
-      EasyAds.instance._initAppLovin(
-        sdkKey: appLovinSdkId,
-        isAgeRestrictedUser: isAgeRestrictedUserForApplovin,
-        interstitialAdUnitId: manager.appLovinAdIds?.interstitialId,
-        rewardedAdUnitId: manager.appLovinAdIds?.rewardedId,
-        segments: segments,
-      );
-    }
   }
 
   /// Returns [EasyAdBase] if ad is created successfully. It assumes that you have already assigned banner id in Ad Id Manager
@@ -148,17 +133,6 @@ class EasyAds {
             adSize: adSize,
             adRequest: _adRequest,
           );
-          _eventController.setupEvents(ad);
-        }
-        break;
-      case AdNetwork.appLovin:
-        final bannerId = adIdManager.appLovinAdIds?.bannerId;
-        assert(
-          bannerId != null,
-          'You are trying to create a banner and Applovin Banner id is null in ad id manager',
-        );
-        if (bannerId != null) {
-          ad = EasyApplovinBannerAd(bannerId);
           _eventController.setupEvents(ad);
         }
         break;
@@ -218,53 +192,6 @@ class EasyAds {
       }
       _appOpenAds.add(appOpenAdManager);
       _eventController.setupEvents(appOpenAdManager);
-    }
-  }
-
-  Future<void> _initAppLovin({
-    required String sdkKey,
-    bool? isAgeRestrictedUser,
-    String? interstitialAdUnitId,
-    String? rewardedAdUnitId,
-    Map<int, List<int>>? segments,
-  }) async {
-    // read this https://developers.applovin.com/en/max/flutter/overview/privacy/
-    if (isAgeRestrictedUser ?? false) return;
-
-    final response = await AppLovinMAX.initialize(sdkKey);
-    if (segments != null) {
-      segments.forEach((key, values) {
-        AppLovinMAX.addSegment(key, values);
-      });
-    }
-
-    if (response != null) {
-      _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, true);
-    } else {
-      _eventController.fireNetworkInitializedEvent(AdNetwork.appLovin, false);
-    }
-
-    // init interstitial ads
-    if (interstitialAdUnitId != null &&
-        _interstitialAds.doesNotContain(
-          AdNetwork.appLovin,
-          AdUnitType.interstitial,
-        )) {
-      final ad = EasyApplovinInterstitialAd(interstitialAdUnitId);
-      _interstitialAds.add(ad);
-      _eventController.setupEvents(ad);
-
-      await ad.load();
-    }
-
-    // init rewarded ads
-    if (rewardedAdUnitId != null &&
-        _rewardedAds.doesNotContain(AdNetwork.appLovin, AdUnitType.rewarded)) {
-      final ad = EasyApplovinRewardedAd(rewardedAdUnitId);
-      _rewardedAds.add(ad);
-      _eventController.setupEvents(ad);
-
-      await ad.load();
     }
   }
 

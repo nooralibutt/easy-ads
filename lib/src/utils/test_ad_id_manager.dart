@@ -25,20 +25,6 @@ class TestAdIdManager extends IAdIdManager {
   );
 
   @override
-  AppAdIds? get appLovinAdIds => AppAdIds(
-    appId: 'YOUR_SDK_KEY',
-    bannerId: Platform.isAndroid
-        ? 'ANDROID_BANNER_AD_UNIT_ID'
-        : 'IOS_BANNER_AD_UNIT_ID',
-    interstitialId: Platform.isAndroid
-        ? 'ANDROID_INTER_AD_UNIT_ID'
-        : 'IOS_INTER_AD_UNIT_ID',
-    rewardedId: Platform.isAndroid
-        ? 'ANDROID_REWARDED_AD_UNIT_ID'
-        : 'IOS_REWARDED_AD_UNIT_ID',
-  );
-
-  @override
   AppAdIds? get fbAdIds => const AppAdIds(
     appId: '1579706379118402',
     interstitialId: 'VID_HD_16_9_15S_LINK#YOUR_PLACEMENT_ID',

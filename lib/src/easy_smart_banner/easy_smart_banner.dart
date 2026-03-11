@@ -8,11 +8,7 @@ class EasySmartBannerAd extends StatefulWidget {
   final AdSize adSize;
   const EasySmartBannerAd({
     super.key,
-    this.priorityAdNetworks = const [
-      AdNetwork.admob,
-      AdNetwork.facebook,
-      AdNetwork.appLovin,
-    ],
+    this.priorityAdNetworks = const [AdNetwork.admob, AdNetwork.facebook],
     this.adSize = AdSize.banner,
   });
 
@@ -75,9 +71,6 @@ class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
       return true;
     } else if (adNetwork == AdNetwork.facebook &&
         adIdManager.fbAdIds?.bannerId != null) {
-      return true;
-    } else if (adNetwork == AdNetwork.appLovin &&
-        adIdManager.appLovinAdIds?.bannerId != null) {
       return true;
     } else {
       return false;

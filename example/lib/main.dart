@@ -10,7 +10,8 @@ const IAdIdManager adIdManager = TestAdIdManager();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ConsentManager.gatherGdprConsent(
-      debugGeography: kDebugMode ? DebugGeography.debugGeographyEea : null);
+    debugGeography: kDebugMode ? DebugGeography.debugGeographyEea : null,
+  );
   await ConsentManager.gatherPrivacyConsent();
 
   await EasyAds.instance.initialize(
@@ -54,20 +55,17 @@ class _CountryListScreenState extends State<CountryListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Ad Network List"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Ad Network List"), centerTitle: true),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             children: [
               Text(
                 'AppOpen',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               AdButton(
                 networkName: 'Admob AppOpen',
@@ -76,10 +74,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
               const Divider(thickness: 2),
               Text(
                 'Interstitial',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               AdButton(
                 networkName: 'Admob Interstitial',
@@ -90,10 +88,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 onTap: () =>
                     _showAd(AdNetwork.facebook, AdUnitType.interstitial),
               ),
-              AdButton(
-                networkName: 'Unity Interstitial',
-                onTap: () => _showAd(AdNetwork.unity, AdUnitType.interstitial),
-              ),
+
               AdButton(
                 networkName: 'Applovin Interstitial',
                 onTap: () =>
@@ -106,10 +101,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
               const Divider(thickness: 2),
               Text(
                 'Rewarded',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               AdButton(
                 networkName: 'Admob Rewarded',
@@ -119,10 +114,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 networkName: 'Facebook Rewarded',
                 onTap: () => _showAd(AdNetwork.facebook, AdUnitType.rewarded),
               ),
-              AdButton(
-                networkName: 'Unity Rewarded',
-                onTap: () => _showAd(AdNetwork.unity, AdUnitType.rewarded),
-              ),
+
               AdButton(
                 networkName: 'Applovin Rewarded',
                 onTap: () => _showAd(AdNetwork.appLovin, AdUnitType.rewarded),
@@ -135,7 +127,6 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 priorityAdNetworks: [
                   AdNetwork.facebook,
                   AdNetwork.admob,
-                  AdNetwork.unity,
                   AdNetwork.appLovin,
                 ],
               ),
@@ -205,10 +196,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('United States'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('United States'), centerTitle: true),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -217,7 +205,8 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(
-                    'https://cdn.britannica.com/33/4833-050-F6E415FE/Flag-United-States-of-America.jpg'),
+                  'https://cdn.britannica.com/33/4833-050-F6E415FE/Flag-United-States-of-America.jpg',
+                ),
               ),
             ),
           ),
@@ -248,7 +237,7 @@ class AdButton extends StatelessWidget {
   final String networkName;
   final VoidCallback onTap;
   const AdButton({Key? key, required this.onTap, required this.networkName})
-      : super(key: key);
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {

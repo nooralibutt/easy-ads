@@ -13,7 +13,6 @@ dependencies:
     sdk: flutter
   google_mobile_ads: ^7.0.0
   collection: ^1.19.1
-  unity_ads_plugin: ^0.3.29
   applovin_max: ^4.6.2
   easy_audience_network: ^0.0.7
   logger: ^2.6.2

@@ -1,11 +1,6 @@
 abstract class IAdIdManager {
   const IAdIdManager();
 
-  /// Pass null if you wish not to implement unity ads
-  ///
-  /// AppAdIds? get unityAdIds => null;
-  AppAdIds? get unityAdIds;
-
   /// Pass null if you wish not to implement admob ads
   ///
   /// AppAdIds? get admobAdIds => null;

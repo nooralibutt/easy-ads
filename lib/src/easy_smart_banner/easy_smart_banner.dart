@@ -12,7 +12,6 @@ class EasySmartBannerAd extends StatefulWidget {
       AdNetwork.admob,
       AdNetwork.facebook,
       AdNetwork.appLovin,
-      AdNetwork.unity,
     ],
     this.adSize = AdSize.banner,
   });
@@ -79,9 +78,6 @@ class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
       return true;
     } else if (adNetwork == AdNetwork.appLovin &&
         adIdManager.appLovinAdIds?.bannerId != null) {
-      return true;
-    } else if (adNetwork == AdNetwork.unity &&
-        adIdManager.unityAdIds?.bannerId != null) {
       return true;
     } else {
       return false;

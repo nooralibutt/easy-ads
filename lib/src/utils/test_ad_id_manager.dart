@@ -26,12 +26,4 @@ class TestAdIdManager extends IAdIdManager {
         ? 'ca-app-pub-3940256099942544/2247696110'
         : 'ca-app-pub-3940256099942544/3986624511',
   );
-
-  @override
-  AppAdIds? get fbAdIds => const AppAdIds(
-    appId: '1579706379118402',
-    interstitialId: 'VID_HD_16_9_15S_LINK#YOUR_PLACEMENT_ID',
-    bannerId: 'IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID',
-    rewardedId: 'VID_HD_16_9_46S_APP_INSTALL#YOUR_PLACEMENT_ID',
-  );
 }

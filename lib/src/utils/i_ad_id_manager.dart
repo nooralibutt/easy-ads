@@ -5,11 +5,6 @@ abstract class IAdIdManager {
   ///
   /// AppAdIds? get admobAdIds => null;
   AppAdIds? get admobAdIds;
-
-  /// Pass null if you wish not to implement facebook ads
-  ///
-  /// AppAdIds? get fbAdIds => null;
-  AppAdIds? get fbAdIds;
 }
 
 class AppAdIds {

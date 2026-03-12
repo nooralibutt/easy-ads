@@ -8,12 +8,10 @@ import 'package:easy_ads_flutter/src/easy_admob/jit_app_open_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/jit_interstitial_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/jit_rewarded_ad.dart';
 import 'package:easy_ads_flutter/src/easy_admob/native_ad_widget.dart';
-import 'package:easy_ads_flutter/src/easy_facebook/easy_facebook_full_screen_ad.dart';
 import 'package:easy_ads_flutter/src/utils/auto_hiding_loader_dialog.dart';
 import 'package:easy_ads_flutter/src/utils/easy_event_controller.dart';
 import 'package:easy_ads_flutter/src/utils/easy_logger.dart';
 import 'package:easy_ads_flutter/src/utils/extensions.dart';
-import 'package:easy_audience_network/easy_audience_network.dart';
 import 'package:flutter/material.dart';
 
 class EasyAds {
@@ -52,17 +50,13 @@ class EasyAds {
   ///
   /// Call this method as early as possible after the app launches
   /// [adMobAdRequest] will be used in all the admob requests. By default empty request will be used if nothing passed here.
-  /// [fbTestingId] can be obtained by running the app once without the testingId.
   Future<void> initialize(
     IAdIdManager manager, {
-    bool fbTestMode = false,
     bool isShowAppOpenOnAppStateChange = false,
     AdRequest? adMobAdRequest,
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
-    String? fbTestingId,
     bool isAgeRestrictedUserForApplovin = false,
-    bool fbiOSAdvertiserTrackingEnabled = false,
     bool showAdBadge = false,
     Map<int, List<int>>? segments,
   }) async {
@@ -75,17 +69,6 @@ class EasyAds {
 
     if (admobConfiguration != null) {
       MobileAds.instance.updateRequestConfiguration(admobConfiguration);
-    }
-
-    final fbAdId = manager.fbAdIds?.appId;
-    if (fbAdId != null && fbAdId.isNotEmpty) {
-      _initFacebook(
-        testingId: fbTestingId,
-        testMode: fbTestMode,
-        iOSAdvertiserTrackingEnabled: fbiOSAdvertiserTrackingEnabled,
-        interstitialPlacementId: manager.fbAdIds?.interstitialId,
-        rewardedPlacementId: manager.fbAdIds?.rewardedId,
-      );
     }
 
     final admobAdId = manager.admobAdIds?.appId;
@@ -196,54 +179,6 @@ class EasyAds {
       }
       _appOpenAds.add(appOpenAdManager);
       _eventController.setupEvents(appOpenAdManager);
-    }
-  }
-
-  Future _initFacebook({
-    required bool iOSAdvertiserTrackingEnabled,
-    required bool testMode,
-    String? testingId,
-    String? interstitialPlacementId,
-    String? rewardedPlacementId,
-  }) async {
-    final status = await EasyAudienceNetwork.init(
-      testingId: testingId,
-      testMode: testMode,
-      iOSAdvertiserTrackingEnabled: iOSAdvertiserTrackingEnabled,
-    );
-
-    _eventController.fireNetworkInitializedEvent(
-      AdNetwork.facebook,
-      status ?? false,
-    );
-
-    // init interstitial ads
-    if (interstitialPlacementId != null &&
-        _interstitialAds.doesNotContain(
-          AdNetwork.facebook,
-          AdUnitType.interstitial,
-        )) {
-      final ad = EasyFacebookFullScreenAd(
-        interstitialPlacementId,
-        AdUnitType.interstitial,
-      );
-      _interstitialAds.add(ad);
-      _eventController.setupEvents(ad);
-
-      await ad.load();
-    }
-
-    // init rewarded ads
-    if (rewardedPlacementId != null &&
-        _rewardedAds.doesNotContain(AdNetwork.facebook, AdUnitType.rewarded)) {
-      final ad = EasyFacebookFullScreenAd(
-        rewardedPlacementId,
-        AdUnitType.rewarded,
-      );
-      _rewardedAds.add(ad);
-      _eventController.setupEvents(ad);
-
-      await ad.load();
     }
   }
 

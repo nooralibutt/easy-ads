@@ -16,7 +16,7 @@ import 'package:flutter/material.dart';
 
 class EasyAds {
   EasyAds._easyAds();
-
+  late final bool autoLoadAds;
   static final EasyAds instance = EasyAds._easyAds();
 
   /// Google admob's ad request
@@ -57,7 +57,9 @@ class EasyAds {
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
     bool showAdBadge = false,
+    bool autoLoadAds = true,
   }) async {
+    autoLoadAds = autoLoadAds;
     _showAdBadge = showAdBadge;
     if (enableLogger) _logger.enable(enableLogger);
     adIdManager = manager;
@@ -120,6 +122,20 @@ class EasyAds {
     bool immersiveModeEnabled = true,
     bool isShowAppOpenOnAppStateChange = true,
   }) async {
+    if (appOpenAdUnitId != null &&
+        _appOpenAds.doesNotContain(AdUnitType.appOpen)) {
+      final appOpenAdManager = EasyAdmobAppOpenAd(appOpenAdUnitId, _adRequest);
+      if (isShowAppOpenOnAppStateChange) {
+        _appLifecycleReactor = AppLifecycleReactor(
+          appOpenAdManager: appOpenAdManager,
+        );
+        _appLifecycleReactor.listenToAppStateChanges();
+      }
+      await appOpenAdManager.load();
+      _appOpenAds.add(appOpenAdManager);
+      _eventController.setupEvents(appOpenAdManager);
+    }
+    if (autoLoadAds == false) return;
     // init interstitial ads
     if (interstitialAdUnitId != null &&
         _interstitialAds.doesNotContain(AdUnitType.interstitial)) {
@@ -146,20 +162,6 @@ class EasyAds {
       _eventController.setupEvents(ad);
 
       await ad.load();
-    }
-
-    if (appOpenAdUnitId != null &&
-        _appOpenAds.doesNotContain(AdUnitType.appOpen)) {
-      final appOpenAdManager = EasyAdmobAppOpenAd(appOpenAdUnitId, _adRequest);
-      await appOpenAdManager.load();
-      if (isShowAppOpenOnAppStateChange) {
-        _appLifecycleReactor = AppLifecycleReactor(
-          appOpenAdManager: appOpenAdManager,
-        );
-        _appLifecycleReactor.listenToAppStateChanges();
-      }
-      _appOpenAds.add(appOpenAdManager);
-      _eventController.setupEvents(appOpenAdManager);
     }
   }
 

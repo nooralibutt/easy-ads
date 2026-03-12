@@ -20,6 +20,7 @@ void main() async {
     adMobAdRequest: const AdRequest(),
     admobConfiguration: RequestConfiguration(testDeviceIds: []),
     showAdBadge: Platform.isIOS,
+    autoLoadAds: false,
   );
 
   runApp(const MyApp());

@@ -20,7 +20,7 @@ void main() async {
     adMobAdRequest: const AdRequest(),
     admobConfiguration: RequestConfiguration(testDeviceIds: []),
     showAdBadge: Platform.isIOS,
-    autoLoadAds: false,
+    autoLoadAds: true,
   );
 
   runApp(const MyApp());
@@ -57,6 +57,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Text(
+                "Auto load ad is ${EasyAds.instance.autoLoadAds ? 'Enabled' : 'Disabled'}",
+              ),
+              SizedBox(height: 10),
               Text(
                 'AppOpen',
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(

@@ -27,6 +27,26 @@ If you need **Facebook, AppLovin, or Unity ads**, you can use the alternative br
 
 ---
 
+## New Feature: `autoLoadAds`
+
+We've introduced a new `autoLoadAds` field in `EasyAds` initialization:
+
+- **Purpose:** Control whether ads are loaded automatically or not.
+- **Default:** `true` (ads are loaded automatically on initialization)
+- **Usage:**
+  ```dart
+  await EasyAds.instance.initialize(
+    adIdManager,
+    autoLoadAds: false, // disables automatic ad loading
+  );```
+
+If set to false, ads will not be loaded automatically.
+You must manually load ads using:
+```dart 
+EasyAds.instance.loadAd(adUnitType: AdUnitType.interstitial);
+```
+
+---
 # Features
 
 - Google Mobile Ads (**Banner, Native, App Open, Interstitial, Rewarded**)

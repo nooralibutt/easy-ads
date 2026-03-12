@@ -59,7 +59,7 @@ class EasyAds {
     bool showAdBadge = false,
     bool autoLoadAds = true,
   }) async {
-    autoLoadAds = autoLoadAds;
+    this.autoLoadAds = autoLoadAds;
     _showAdBadge = showAdBadge;
     if (enableLogger) _logger.enable(enableLogger);
     adIdManager = manager;
@@ -135,7 +135,6 @@ class EasyAds {
       _appOpenAds.add(appOpenAdManager);
       _eventController.setupEvents(appOpenAdManager);
     }
-    if (autoLoadAds == false) return;
     // init interstitial ads
     if (interstitialAdUnitId != null &&
         _interstitialAds.doesNotContain(AdUnitType.interstitial)) {
@@ -147,7 +146,7 @@ class EasyAds {
       _interstitialAds.add(ad);
       _eventController.setupEvents(ad);
 
-      await ad.load();
+      if (autoLoadAds) await ad.load();
     }
 
     // init rewarded ads
@@ -161,7 +160,7 @@ class EasyAds {
       _rewardedAds.add(ad);
       _eventController.setupEvents(ad);
 
-      await ad.load();
+      if (autoLoadAds) await ad.load();
     }
   }
 

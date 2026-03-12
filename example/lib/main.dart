@@ -65,7 +65,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
               ),
               AdButton(
                 networkName: 'Admob AppOpen',
-                onTap: () => _showAd(AdNetwork.admob, AdUnitType.appOpen),
+                onTap: () => _showAd(AdUnitType.appOpen),
               ),
               AdButton(
                 networkName: 'JIT Admob AppOpen',
@@ -81,7 +81,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
               ),
               AdButton(
                 networkName: 'Admob Interstitial',
-                onTap: () => _showAd(AdNetwork.admob, AdUnitType.interstitial),
+                onTap: () => _showAd(AdUnitType.interstitial),
               ),
               AdButton(
                 networkName: 'Jit Admob Interstitial',
@@ -102,7 +102,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
               ),
               AdButton(
                 networkName: 'Admob Rewarded',
-                onTap: () => _showAd(AdNetwork.admob, AdUnitType.rewarded),
+                onTap: () => _showAd(AdUnitType.rewarded),
               ),
               AdButton(
                 networkName: 'Jit Admob Rewarded',
@@ -113,7 +113,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
                 networkName: 'Available Rewarded',
                 onTap: () => _showAvailableAd(AdUnitType.rewarded),
               ),
-              const EasySmartBannerAd(priorityAdNetworks: [AdNetwork.admob]),
+              EasyBannerAd(),
             ],
           ),
         ),
@@ -121,10 +121,9 @@ class _CountryListScreenState extends State<CountryListScreen> {
     );
   }
 
-  void _showAd(AdNetwork adNetwork, AdUnitType adUnitType) {
+  void _showAd(AdUnitType adUnitType) {
     if (EasyAds.instance.showAd(
       adUnitType,
-      adNetwork: adNetwork,
       context: context,
       loaderDuration: 1,
     )) {
@@ -134,11 +133,11 @@ class _CountryListScreenState extends State<CountryListScreen> {
       _streamSubscription = EasyAds.instance.onEvent.listen((event) {
         if (event.adUnitType == adUnitType) {
           _streamSubscription?.cancel();
-          goToNextScreen(adNetwork: adNetwork);
+          goToNextScreen();
         }
       });
     } else {
-      goToNextScreen(adNetwork: adNetwork);
+      goToNextScreen();
     }
   }
 
@@ -158,12 +157,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
     }
   }
 
-  void goToNextScreen({AdNetwork? adNetwork}) {
+  void goToNextScreen() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => CountryDetailScreen(adNetwork: adNetwork),
-      ),
+      MaterialPageRoute(builder: (context) => CountryDetailScreen()),
     );
   }
 
@@ -200,8 +197,7 @@ class _CountryListScreenState extends State<CountryListScreen> {
 }
 
 class CountryDetailScreen extends StatefulWidget {
-  final AdNetwork? adNetwork;
-  const CountryDetailScreen({super.key, this.adNetwork});
+  const CountryDetailScreen({super.key});
 
   @override
   State<CountryDetailScreen> createState() => _CountryDetailScreenState();
@@ -225,9 +221,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
-          (widget.adNetwork == null)
-              ? const EasySmartBannerAd()
-              : EasyBannerAd(adSize: AdSize.largeBanner),
+          EasyBannerAd(adSize: AdSize.largeBanner),
           const Expanded(
             child: SingleChildScrollView(
               child: Padding(

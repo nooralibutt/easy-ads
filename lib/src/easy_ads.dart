@@ -56,9 +56,7 @@ class EasyAds {
     AdRequest? adMobAdRequest,
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
-    bool isAgeRestrictedUserForApplovin = false,
     bool showAdBadge = false,
-    Map<int, List<int>>? segments,
   }) async {
     _showAdBadge = showAdBadge;
     if (enableLogger) _logger.enable(enableLogger);
@@ -83,7 +81,6 @@ class EasyAds {
       });
 
       _eventController.fireNetworkInitializedEvent(
-        AdNetwork.admob,
         status == AdapterInitializationState.ready,
       );
 
@@ -101,30 +98,17 @@ class EasyAds {
   ///
   /// if [adNetwork] is provided, only that network's ad would be created. For now, only unity and admob banner is supported
   /// [adSize] is used to provide ad banner size
-  EasyAdBase? createBanner({
-    required AdNetwork adNetwork,
-    AdSize adSize = AdSize.banner,
-  }) {
+  EasyAdBase? createBanner({AdSize adSize = AdSize.banner}) {
     EasyAdBase? ad;
 
-    switch (adNetwork) {
-      case AdNetwork.admob:
-        final bannerId = adIdManager.admobAdIds?.bannerId;
-        assert(
-          bannerId != null,
-          'You are trying to create a banner and Admob Banner id is null in ad id manager',
-        );
-        if (bannerId != null) {
-          ad = EasyAdmobBannerAd(
-            bannerId,
-            adSize: adSize,
-            adRequest: _adRequest,
-          );
-          _eventController.setupEvents(ad);
-        }
-        break;
-      default:
-        ad = null;
+    final bannerId = adIdManager.admobAdIds?.bannerId;
+    assert(
+      bannerId != null,
+      'You are trying to create a banner and Admob Banner id is null in ad id manager',
+    );
+    if (bannerId != null) {
+      ad = EasyAdmobBannerAd(bannerId, adSize: adSize, adRequest: _adRequest);
+      _eventController.setupEvents(ad);
     }
     return ad;
   }
@@ -138,10 +122,7 @@ class EasyAds {
   }) async {
     // init interstitial ads
     if (interstitialAdUnitId != null &&
-        _interstitialAds.doesNotContain(
-          AdNetwork.admob,
-          AdUnitType.interstitial,
-        )) {
+        _interstitialAds.doesNotContain(AdUnitType.interstitial)) {
       final ad = EasyAdmobInterstitialAd(
         interstitialAdUnitId,
         _adRequest,
@@ -155,7 +136,7 @@ class EasyAds {
 
     // init rewarded ads
     if (rewardedAdUnitId != null &&
-        _rewardedAds.doesNotContain(AdNetwork.admob, AdUnitType.rewarded)) {
+        _rewardedAds.doesNotContain(AdUnitType.rewarded)) {
       final ad = EasyAdmobRewardedAd(
         rewardedAdUnitId,
         _adRequest,
@@ -168,7 +149,7 @@ class EasyAds {
     }
 
     if (appOpenAdUnitId != null &&
-        _appOpenAds.doesNotContain(AdNetwork.admob, AdUnitType.appOpen)) {
+        _appOpenAds.doesNotContain(AdUnitType.appOpen)) {
       final appOpenAdManager = EasyAdmobAppOpenAd(appOpenAdUnitId, _adRequest);
       await appOpenAdManager.load();
       if (isShowAppOpenOnAppStateChange) {
@@ -188,18 +169,16 @@ class EasyAds {
   /// Returns bool indicating whether ad has been successfully displayed or not
   ///
   /// [adUnitType] should be mentioned here, only interstitial or rewarded should be mentioned here
-  /// if [adNetwork] is provided, only that network's ad would be displayed
   /// if [loaderDuration] is > 0 then it will show loader before showing ad, and use [loaderDuration] in seconds. Also, you have to provide build context.
   bool showAd(
     AdUnitType adUnitType, {
-    AdNetwork adNetwork = AdNetwork.any,
     int loaderDuration = 0,
     BuildContext? context,
   }) {
     if (loaderDuration > 0) {
       assert(
         context != null,
-        "Loader duration is greater than zero, context has to be provided in order to show dialog",
+        'Loader duration is greater than zero, context has to be provided in order to show dialog',
       );
     }
 
@@ -212,42 +191,18 @@ class EasyAds {
       ads = _appOpenAds;
     }
 
-    if (adNetwork != AdNetwork.any) {
-      final ad = ads.firstWhereOrNull((e) => adNetwork == e.adNetwork);
-      if (ad?.isAdLoaded == true) {
-        if (ad?.adUnitType == AdUnitType.interstitial &&
+    for (final ad in ads) {
+      if (ad.isAdLoaded) {
+        if (ad.adUnitType == AdUnitType.interstitial &&
             loaderDuration > 0 &&
             context != null) {
-          showLoaderDialog(context, loaderDuration).then((_) => ad?.show());
+          showLoaderDialog(context, loaderDuration).then((_) => ad.show());
         } else {
-          ad?.show();
+          ad.show();
         }
         return true;
       } else {
-        _logger.logInfo(
-          '${ad?.adNetwork} ${ad?.adUnitType} was not loaded, so called loading',
-        );
-        ad?.load();
-        return false;
-      }
-    }
-
-    for (final ad in ads) {
-      if (ad.isAdLoaded) {
-        if (adNetwork == AdNetwork.any || adNetwork == ad.adNetwork) {
-          if (ad.adUnitType == AdUnitType.interstitial &&
-              loaderDuration > 0 &&
-              context != null) {
-            showLoaderDialog(context, loaderDuration).then((_) => ad.show());
-          } else {
-            ad.show();
-          }
-          return true;
-        }
-      } else {
-        _logger.logInfo(
-          '${ad.adNetwork} ${ad.adUnitType} was not loaded, so called loading',
-        );
+        _logger.logInfo('${ad.adUnitType} was not loaded, so called loading');
         ad.load();
       }
     }
@@ -261,28 +216,22 @@ class EasyAds {
   ///
   /// if [adNetwork] is provided, only that network's ad will be loaded
   /// if [adUnitType] is provided, only that unit type will be loaded, otherwise all unit types will be loaded
-  void loadAd({AdNetwork adNetwork = AdNetwork.any, AdUnitType? adUnitType}) {
+  void loadAd({AdUnitType? adUnitType}) {
     if (adUnitType == null || adUnitType == AdUnitType.rewarded) {
       for (final e in _rewardedAds) {
-        if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
-          e.load();
-        }
+        e.load();
       }
     }
 
     if (adUnitType == null || adUnitType == AdUnitType.interstitial) {
       for (final e in _interstitialAds) {
-        if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
-          e.load();
-        }
+        e.load();
       }
     }
 
     if (adUnitType == null || adUnitType == AdUnitType.appOpen) {
       for (final e in _appOpenAds) {
-        if (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) {
-          e.load();
-        }
+        e.load();
       }
     }
   }
@@ -290,36 +239,24 @@ class EasyAds {
   /// Returns bool indicating whether ad has been loaded
   ///
   /// if [adNetwork] is provided, only that network's ad would be checked
-  bool isRewardedAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
-    final ad = _rewardedAds.firstWhereOrNull(
-      (e) =>
-          (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
-          e.isAdLoaded,
-    );
+  bool isRewardedAdLoaded() {
+    final ad = _rewardedAds.firstWhereOrNull((e) => e.isAdLoaded);
     return ad?.isAdLoaded ?? false;
   }
 
   /// Returns bool indicating whether ad has been loaded
   ///
   /// if [adNetwork] is provided, only that network's ad would be checked
-  bool isInterstitialAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
-    final ad = _interstitialAds.firstWhereOrNull(
-      (e) =>
-          (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
-          e.isAdLoaded,
-    );
+  bool isInterstitialAdLoaded() {
+    final ad = _interstitialAds.firstWhereOrNull((e) => e.isAdLoaded);
     return ad?.isAdLoaded ?? false;
   }
 
   /// Returns bool indicating whether ad has been loaded
   ///
   /// if [adNetwork] is provided, only that network's ad would be checked
-  bool isAppOpenAdLoaded({AdNetwork adNetwork = AdNetwork.any}) {
-    final ad = _appOpenAds.firstWhereOrNull(
-      (e) =>
-          (adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
-          e.isAdLoaded,
-    );
+  bool isAppOpenAdLoaded() {
+    final ad = _appOpenAds.firstWhereOrNull((e) => e.isAdLoaded);
     return ad?.isAdLoaded ?? false;
   }
 
@@ -330,13 +267,9 @@ class EasyAds {
   ///
   /// if [adNetwork] is provided only that network's ads will be disposed otherwise it will be ignored
   /// if [adUnitType] is provided only that ad unit type will be disposed, otherwise it will be ignored
-  void destroyAds({
-    AdNetwork adNetwork = AdNetwork.any,
-    AdUnitType? adUnitType,
-  }) {
+  void destroyAds({AdUnitType? adUnitType}) {
     for (final e in _allAds) {
-      if ((adNetwork == AdNetwork.any || adNetwork == e.adNetwork) &&
-          (adUnitType == null || adUnitType == e.adUnitType)) {
+      if (adUnitType == null || adUnitType == e.adUnitType) {
         e.dispose();
       }
     }

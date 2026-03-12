@@ -32,10 +32,7 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
   }
 
   void createBanner() {
-    _bannerAd = EasyAds.instance.createBanner(
-      adNetwork: AdNetwork.admob,
-      adSize: widget.adSize,
-    );
+    _bannerAd = EasyAds.instance.createBanner(adSize: widget.adSize);
     _bannerAd?.load();
   }
 
@@ -55,11 +52,7 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
     _bannerAd = null;
   }
 
-  void onBannerAdReadyForSetState(
-    AdNetwork adNetwork,
-    AdUnitType adUnitType,
-    Object? data,
-  ) {
+  void onBannerAdReadyForSetState(AdUnitType adUnitType, Object? data) {
     setState(() {});
   }
 }

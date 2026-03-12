@@ -1,5 +1,4 @@
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
-import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
@@ -15,9 +14,6 @@ class EasyAdmobRewardedAd extends EasyAdBase {
 
   RewardedAd? _rewardedAd;
   bool _isAdLoaded = false;
-
-  @override
-  AdNetwork get adNetwork => AdNetwork.admob;
 
   @override
   AdUnitType get adUnitType => AdUnitType.rewarded;
@@ -42,17 +38,12 @@ class EasyAdmobRewardedAd extends EasyAdBase {
         onAdLoaded: (RewardedAd ad) {
           _rewardedAd = ad;
           _isAdLoaded = true;
-          onAdLoaded?.call(adNetwork, adUnitType, ad);
+          onAdLoaded?.call(adUnitType, ad);
         },
         onAdFailedToLoad: (LoadAdError error) {
           _rewardedAd = null;
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(
-            adNetwork,
-            adUnitType,
-            error,
-            error.toString(),
-          );
+          onAdFailedToLoad?.call(adUnitType, error, error.toString());
         },
       ),
     );
@@ -65,16 +56,16 @@ class EasyAdmobRewardedAd extends EasyAdBase {
 
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (RewardedAd ad) {
-        onAdShowed?.call(adNetwork, adUnitType, ad);
+        onAdShowed?.call(adUnitType, ad);
       },
       onAdDismissedFullScreenContent: (RewardedAd ad) {
-        onAdDismissed?.call(adNetwork, adUnitType, ad);
+        onAdDismissed?.call(adUnitType, ad);
 
         ad.dispose();
         load();
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-        onAdFailedToShow?.call(adNetwork, adUnitType, ad, error.toString());
+        onAdFailedToShow?.call(adUnitType, ad, error.toString());
 
         ad.dispose();
         load();
@@ -84,7 +75,7 @@ class EasyAdmobRewardedAd extends EasyAdBase {
     ad.setImmersiveMode(_immersiveModeEnabled);
     ad.show(
       onUserEarnedReward: (AdWithoutView ad, RewardItem reward) {
-        onEarnedReward?.call(adNetwork, adUnitType, reward.type, reward.amount);
+        onEarnedReward?.call(adUnitType, reward.type, reward.amount);
       },
     );
     _rewardedAd = null;

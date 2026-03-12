@@ -106,18 +106,18 @@ class JitRewardedAd {
     LoadingOverlay.show(context, message: "Loading Ad...");
 
     ad = _EasyAdmobRewardedAd(viewModel.id, viewModel.adRequest);
-    ad?.onAdLoaded = (_, adUnitType, _) {
+    ad?.onAdLoaded = (_, adUnitType) {
       LoadingOverlay.hide(context);
       ad?.show();
     };
-    ad?.onAdFailedToLoad = (_, _, _, message) {
+    ad?.onAdFailedToLoad = (_, _, message) {
       LoadingOverlay.hide(context);
       _adFailedToLoadOrDisplay(viewModel.context, message);
     };
 
-    ad?.onEarnedReward = (_, _, message, _) =>
+    ad?.onEarnedReward = (_, _, message) =>
         viewModel.onEarnedReward(viewModel.context);
-    ad?.onAdFailedToShow = (_, _, _, message) {
+    ad?.onAdFailedToShow = (_, _, message) {
       LoadingOverlay.hide(context);
       _adFailedToLoadOrDisplay(viewModel.context, message);
     };
@@ -165,17 +165,12 @@ class _EasyAdmobRewardedAd extends EasyAdBase {
         onAdLoaded: (RewardedAd ad) {
           _rewardedAd = ad;
           _isAdLoaded = true;
-          onAdLoaded?.call(AdNetwork.admob, adUnitType, ad);
+          onAdLoaded?.call(adUnitType, ad);
         },
         onAdFailedToLoad: (LoadAdError error) {
           _rewardedAd = null;
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(
-            AdNetwork.admob,
-            adUnitType,
-            error,
-            error.toString(),
-          );
+          onAdFailedToLoad?.call(adUnitType, error, error.toString());
         },
       ),
     );
@@ -188,20 +183,15 @@ class _EasyAdmobRewardedAd extends EasyAdBase {
 
     ad.fullScreenContentCallback = FullScreenContentCallback(
       onAdShowedFullScreenContent: (RewardedAd ad) {
-        onAdShowed?.call(AdNetwork.admob, adUnitType, ad);
+        onAdShowed?.call(adUnitType, ad);
       },
       onAdDismissedFullScreenContent: (RewardedAd ad) {
-        onAdDismissed?.call(AdNetwork.admob, adUnitType, ad);
+        onAdDismissed?.call(adUnitType, ad);
 
         ad.dispose();
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
-        onAdFailedToShow?.call(
-          AdNetwork.admob,
-          adUnitType,
-          ad,
-          error.toString(),
-        );
+        onAdFailedToShow?.call(adUnitType, ad, error.toString());
 
         ad.dispose();
       },
@@ -209,18 +199,10 @@ class _EasyAdmobRewardedAd extends EasyAdBase {
 
     ad.show(
       onUserEarnedReward: (ad, reward) {
-        onEarnedReward?.call(
-          AdNetwork.admob,
-          adUnitType,
-          reward.type,
-          reward.amount,
-        );
+        onEarnedReward?.call(adUnitType, reward.type, reward.amount);
       },
     );
     _rewardedAd = null;
     _isAdLoaded = false;
   }
-
-  @override
-  AdNetwork get adNetwork => AdNetwork.admob;
 }

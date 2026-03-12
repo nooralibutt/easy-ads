@@ -20,49 +20,47 @@ class EasyLogger {
 
   void _onAdNetworkInitialized(AdEvent event) {
     if (event.data == true) {
-      _logger.i(
-          "${event.adNetwork.value} has been initialized and is ready to use.");
+      _logger.i("Admob has been initialized and is ready to use.");
     } else {
-      _logger.e("${event.adNetwork.value} could not be initialized.");
+      _logger.e("Admob could not be initialized.");
     }
   }
 
   void _onAdLoaded(AdEvent event) {
     String message =
-        "${event.adUnitType?.value} ads for ${event.adNetwork.value} have been loaded.";
-    if (event.adNetwork == AdNetwork.admob) {
-      final ad = event.data as Ad?;
-      message +=
-          ' adapter status: ${ad?.responseInfo?.mediationAdapterClassName}';
-    }
+        "${event.adUnitType?.value} ads for Admob have been loaded.";
+    final ad = event.data as Ad?;
+    message +=
+        ' adapter status: ${ad?.responseInfo?.mediationAdapterClassName}';
 
     _logger.i(message);
   }
 
   void _onAdFailedToLoad(AdEvent event) {
     _logger.e(
-        "${event.adUnitType?.value} ads for ${event.adNetwork.value} could not be loaded.\nERROR: ${event.error}");
+      "${event.adUnitType?.value} ads for Admob could not be loaded.\nERROR: ${event.error}",
+    );
   }
 
   void _onAdShowed(AdEvent event) {
-    _logger.i(
-        "${event.adUnitType?.value} ad for ${event.adNetwork.value} has been shown.");
+    _logger.i("${event.adUnitType?.value} ad for Admob has been shown.");
   }
 
   void _onAdFailedShow(AdEvent event) {
     _logger.e(
-        "${event.adUnitType?.value} ad for ${event.adNetwork.value} could not be showed.\nERROR: ${event.error}");
+      "${event.adUnitType?.value} ad for Admob could not be showed.\nERROR: ${event.error}",
+    );
   }
 
   void _onAdDismissed(AdEvent event) {
-    _logger.i(
-        "${event.adUnitType?.value} ad for ${event.adNetwork.value} has been dismissed.");
+    _logger.i("${event.adUnitType?.value} ad for Admob has been dismissed.");
   }
 
   void _onEarnedReward(AdEvent event) {
     final dataMap = event.data as Map<String, dynamic>?;
     _logger.i(
-        "User has earned ${dataMap?['rewardAmount']} of ${dataMap?['rewardType']} from ${event.adNetwork.value}");
+      "User has earned ${dataMap?['rewardAmount']} of ${dataMap?['rewardType']} from Admob",
+    );
   }
 
   void _onAdEvent(AdEvent event) {

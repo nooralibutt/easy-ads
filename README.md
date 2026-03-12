@@ -9,21 +9,48 @@
 
 **Show some 💙, 👍 the package & ⭐️ the repo to support the project**
 
-To easily integrate ads from different ad networks into your flutter app.
+A plugin to **easily integrate AdMob ads** into your Flutter app.
 
-## Features
+---
 
-- Google Mobile Ads (banner, appOpen, interstitial, rewarded ad)
-- Facebook Audience Network (banner, interstitial, rewarded ad)
-- Unity Ads (banner, interstitial, rewarded ad)
-- AppLovin Max Ads (banner, interstitial, rewarded ad)
+⚠ **Note**
 
-## Admob Mediation
-- This plugin supports admob mediation [See Details](https://developers.google.com/admob/flutter/mediation/get-started) to see Admob Mediation Guide.
-- You just need to add the native platform setting for admob mediation.
+From version **26.3.12**, this package supports **AdMob only**.
 
-## GDPR and Privacy Options compliance
-There is a consent manager helper added to support gdpr dialog and privacy dialog `ConsentManager.gatherGdprConsent()` and `ConsentManager.gatherPrivacyConsent()`
+If you need **Facebook, AppLovin, or Unity ads**, you can use the alternative branches:
+
+- **All Ad Networks (AdMob + Facebook + AppLovin + Unity)**  
+  https://github.com/nooralibutt/easy-ads/tree/feature/all-ads-support
+
+- **AdMob + Facebook Only**  
+  https://github.com/nooralibutt/easy-ads/tree/feature/admob-facebook
+
+---
+
+# Features
+
+- Google Mobile Ads (**Banner, Native, App Open, Interstitial, Rewarded**)
+- **JIT (Just-in-Time)** ad loading for **Interstitial, App Open, and Rewarded** ads
+- Simple API for loading and displaying ads
+- Event callbacks for ad lifecycle handling
+
+---
+
+# AdMob Mediation
+
+This plugin supports **AdMob Mediation**.
+
+You can configure additional ad networks directly in your AdMob dashboard while still using this plugin.
+
+See the official guide:  
+https://developers.google.com/admob/flutter/mediation/get-started
+
+---
+
+# GDPR and Privacy Options Compliance
+
+A **Consent Manager helper** is provided to support GDPR and privacy dialogs. `ConsentManager.gatherGdprConsent()` and `ConsentManager.gatherPrivacyConsent()`
+
 
 ## Platform Specific Setup
 
@@ -31,7 +58,7 @@ There is a consent manager helper added to support gdpr dialog and privacy dialo
 
 #### Update your Info.plist
 
-* The keys for AppLovin and Google Ads **are required** in Info.plist.
+* The Google Mobile Ads App ID is required in your Info.plist.
 
 Update your app's `ios/Runner/Info.plist` file to add two keys:
 
@@ -61,9 +88,7 @@ Update your app's `ios/Runner/Info.plist` file to add two keys:
 
 ```dart
 import 'dart:io';
-
 import 'package:easy_ads_flutter/easy_ads_flutter.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class TestAdIdManager extends IAdIdManager {
   const TestAdIdManager();
@@ -74,39 +99,20 @@ class TestAdIdManager extends IAdIdManager {
         ? 'ca-app-pub-3940256099942544~3347511713'
         : 'ca-app-pub-3940256099942544~1458002511',
     appOpenId: Platform.isAndroid
-        ? 'ca-app-pub-3940256099942544/3419835294'
-        : 'ca-app-pub-3940256099942544/5662855259',
-    bannerId: 'ca-app-pub-3940256099942544/6300978111',
-    interstitialId: 'ca-app-pub-3940256099942544/1033173712',
-    rewardedId: 'ca-app-pub-3940256099942544/5224354917',
-  );
-
-  @override
-  AppAdIds? get unityAdIds => AppAdIds(
-    appId: Platform.isAndroid ? '4374881' : '4374880',
-    bannerId: Platform.isAndroid ? 'Banner_Android' : 'Banner_iOS',
-    interstitialId:
-    Platform.isAndroid ? 'Interstitial_Android' : 'Interstitial_iOS',
-    rewardedId: Platform.isAndroid ? 'Rewarded_Android' : 'Rewarded_iOS',
-  );
-
-  @override
-  AppAdIds? get appLovinAdIds => AppAdIds(
-    appId:
-    'OeKTS4Zl758OIlAs3KQ6-3WE1IkdOo3nQNJtRubTzlyFU76TRWeQZAeaSMCr9GcZdxR4p2cnoZ1Gg7p7eSXCdA',
-    bannerId: Platform.isAndroid ? 'b2c4f43d3986bcfb' : '80c269494c0e45c2',
-    interstitialId:
-    Platform.isAndroid ? 'c48f54c6ce5ff297' : 'e33147110a6d12d2',
-    rewardedId:
-    Platform.isAndroid ? 'ffbed216d19efb09' : 'f4af3e10dd48ee4f',
-  );
-
-  @override
-  AppAdIds? get fbAdIds => AppAdIds(
-    appId: 'YOUR_APP_ID',
-    interstitialId: 'VID_HD_16_9_15S_LINK#YOUR_PLACEMENT_ID',
-    bannerId: 'IMG_16_9_APP_INSTALL#YOUR_PLACEMENT_ID',
-    rewardedId: 'VID_HD_16_9_46S_APP_INSTALL#YOUR_PLACEMENT_ID',
+        ? 'ca-app-pub-3940256099942544/9257395921'
+        : 'ca-app-pub-3940256099942544/5575463023',
+    bannerId: Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/9214589741'
+        : 'ca-app-pub-3940256099942544/2435281174',
+    interstitialId: Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/1033173712'
+        : 'ca-app-pub-3940256099942544/4411468910',
+    rewardedId: Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/5224354917'
+        : 'ca-app-pub-3940256099942544/1712485313',
+    nativeBannerId: Platform.isAndroid
+        ? 'ca-app-pub-3940256099942544/2247696110'
+        : 'ca-app-pub-3940256099942544/3986624511',
   );
 }
 ```
@@ -124,8 +130,6 @@ const IAdIdManager adIdManager = TestAdIdManager();
 EasyAds.instance.initialize(
     adIdManager,
     adMobAdRequest: const AdRequest(),
-    // To enable Facebook Test mode ads
-    fbTestMode: true,
     admobConfiguration: RequestConfiguration(testDeviceIds: [
       '072D2F3992EF5B4493042ADC632CE39F', // Mi Phone
       '00008030-00163022226A802E',
@@ -165,43 +169,68 @@ Widget build(BuildContext context) {
     children: [
       SomeWidget(),
       const Spacer(),
-      EasyBannerAd(
-          adNetwork: AdNetwork.admob, adSize: AdSize.mediumRectangle),
+      EasyBannerAd(adSize: AdSize.largeBanner),
     ],
   );
 }
 ```
+# JIT (Just-in-Time) Ads
 
-## Show Smart Banner Ad
+This package supports **JIT (Just-in-Time) ad loading** for Interstitial, App Open, and Rewarded ads.  
+You can show ads **on demand**, with callbacks for success, failure, and dismissal.
 
-Smart Banner will check one by one the priority ad networks provided by you, if any of the priority network failed to load by some reason then it will automatically jump and try to load the next one so we can prevent revenue loss. 
+### Show JIT App Open
 
-If you want to set the priority for Smart Banner, just pass the priorityAdNetworks in EasySmartBannerAd constructor just like below.
-Other wise it will set by default as [admob, facebook, appLovin, unity] and default AdSize is AdSize.banner,
+```dart
+EasyAds.instance.showJitAppOpen(
+  onFailedToLoadOrShow: () => _showSnack('AppOpen failed'),
+  onAdShowed: () => _showSnack('AppOpen showed'),
+  onAdDismissed: () => _showSnack('AppOpen dismissed'),
+);
+```
 
-This is how you may show banner ad in widget-tree somewhere:
+### Show JIT Interstitial
+
+```dart
+EasyAds.instance.showJitInterstitial(
+context,
+onFailedToLoadOrShow: () => _showSnack('Interstitial failed'),
+onAdShowed: () => _showSnack('Interstitial showed'),
+onAdDismissed: () => _showSnack('Interstitial dismissed'),
+);
+```
+
+### Show JIT Rewarded
+
+```dart
+EasyAds.instance.showJitRewarded(
+context,
+onEarnedReward: (ctx) => _showSnack('Reward earned!'),
+);
+```
+
+### Native Ads
+You can also create Native Ads and insert them into your widget tree using:
+
+```dart
+EasyAds.instance.createNativeAd();
+```
+Example usage in a widget tree:
 
 ```dart
 @override
 Widget build(BuildContext context) {
-  Column(
-    crossAxisAlignment: CrossAxisAlignment.stretch,
+  return Column(
     children: [
       SomeWidget(),
-      const Spacer(),
-      const EasySmartBannerAd(
-        priorityAdNetworks: [
-          AdNetwork.facebook,
-          AdNetwork.admob,
-          AdNetwork.unity,
-          AdNetwork.appLovin,
-        ],
-        adSize: AdSize.largeBanner,
-      ),
+      EasyAds.instance.createNativeAd(),
+      AnotherWidget(),
     ],
   );
 }
 ```
+This ensures native ads are properly loaded and displayed within your UI.
+
 
 ## Listening to the callbacks
 Declare this object in the class

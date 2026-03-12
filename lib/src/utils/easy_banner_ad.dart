@@ -3,13 +3,8 @@ import 'package:easy_ads_flutter/src/utils/badged_banner.dart';
 import 'package:flutter/material.dart';
 
 class EasyBannerAd extends StatefulWidget {
-  final AdNetwork adNetwork;
   final AdSize adSize;
-  const EasyBannerAd({
-    this.adNetwork = AdNetwork.admob,
-    this.adSize = AdSize.banner,
-    super.key,
-  });
+  const EasyBannerAd({this.adSize = AdSize.banner, super.key});
 
   @override
   State<EasyBannerAd> createState() => _EasyBannerAdState();
@@ -37,10 +32,7 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
   }
 
   void createBanner() {
-    _bannerAd = EasyAds.instance.createBanner(
-      adNetwork: widget.adNetwork,
-      adSize: widget.adSize,
-    );
+    _bannerAd = EasyAds.instance.createBanner(adSize: widget.adSize);
     _bannerAd?.load();
   }
 
@@ -60,11 +52,7 @@ class _EasyBannerAdState extends State<EasyBannerAd> {
     _bannerAd = null;
   }
 
-  void onBannerAdReadyForSetState(
-    AdNetwork adNetwork,
-    AdUnitType adUnitType,
-    Object? data,
-  ) {
+  void onBannerAdReadyForSetState(AdUnitType adUnitType, Object? data) {
     setState(() {});
   }
 }

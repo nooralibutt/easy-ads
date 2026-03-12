@@ -1,3 +1,23 @@
+## 26.3.12
+
+⚠ **Breaking Changes**
+
+* Removed **Unity**, **AppLovin**, and **Facebook** ad network support from the main package.
+* The package now supports **AdMob only**.
+
+If you are using Unity, AppLovin, or Facebook ads, you can continue using them from the alternative branches:
+
+- **All Ad Networks (AdMob + Facebook + AppLovin + Unity)**  
+  https://github.com/nooralibutt/easy-ads/tree/feature/all-ads-support
+
+- **AdMob + Facebook Only**  
+  https://github.com/nooralibutt/easy-ads/tree/feature/admob-facebook
+
+## 26.3.11
+
+⚠ **Breaking Changes**
+* Removed Unity and AppLovin ads. Any code depending on these SDKs will need to be updated or removed.
+
 ## 26.0.0
 
 * Updated to latest dependencies

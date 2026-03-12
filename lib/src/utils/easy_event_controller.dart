@@ -7,12 +7,10 @@ class EasyEventController {
   Stream<AdEvent> get onEvent => _onEventController.stream;
   final _onEventController = StreamController<AdEvent>.broadcast();
 
-  void fireNetworkInitializedEvent(AdNetwork adNetwork, bool status) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adNetworkInitialized,
-      adNetwork: adNetwork,
-      data: status,
-    ));
+  void fireNetworkInitializedEvent(bool status) {
+    _onEventController.add(
+      AdEvent(type: AdEventType.adNetworkInitialized, data: status),
+    );
   }
 
   void setupEvents(EasyAdBase ad) {
@@ -24,65 +22,69 @@ class EasyEventController {
     ad.onEarnedReward = _onEarnedRewardMethod;
   }
 
-  void _onAdLoadedMethod(
-      AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adLoaded,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-    ));
+  void _onAdLoadedMethod(AdUnitType adUnitType, Object? data) {
+    _onEventController.add(
+      AdEvent(type: AdEventType.adLoaded, adUnitType: adUnitType, data: data),
+    );
   }
 
-  void _onAdShowedMethod(
-      AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adShowed,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-    ));
+  void _onAdShowedMethod(AdUnitType adUnitType, Object? data) {
+    _onEventController.add(
+      AdEvent(type: AdEventType.adShowed, adUnitType: adUnitType, data: data),
+    );
   }
 
-  void _onAdFailedToLoadMethod(AdNetwork adNetwork, AdUnitType adUnitType,
-      Object? data, String errorMessage) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adFailedToLoad,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-      error: errorMessage,
-    ));
+  void _onAdFailedToLoadMethod(
+    AdUnitType adUnitType,
+    Object? data,
+    String errorMessage,
+  ) {
+    _onEventController.add(
+      AdEvent(
+        type: AdEventType.adFailedToLoad,
+        adUnitType: adUnitType,
+        data: data,
+        error: errorMessage,
+      ),
+    );
   }
 
-  void _onAdFailedToShowMethod(AdNetwork adNetwork, AdUnitType adUnitType,
-      Object? data, String errorMessage) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adFailedToShow,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-      error: errorMessage,
-    ));
+  void _onAdFailedToShowMethod(
+    AdUnitType adUnitType,
+    Object? data,
+    String errorMessage,
+  ) {
+    _onEventController.add(
+      AdEvent(
+        type: AdEventType.adFailedToShow,
+        adUnitType: adUnitType,
+        data: data,
+        error: errorMessage,
+      ),
+    );
   }
 
-  void _onAdDismissedMethod(
-      AdNetwork adNetwork, AdUnitType adUnitType, Object? data) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.adDismissed,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: data,
-    ));
+  void _onAdDismissedMethod(AdUnitType adUnitType, Object? data) {
+    _onEventController.add(
+      AdEvent(
+        type: AdEventType.adDismissed,
+        adUnitType: adUnitType,
+        data: data,
+      ),
+    );
   }
 
-  void _onEarnedRewardMethod(AdNetwork adNetwork, AdUnitType adUnitType,
-      String? rewardType, num? rewardAmount) {
-    _onEventController.add(AdEvent(
-      type: AdEventType.earnedReward,
-      adNetwork: adNetwork,
-      adUnitType: adUnitType,
-      data: {'rewardType': rewardType, 'rewardAmount': rewardAmount},
-    ));
+  void _onEarnedRewardMethod(
+    AdUnitType adUnitType,
+    String? rewardType,
+    num? rewardAmount,
+  ) {
+    _onEventController.add(
+      AdEvent(
+        type: AdEventType.earnedReward,
+        adUnitType: adUnitType,
+        data: {'rewardType': rewardType, 'rewardAmount': rewardAmount},
+      ),
+    );
   }
 }

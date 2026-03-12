@@ -10,26 +10,24 @@ const IAdIdManager adIdManager = TestAdIdManager();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await ConsentManager.gatherGdprConsent(
-      debugGeography: kDebugMode ? DebugGeography.debugGeographyEea : null);
+    debugGeography: kDebugMode ? DebugGeography.debugGeographyEea : null,
+  );
   await ConsentManager.gatherPrivacyConsent();
 
   await EasyAds.instance.initialize(
     isShowAppOpenOnAppStateChange: false,
     adIdManager,
-    unityTestMode: true,
     adMobAdRequest: const AdRequest(),
     admobConfiguration: RequestConfiguration(testDeviceIds: []),
-    fbTestingId: '73f92d66-f8f6-4978-999f-b5e0dd62275a',
-    fbTestMode: true,
     showAdBadge: Platform.isIOS,
-    fbiOSAdvertiserTrackingEnabled: true,
+    autoLoadAds: true,
   );
 
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +39,7 @@ class MyApp extends StatelessWidget {
 }
 
 class CountryListScreen extends StatefulWidget {
-  const CountryListScreen({Key? key}) : super(key: key);
+  const CountryListScreen({super.key});
 
   @override
   State<CountryListScreen> createState() => _CountryListScreenState();
@@ -54,51 +52,47 @@ class _CountryListScreenState extends State<CountryListScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Ad Network List"),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text("Ad Network List"), centerTitle: true),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             children: [
               Text(
+                "Auto load ad is ${EasyAds.instance.autoLoadAds ? 'Enabled' : 'Disabled'}",
+              ),
+              SizedBox(height: 10),
+              Text(
                 'AppOpen',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               AdButton(
                 networkName: 'Admob AppOpen',
-                onTap: () => _showAd(AdNetwork.admob, AdUnitType.appOpen),
+                onTap: () => _showAd(AdUnitType.appOpen),
+              ),
+              AdButton(
+                networkName: 'JIT Admob AppOpen',
+                onTap: () => _showJitAppOpen(),
               ),
               const Divider(thickness: 2),
               Text(
                 'Interstitial',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               AdButton(
                 networkName: 'Admob Interstitial',
-                onTap: () => _showAd(AdNetwork.admob, AdUnitType.interstitial),
+                onTap: () => _showAd(AdUnitType.interstitial),
               ),
               AdButton(
-                networkName: 'Facebook Interstitial',
-                onTap: () =>
-                    _showAd(AdNetwork.facebook, AdUnitType.interstitial),
+                networkName: 'Jit Admob Interstitial',
+                onTap: () => _showJitInterstitial(context),
               ),
-              AdButton(
-                networkName: 'Unity Interstitial',
-                onTap: () => _showAd(AdNetwork.unity, AdUnitType.interstitial),
-              ),
-              AdButton(
-                networkName: 'Applovin Interstitial',
-                onTap: () =>
-                    _showAd(AdNetwork.appLovin, AdUnitType.interstitial),
-              ),
+
               AdButton(
                 networkName: 'Available Interstitial',
                 onTap: () => _showAvailableAd(AdUnitType.interstitial),
@@ -106,39 +100,25 @@ class _CountryListScreenState extends State<CountryListScreen> {
               const Divider(thickness: 2),
               Text(
                 'Rewarded',
-                style: Theme.of(context)
-                    .textTheme
-                    .headlineMedium!
-                    .copyWith(color: Colors.blue, fontWeight: FontWeight.bold),
+                style: Theme.of(context).textTheme.headlineMedium!.copyWith(
+                  color: Colors.blue,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               AdButton(
                 networkName: 'Admob Rewarded',
-                onTap: () => _showAd(AdNetwork.admob, AdUnitType.rewarded),
+                onTap: () => _showAd(AdUnitType.rewarded),
               ),
               AdButton(
-                networkName: 'Facebook Rewarded',
-                onTap: () => _showAd(AdNetwork.facebook, AdUnitType.rewarded),
+                networkName: 'Jit Admob Rewarded',
+                onTap: () => _showJitRewarded(),
               ),
-              AdButton(
-                networkName: 'Unity Rewarded',
-                onTap: () => _showAd(AdNetwork.unity, AdUnitType.rewarded),
-              ),
-              AdButton(
-                networkName: 'Applovin Rewarded',
-                onTap: () => _showAd(AdNetwork.appLovin, AdUnitType.rewarded),
-              ),
+
               AdButton(
                 networkName: 'Available Rewarded',
                 onTap: () => _showAvailableAd(AdUnitType.rewarded),
               ),
-              const EasySmartBannerAd(
-                priorityAdNetworks: [
-                  AdNetwork.facebook,
-                  AdNetwork.admob,
-                  AdNetwork.unity,
-                  AdNetwork.appLovin,
-                ],
-              ),
+              EasyBannerAd(),
             ],
           ),
         ),
@@ -146,10 +126,9 @@ class _CountryListScreenState extends State<CountryListScreen> {
     );
   }
 
-  void _showAd(AdNetwork adNetwork, AdUnitType adUnitType) {
+  void _showAd(AdUnitType adUnitType) {
     if (EasyAds.instance.showAd(
       adUnitType,
-      adNetwork: adNetwork,
       context: context,
       loaderDuration: 1,
     )) {
@@ -159,11 +138,11 @@ class _CountryListScreenState extends State<CountryListScreen> {
       _streamSubscription = EasyAds.instance.onEvent.listen((event) {
         if (event.adUnitType == adUnitType) {
           _streamSubscription?.cancel();
-          goToNextScreen(adNetwork: adNetwork);
+          goToNextScreen();
         }
       });
     } else {
-      goToNextScreen(adNetwork: adNetwork);
+      goToNextScreen();
     }
   }
 
@@ -183,19 +162,47 @@ class _CountryListScreenState extends State<CountryListScreen> {
     }
   }
 
-  void goToNextScreen({AdNetwork? adNetwork}) {
+  void goToNextScreen() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-        builder: (context) => CountryDetailScreen(adNetwork: adNetwork),
-      ),
+      MaterialPageRoute(builder: (context) => CountryDetailScreen()),
+    );
+  }
+
+  void _showJitAppOpen() {
+    EasyAds.instance.showJitAppOpen(
+      onFailedToLoadOrShow: () => _showSnack('AppOpen failed'),
+      onAdShowed: () => _showSnack('AppOpen showed'),
+      onAdDismissed: () => _showSnack('AppOpen dismissed'),
+    );
+  }
+
+  void _showJitInterstitial(BuildContext context) {
+    EasyAds.instance.showJitInterstitial(
+      context,
+      onFailedToLoadOrShow: () => _showSnack('Interstitial failed'),
+      onAdShowed: () => _showSnack('Interstitial showed'),
+      onAdDismissed: () => _showSnack('Interstitial dismissed'),
+    );
+  }
+
+  void _showJitRewarded() {
+    EasyAds.instance.showJitRewarded(
+      context,
+      onEarnedReward: (ctx) => _showSnack('Reward earned!'),
+    );
+  }
+
+  void _showSnack(String message) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(message), duration: const Duration(seconds: 2)),
     );
   }
 }
 
 class CountryDetailScreen extends StatefulWidget {
-  final AdNetwork? adNetwork;
-  const CountryDetailScreen({Key? key, this.adNetwork}) : super(key: key);
+  const CountryDetailScreen({super.key});
 
   @override
   State<CountryDetailScreen> createState() => _CountryDetailScreenState();
@@ -205,10 +212,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('United States'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: const Text('United States'), centerTitle: true),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -217,16 +221,12 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
             decoration: const BoxDecoration(
               image: DecorationImage(
                 image: NetworkImage(
-                    'https://cdn.britannica.com/33/4833-050-F6E415FE/Flag-United-States-of-America.jpg'),
+                  'https://cdn.britannica.com/33/4833-050-F6E415FE/Flag-United-States-of-America.jpg',
+                ),
               ),
             ),
           ),
-          (widget.adNetwork == null)
-              ? const EasySmartBannerAd()
-              : EasyBannerAd(
-                  adNetwork: widget.adNetwork!,
-                  adSize: AdSize.largeBanner,
-                ),
+          EasyBannerAd(adSize: AdSize.largeBanner),
           const Expanded(
             child: SingleChildScrollView(
               child: Padding(
@@ -238,6 +238,8 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
               ),
             ),
           ),
+          EasyAds.instance.createNativeAd(),
+          SizedBox(height: 20),
         ],
       ),
     );
@@ -247,8 +249,7 @@ class _CountryDetailScreenState extends State<CountryDetailScreen> {
 class AdButton extends StatelessWidget {
   final String networkName;
   final VoidCallback onTap;
-  const AdButton({Key? key, required this.onTap, required this.networkName})
-      : super(key: key);
+  const AdButton({super.key, required this.onTap, required this.networkName});
 
   @override
   Widget build(BuildContext context) {

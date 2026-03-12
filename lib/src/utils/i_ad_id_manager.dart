@@ -1,25 +1,10 @@
 abstract class IAdIdManager {
   const IAdIdManager();
 
-  /// Pass null if you wish not to implement unity ads
-  ///
-  /// AppAdIds? get unityAdIds => null;
-  AppAdIds? get unityAdIds;
-
   /// Pass null if you wish not to implement admob ads
   ///
   /// AppAdIds? get admobAdIds => null;
   AppAdIds? get admobAdIds;
-
-  /// Pass null if you wish not to implement appLovin ads
-  ///
-  /// AppAdIds? get appLovinAdIds => null;
-  AppAdIds? get appLovinAdIds;
-
-  /// Pass null if you wish not to implement facebook ads
-  ///
-  /// AppAdIds? get fbAdIds => null;
-  AppAdIds? get fbAdIds;
 }
 
 class AppAdIds {
@@ -38,11 +23,15 @@ class AppAdIds {
   /// if id is null, it will not be implemented
   final String? bannerId;
 
+  /// if id is null, it will not be implemented
+  final String? nativeBannerId;
+
   const AppAdIds({
     required this.appId,
     this.appOpenId,
     this.interstitialId,
     this.rewardedId,
     this.bannerId,
+    this.nativeBannerId,
   });
 }

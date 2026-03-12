@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart';
-
 enum AdEventType {
   /// When ad network is initialized and ready to load ad units this will be triggered
   /// In case of [adNetworkInitialized], [AdEvent.data] will have a boolean value indicating status of initialization
@@ -17,5 +15,5 @@ enum AdEventType {
 }
 
 extension AdEventTypeExtension on AdEventType {
-  String get value => describeEnum(this);
+  String get value => name;
 }

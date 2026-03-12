@@ -1,5 +1,4 @@
 import 'package:easy_ads_flutter/src/easy_ad_base.dart';
-import 'package:easy_ads_flutter/src/enums/ad_network.dart';
 import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -19,8 +18,6 @@ class EasyAdmobBannerAd extends EasyAdBase {
 
   @override
   AdUnitType get adUnitType => AdUnitType.banner;
-  @override
-  AdNetwork get adNetwork => AdNetwork.admob;
 
   @override
   void dispose() {
@@ -45,18 +42,18 @@ class EasyAdmobBannerAd extends EasyAdBase {
         onAdLoaded: (Ad ad) {
           _bannerAd = ad as BannerAd?;
           _isAdLoaded = true;
-          onAdLoaded?.call(adNetwork, adUnitType, ad);
-          onBannerAdReadyForSetState?.call(adNetwork, adUnitType, ad);
+          onAdLoaded?.call(adUnitType, ad);
+          onBannerAdReadyForSetState?.call(adUnitType, ad);
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           _bannerAd = null;
           _isAdLoaded = false;
-          onAdFailedToLoad?.call(adNetwork, adUnitType, ad, error.toString());
+          onAdFailedToLoad?.call(adUnitType, ad, error.toString());
           ad.dispose();
         },
-        onAdOpened: (Ad ad) => onAdClicked?.call(adNetwork, adUnitType, ad),
-        onAdClosed: (Ad ad) => onAdDismissed?.call(adNetwork, adUnitType, ad),
-        onAdImpression: (Ad ad) => onAdShowed?.call(adNetwork, adUnitType, ad),
+        onAdOpened: (Ad ad) => onAdClicked?.call(adUnitType, ad),
+        onAdClosed: (Ad ad) => onAdDismissed?.call(adUnitType, ad),
+        onAdImpression: (Ad ad) => onAdShowed?.call(adUnitType, ad),
       ),
       request: _adRequest,
     );

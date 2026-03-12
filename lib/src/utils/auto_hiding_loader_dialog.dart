@@ -12,8 +12,11 @@ Future showLoaderDialog(BuildContext context, int duration) {
     ),
   );
 
-  Future.delayed(
-      Duration(seconds: duration), () => Navigator.of(context).pop());
+  Future.delayed(Duration(seconds: duration), () {
+    if (context.mounted && Navigator.of(context).canPop()) {
+      Navigator.of(context).pop();
+    }
+  });
   return showDialog(
     barrierDismissible: false,
     context: context,

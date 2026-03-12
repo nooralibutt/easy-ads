@@ -37,7 +37,7 @@ class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
       if (_isBannerIdAvailable(
         widget.priorityAdNetworks[_currentADNetworkIndex],
       )) {
-        return _showBannerAd(widget.priorityAdNetworks[_currentADNetworkIndex]);
+        return _showBannerAd();
       }
 
       _currentADNetworkIndex++;
@@ -74,9 +74,9 @@ class _EasySmartBannerAdState extends State<EasySmartBannerAd> {
     }
   }
 
-  Widget _showBannerAd(AdNetwork priorityAdNetwork) {
-    _subscribeToAdEvent(priorityAdNetwork);
-    return EasyBannerAd(adNetwork: priorityAdNetwork, adSize: widget.adSize);
+  Widget _showBannerAd() {
+    _subscribeToAdEvent(AdNetwork.admob);
+    return EasyBannerAd(adSize: widget.adSize);
   }
 
   void _cancelStream() {

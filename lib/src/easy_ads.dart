@@ -61,10 +61,8 @@ class EasyAds {
     RequestConfiguration? admobConfiguration,
     bool enableLogger = true,
     String? fbTestingId,
-    bool isAgeRestrictedUserForApplovin = false,
     bool fbiOSAdvertiserTrackingEnabled = false,
     bool showAdBadge = false,
-    Map<int, List<int>>? segments,
   }) async {
     _showAdBadge = showAdBadge;
     if (enableLogger) _logger.enable(enableLogger);

@@ -23,6 +23,7 @@ void main() async {
     fbTestMode: true,
     showAdBadge: Platform.isIOS,
     fbiOSAdvertiserTrackingEnabled: true,
+    autoLoadAds: true,
   );
 
   runApp(const MyApp());

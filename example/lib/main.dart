@@ -12,7 +12,7 @@ void main() async {
   await ConsentManager.gatherGdprConsent(
     debugGeography: kDebugMode ? DebugGeography.debugGeographyEea : null,
   );
-  await ConsentManager.gatherPrivacyConsent();
+  // await ConsentManager.gatherPrivacyConsent();
 
   await EasyAds.instance.initialize(
     isShowAppOpenOnAppStateChange: false,

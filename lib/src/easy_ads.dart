@@ -18,7 +18,7 @@ import 'package:flutter/material.dart';
 
 class EasyAds {
   EasyAds._easyAds();
-
+  late final bool autoLoadAds;
   static final EasyAds instance = EasyAds._easyAds();
 
   /// Google admob's ad request
@@ -63,7 +63,9 @@ class EasyAds {
     String? fbTestingId,
     bool fbiOSAdvertiserTrackingEnabled = false,
     bool showAdBadge = false,
+    bool autoLoadAds = true,
   }) async {
+    this.autoLoadAds = autoLoadAds;
     _showAdBadge = showAdBadge;
     if (enableLogger) _logger.enable(enableLogger);
     adIdManager = manager;
@@ -165,7 +167,7 @@ class EasyAds {
       _interstitialAds.add(ad);
       _eventController.setupEvents(ad);
 
-      await ad.load();
+      if (autoLoadAds) await ad.load();
     }
 
     // init rewarded ads
@@ -179,7 +181,7 @@ class EasyAds {
       _rewardedAds.add(ad);
       _eventController.setupEvents(ad);
 
-      await ad.load();
+      if (autoLoadAds) await ad.load();
     }
 
     if (appOpenAdUnitId != null &&
@@ -228,7 +230,7 @@ class EasyAds {
       _interstitialAds.add(ad);
       _eventController.setupEvents(ad);
 
-      await ad.load();
+      if (autoLoadAds) await ad.load();
     }
 
     // init rewarded ads
@@ -241,7 +243,7 @@ class EasyAds {
       _rewardedAds.add(ad);
       _eventController.setupEvents(ad);
 
-      await ad.load();
+      if (autoLoadAds) await ad.load();
     }
   }
 

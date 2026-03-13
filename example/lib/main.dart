@@ -60,6 +60,10 @@ class _CountryListScreenState extends State<CountryListScreen> {
           child: Column(
             children: [
               Text(
+                'Auto load ad is ${EasyAds.instance.autoLoadAds ? 'Enabled' : 'Disabled'}',
+              ),
+              SizedBox(height: 10),
+              Text(
                 'AppOpen',
                 style: Theme.of(context).textTheme.headlineMedium!.copyWith(
                   color: Colors.blue,

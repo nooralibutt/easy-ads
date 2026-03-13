@@ -1,7 +1,4 @@
-import 'package:easy_ads_flutter/src/easy_ad_base.dart';
-import 'package:easy_ads_flutter/src/enums/ad_network.dart';
-import 'package:easy_ads_flutter/src/enums/ad_unit_type.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:easy_ads_flutter/easy_ads_flutter.dart';
 
 class EasyAdmobRewardedAd extends EasyAdBase {
   final AdRequest _adRequest;
@@ -71,13 +68,13 @@ class EasyAdmobRewardedAd extends EasyAdBase {
         onAdDismissed?.call(adNetwork, adUnitType, ad);
 
         ad.dispose();
-        load();
+        if (EasyAds.instance.autoLoadAds) load();
       },
       onAdFailedToShowFullScreenContent: (RewardedAd ad, AdError error) {
         onAdFailedToShow?.call(adNetwork, adUnitType, ad, error.toString());
 
         ad.dispose();
-        load();
+        if (EasyAds.instance.autoLoadAds) load();
       },
     );
 

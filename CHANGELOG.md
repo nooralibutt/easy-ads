@@ -1,3 +1,6 @@
+## 26.3.13
+* Updated dependencies
+
 ## 26.3.12
 
 ⚠ **Breaking Changes**
